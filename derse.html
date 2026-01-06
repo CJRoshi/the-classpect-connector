@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Derse - The Classpect Connector</title>
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Shared Components -->
+  <script type="text/babel" src="./components/constants.js"></script>
+  <script type="text/babel" src="./components/header.js"></script>
+  <script type="text/babel" src="./components/searchbar.js"></script>
+  <script type="text/babel" src="./components/footer.js"></script>
+  
+  <style>
+    @font-face {
+      font-family: 'Carima';
+      src: url('./fonts/Carima-Regular.ttf') format('truetype');
+    }
+    
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('./fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+    
+    /* Font families */
+    .font-courier { font-family: 'Courier New', monospace; }
+    .font-courier-bold { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem;
+      font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem;
+      font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem;
+      font-weight: normal;
+    }
+    .font-verdana { 
+      font-family: Verdana, Arial, sans-serif; 
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    .font-carima {
+      font-family: 'Carima', Verdana, serif;
+      font-size: 3rem;
+      font-weight: normal;
+    }
+    
+    .font-verdana-title { 
+      font-family: Verdana, Arial, sans-serif;
+      font-size: 2.25rem;
+      font-weight: bold;
+    }
+    
+    /* Homestuck command style */
+    .homestuck-command-dark {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: #ff01fe;
+    }
+    
+    .font-pixelated {
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+      -webkit-font-smoothing: none;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Background image */
+    .derse-bg {
+      background-image: url('./images/special/dersestreet.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useMemo } = React;
+
+/* =========================
+   DERSE THEME
+   ========================= */
+const derseTheme = {
+  bg: "#9954cf",           // Purple background (from hs-hexes Moons section)
+  contentBg: "#1a0d26",    // Dark purple content background
+  textColor: "#ffffff",
+  accentBg: "#6a2a7a",     // Darker purple for accents
+  headerBg: "#7d3f99",     // Medium purple for header
+  isDark: true
+};
+
+/* =========================
+   DATA LOADING
+   ========================= */
+let characterData = { canon: {}, nonCanon: {} };
+let moonsData = {};
+
+const loadData = async () => {
+  try {
+    const [charactersRes, moonsRes] = await Promise.all([
+      fetch('./data/characters.json'),
+      fetch('./data/moons.json')
+    ]);
+    
+    characterData = await charactersRes.json();
+    moonsData = await moonsRes.json();
+    
+    return true;
+  } catch (error) {
+    console.error('Error loading data:', error);
+    return false;
+  }
+};
+
+/* =========================
+   DERSE PAGE
+   ========================= */
+const DersePage = () => {
+  const [dataLoaded, setDataLoaded] = useState(false);
+  
+  useEffect(() => {
+    loadData().then(success => {
+      if (success) setDataLoaded(true);
+    });
+  }, []);
+  
+  if (!dataLoaded) {
+    return (
+      <div className="text-center">
+        <p className="text-2xl font-bold">Loading...</p>
+      </div>
+    );
+  }
+  
+  // Get all canon Derse dreamers (including Dual dreamers)
+  const derseDreamers = Object.entries(characterData.canon)
+    .filter(([_, data]) => data.lunarsway === "Derse" || data.lunarsway === "Dual")
+    .map(([name, data]) => ({
+      name,
+      classpect: data.classpect,
+      color: data.color
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  
+  const description = moonsData.Derse?.description || "Description loading...";
+  
+  return (
+    <div className="space-y-6">
+      {/* Title with Icon */}
+      <div className="flex items-center justify-between p-4 rounded" style={{backgroundColor: 'rgba(0,0,0,0.3)'}}>
+        <h1 className="font-carima" style={{color: '#ff01fe', fontSize: '4rem'}}>DERSE</h1>
+        <img 
+          src="./images/special/derse_bg.png" 
+          alt="Derse" 
+          style={{height: '100px', width: 'auto'}}
+        />
+      </div>
+      
+      {/* Extended Zodiac Description */}
+      <div className="p-4 rounded" style={{backgroundColor: 'rgba(0,0,0,0.3)'}}>
+        <button
+          className="homestuck-command-dark mb-3"
+          style={{color: '#c77dff', textDecoration: 'none', cursor: 'text'}}
+        >
+          {'>'} Read Extended Zodiac Description of Derse Dreamers.
+        </button>
+        <p className="font-courier leading-relaxed" style={{color: '#ffffff'}}>
+          {description}
+        </p>
+      </div>
+      
+      {/* Canon Examples */}
+      <div>
+        <h2 className="homestuck-command-dark mb-3">Canon Examples</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+          {derseDreamers.map(({ name, classpect }) => {
+            const [className, aspectName] = classpect;
+            const path = `/classpect/${className.toLowerCase()}-of-${aspectName.toLowerCase()}`;
+            return (
+              <div key={name}>
+                <a
+                  href={`./index.html#${path}`}
+                  className="font-courier-bold hover:underline"
+                  style={{color: '#c77dff'}}
+                >
+                  {name}
+                </a>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   APP
+   ========================= */
+const App = () => {
+  return (
+    <div className="derse-bg" style={{ 
+      backgroundColor: derseTheme.bg, 
+      minHeight: '100vh'
+    }}>
+      <Header theme={derseTheme} />
+      
+      <div className="px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <SearchBar theme={derseTheme} />
+          
+          <div style={{ 
+            backgroundColor: derseTheme.contentBg, 
+            color: derseTheme.textColor, 
+            padding: '24px', 
+            borderRadius: '8px', 
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)', 
+            border: `2px solid ${derseTheme.accentBg}` 
+          }}>
+            <DersePage />
+          </div>
+          
+          <Footer theme={derseTheme} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   MOUNT
+   ========================= */
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+
+</script>
+</body>
+</html>

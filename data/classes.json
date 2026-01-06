@@ -1,0 +1,70 @@
+{
+  "Lord": {
+    "blurb": "One who masters their Aspect, actively. As a Master class, Lords tend to exhibit influence of their aspect that reaches beyond their awareness, and are typically assisted by henchmen or minions in the use of their Aspect.",
+    "links": []
+  },
+  "Muse": {
+    "blurb": "One who masters their Aspect, passively. As a Master class, Muses often inspire others to use their Aspect on their behalf, and rarely act directly with their Aspect. They appear to have the strongest direct connection to their Aspect out of all the classes.",
+    "links": []
+  },
+  "Witch": {
+    "blurb": "",
+    "links": []
+  },
+  "Heir": {
+    "blurb": "",
+    "links": []
+  },
+  "Maid": {
+    "blurb": "",
+    "links": []
+  },
+  "Sylph": {
+    "blurb": "",
+    "links": []
+  },
+  "Knight": {
+    "blurb": "One who fights to preserve their Aspect, actively. As a defender class, Knights are staunch protectors of their Aspect and often deal with an active seige on their Aspect, being consistently strong throughout a session.",
+    "links": [
+      {
+        "label": "Read on rosespecting (Tumblr)",
+        "url": "https://www.tumblr.com/rosespecting/792919673299681280/knights-and-pages",
+        "author": "rosespecting"
+      }
+    ]
+  },
+  "Page": {
+    "blurb": "One who fights to preserve their Aspect, passively. As a defender class, Pages may seem to start out weak, but given time to prepare, they can meet any threat coming their way, especially if that threat comes to their Aspect.",
+    "links": [
+      {
+        "label": "Read on rosespecting (Tumblr)",
+        "url": "https://www.tumblr.com/rosespecting/792919673299681280/knights-and-pages",
+        "author": "rosespecting"
+      }
+    ]
+  },
+  "Mage": {
+    "blurb": "",
+    "links": []
+  },
+  "Seer": {
+    "blurb": "",
+    "links": []
+  },
+  "Thief": {
+    "blurb": "",
+    "links": []
+  },
+  "Rogue": {
+    "blurb": "",
+    "links": []
+  },
+  "Prince": {
+    "blurb": "",
+    "links": []
+  },
+  "Bard": {
+    "blurb": "",
+    "links": []
+  }
+}

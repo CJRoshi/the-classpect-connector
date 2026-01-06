@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="./images/special/CCLogoRegular.png" />
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Shared Components (load in dependency order) -->
+  <script type="text/babel" src="./components/constants.js"></script>
+  <script type="text/babel" src="./components/utility-functions.js"></script>
+  <script type="text/babel" src="./components/header.js"></script>
+  <script type="text/babel" src="./components/searchbar.js"></script>
+  <script type="text/babel" src="./components/footer.js"></script>
+  <script type="text/babel" src="./components/links.js"></script>
+  <script type="text/babel" src="./components/section.js"></script>
+  <script type="text/babel" src="./components/rotation-graph.js"></script>
+  <script type="text/babel" src="./components/tiled-background.js"></script>
+  
+  <!-- Page Components -->
+  <script type="text/babel" src="./components/homepage.js"></script>
+  <script type="text/babel" src="./components/class-page.js"></script>
+  <script type="text/babel" src="./components/aspect-page.js"></script>
+  <script type="text/babel" src="./components/classpect-page.js"></script>
+  <script type="text/babel" src="./components/canon-page.js"></script>
+  
+  <style>
+    @font-face {
+      font-family: 'Carima';
+      src: url('./fonts/Carima-Regular.ttf') format('truetype');
+    }
+    
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('./fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+    
+    /* Font families */
+    .font-courier { font-family: 'Courier New', monospace; }
+    .font-courier-bold { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem;
+      font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem;
+      font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem;
+      font-weight: normal;
+    }
+    .font-verdana { 
+      font-family: Verdana, Arial, sans-serif; 
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    .font-verdana-title { 
+      font-family: Verdana, Arial, sans-serif;
+      font-size: 2.25rem;
+      font-weight: bold;
+    }
+    .font-verdana-subtitle {
+      font-family: Verdana, Arial, sans-serif;
+      font-size: 1.5rem;
+    }
+    
+    /* Homestuck command style */
+    .homestuck-command {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: #000000;
+    }
+    
+    .homestuck-command-dark {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: #ffffff;
+    }
+    
+    .font-pixelated {
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+      -webkit-font-smoothing: none;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useMemo } = React;
+
+/* =========================
+   DATA STORAGE (Global - accessible to all components)
+   ========================= */
+window.aspectsData = {};
+window.classesData = {};
+window.characterData = { canon: {}, nonCanon: {} };
+
+// Aliases for easier access
+let aspectsData = window.aspectsData;
+let classesData = window.classesData;
+let characterData = window.characterData;
+
+/* =========================
+   INVERSE MAPPINGS
+   ========================= */
+const classInverses = {
+  Lord: ["Muse", "Muse", "Muse", "Muse"],
+  Witch: ["Sylph", "Heir", "Maid", "Heir"],
+  Prince: ["Bard", "Mage", "Seer", "Bard"],
+  Thief: ["Rogue", "Knight", "Page", "Rogue"],
+  Knight: ["Page", "Thief", "Rogue", "Page"],
+  Mage: ["Seer", "Prince", "Bard", "Seer"],
+  Sylph: ["Witch", "Maid", "Heir", "Maid"],
+  Maid: ["Heir", "Sylph", "Witch", "Sylph"],
+  Seer: ["Mage", "Bard", "Prince", "Mage"],
+  Page: ["Knight", "Rogue", "Thief", "Knight"],
+  Rogue: ["Thief", "Page", "Knight", "Thief"],
+  Bard: ["Prince", "Seer", "Mage", "Prince"],
+  Heir: ["Maid", "Witch", "Sylph", "Witch"],
+  Muse: ["Lord", "Lord", "Lord", "Lord"]
+};
+
+const aspectInverses = {
+  Space: ["Time", "Hope", "Rage", "Hope"],
+  Void: ["Light", "Blood", "Breath", "Light"],
+  Doom: ["Life", "Heart", "Mind", "Life"],
+  Heart: ["Mind", "Doom", "Life", "Mind"],
+  Blood: ["Breath", "Void", "Light", "Breath"],
+  Time: ["Space", "Rage", "Hope", "Rage"],
+  Rage: ["Hope", "Time", "Space", "Time"],
+  Breath: ["Blood", "Light", "Void", "Blood"],
+  Mind: ["Heart", "Life", "Doom", "Heart"],
+  Life: ["Doom", "Mind", "Heart", "Doom"],
+  Light: ["Void", "Breath", "Blood", "Void"],
+  Hope: ["Rage", "Space", "Time", "Space"]
+};
+
+/* =========================
+   DATA LOADING
+   ========================= */
+const loadData = async () => {
+  try {
+    const [aspectsRes, classesRes, charactersRes] = await Promise.all([
+      fetch('./data/aspects.json'),
+      fetch('./data/classes.json'),
+      fetch('./data/characters.json')
+    ]);
+    
+    // Load into global window object so components can access
+    window.aspectsData = await aspectsRes.json();
+    window.classesData = await classesRes.json();
+    window.characterData = await charactersRes.json();
+    
+    // Update local aliases
+    aspectsData = window.aspectsData;
+    classesData = window.classesData;
+    characterData = window.characterData;
+    
+    return true;
+  } catch (error) {
+    console.error('Error loading data:', error);
+    return false;
+  }
+};
+
+/* =========================
+   THEME DEFINITIONS
+   ========================= */
+const aspectThemes = {
+  Breath: { 
+    bg: "#4379e6",        // Medium blue bg
+    aspectLinkColor: "graph",
+    contentBg: "#e0f7ff",  // Very light blue content
+    textColor: "#000000", 
+    accentBg: "#0076f9" 
+  },
+  Blood: { 
+    bg: "#5a0f00",        // Dark maroon bg
+    aspectLinkColor: "dark",
+    contentBg: "#2a0600", // Very dark red content
+    textColor: "#ffffff", 
+    accentBg: "#ff5000",
+    isDark: true
+  },
+  Space: { 
+    bg: "#202020",        // Dark gray bg  
+    aspectLinkColor: "dark",
+    contentBg: "#000000", // Pure black content
+    textColor: "#ffffff", 
+    accentBg: "#4ac925",  // Jade's lime green
+    isDark: true
+  },
+  Time: { 
+    bg: "#7a0000",        // Dark red bg
+    aspectLinkColor: "graph",
+    contentBg: "#ffcccc", // Light pink content
+    textColor: "#000000", 
+    accentBg: "#d52c2c" 
+  },
+  Light: { 
+    bg: "#f0840c",        // Orange bg
+    aspectLinkColor: "graph",
+    contentBg: "#fffdf0", // Cream content
+    textColor: "#000000", 
+    accentBg: "#ff8c00" 
+  },
+  Void: { 
+    bg: "#000033",        // Very dark blue bg
+    aspectLinkColor: "dark",
+    contentBg: "#0d0d26",  // Darker blue content
+    textColor: "#ffffff", 
+    accentBg: "#4d4d9a",
+    isDark: true
+  },
+  Mind: { 
+    bg: "#00923d",        // Teal bg
+    aspectLinkColor: "graph",
+    contentBg: "#e5fcfc", // Light cyan content
+    textColor: "#000000", 
+    accentBg: "#23a153" 
+  },
+  Heart: { 
+    bg: "#4d0026",        // Dark magenta bg
+    aspectLinkColor: "graph",
+    contentBg: "#ffe0f0", // Light pink content
+    textColor: "#000000", 
+    accentBg: "#e63f7a" 
+  },
+  Life: { 
+    bg: "#a49787",        // Beige-gray bg
+    aspectLinkColor: "graph",
+    contentBg: "#f0fff0", // Very light green content
+    textColor: "#000000", 
+    accentBg: "#6bbd40" 
+  },
+  Doom: { 
+    bg: "#20401f",        // Very dark green bg
+    aspectLinkColor: "dark",
+    contentBg: "#0d1a0d", // Almost black green content
+    textColor: "#ffffff", 
+    accentBg: "#3f6b3f",
+    isDark: true
+  },
+  Hope: { 
+    bg: "#ffde55",        // Bright gold bg
+    aspectLinkColor: "graph",
+    contentBg: "#f0eee1", // Cream content
+    textColor: "#000000", 
+    accentBg: "#f4a72c" 
+  },
+  Rage: { 
+    bg: "#6a2a7a",        // Dark purple bg
+    aspectLinkColor: "graph",
+    contentBg: "#f5e5ff", // Light purple content
+    textColor: "#000000", 
+    accentBg: "#a336d5" 
+  }
+};
+
+const defaultTheme = { 
+  bg: "#626262", 
+  contentBg: "#d0d0d0", 
+  textColor: "#000000", 
+  accentBg: "#a0a0a0",
+  isDark: false,
+  aspectLinkColor: "graph"
+};
+
+/* =========================
+   APP COMPONENT
+   ========================= */
+const App = () => {
+  // Clean up the path - if we're coming from prospit.html or derse.html, start fresh
+  const initialPath = (() => {
+    const urlPath = window.location.pathname;
+    const hash = window.location.hash;
+    
+    // Check if there's a search query from external page
+    if (hash && hash.startsWith('#search=')) {
+      return '/'; // Will trigger search in useEffect
+    }
+    
+    // Check if it's a random request
+    if (hash === '#random') {
+      return '/'; // Will trigger random in useEffect
+    }
+    
+    // If there's a hash path, use it (for navigation from external pages)
+    if (hash && hash.startsWith('#/')) {
+      return hash.substring(1); // Remove the #
+    }
+    
+    // Otherwise use the pathname, defaulting to home
+    return urlPath === '/' || urlPath === '/index.html' || urlPath === '' ? '/' : urlPath;
+  })();
+  
+  const [path, setPath] = useState(initialPath);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  
+  // Load data on mount
+  useEffect(() => {
+    loadData().then(success => {
+      if (success) {
+        setDataLoaded(true);
+        
+        // Handle search or random from external pages
+        const hash = window.location.hash;
+        
+        if (hash && hash.startsWith('#search=')) {
+          const searchQuery = decodeURIComponent(hash.substring(8));
+          handleExternalSearch(searchQuery);
+        } else if (hash === '#random') {
+          handleExternalRandom();
+        }
+      }
+    });
+  }, []);
+  
+  // Handle search from external page
+  const handleExternalSearch = (searchQuery) => {
+    const searchLower = searchQuery.toLowerCase().trim();
+    
+    // Secret redirects
+    const secretRedirects = [
+      {
+        terms: ['mutt of slop', 'dog of oil', 'muttofslop', 'dogofoil'],
+        url: 'https://youtu.be/EUELs5Uzn3I?si=Um6uBy0XDC3qenal'
+      },
+      {
+        terms: ['waste of space', 'huss of lips', 'wasteofspace', 'hussoflips'],
+        url: () => {
+          const urls = ['https://homestuck.com/problemsleuth/000458', 'https://homestuck.com/005973'];
+          return urls[Math.floor(Math.random() * urls.length)];
+        }
+      },
+      {
+        terms: ['douche of tears', 'doucheoftears'],
+        url: 'https://homestuck.com/001951'
+      },
+      {
+        terms: ['gent of piss', 'gentofpiss'],
+        url: 'https://homestuck.com/005854'
+      },
+      {
+        terms: ['trash of time', 'trashoftime'],
+        url: 'https://deltarune.com/'
+      },
+      {
+        terms: ['nic of time', 'nick of time', 'nicoftime', 'nickoftime'],
+        url: 'https://www.homestuck.com/004687'
+      },
+      {
+        terms: ['champion of pulchritude', 'championofpulchritude'],
+        url: 'https://homestuck.com/problemsleuth/001760'
+      },
+      {
+        terms: ['nogue of noid', 'gent of time', 'nogueofnoid', 'gentoftime'],
+        url: () => {
+          // Random choice between two URLs -- The first page of Noxyquest or Nascade
+          const urls2 = [
+            'https://youtu.be/jeQWXKajnxw?si=8GTjEzO4HhPXiMcA',
+            'https://mspfa.com/?s=65765&p=1'
+          ];
+          return urls2[Math.floor(Math.random() * urls2.length)];
+        }
+      },
+      {
+        terms: ['email of equius', 'emailofequius'],
+        url: './email-of-equius.html'
+      },
+      {
+        terms: ['dave of guy', 'daveofguy'],
+        url: "./index.html#/classpect/knight-of-time"
+      },
+      {
+        terms: ['son of god', 'sonofgod', 'seer of any', 'seerofany', 'seer of all', 'seerofall', 'christ of jesus', 'christofjesus', 'jesus of christ', 'jesusofchrist', 'lord of lords', 'lordoflords'],
+        url: "https://youtu.be/GTh5J0HsIAg?si=gpAQLAj0UMtSq-md" // Several euphemisms for "Jesus" redirecting to that video of Morshu reading the whole Bible
+      }
+    ];
+    
+    const secretMatch = secretRedirects.find(redirect =>
+      redirect.terms.some(term => term === searchLower || term.replace(/\s+/g, '') === searchLower.replace(/\s+/g, ''))
+    );
+    
+    if (secretMatch) {
+      const url = typeof secretMatch.url === 'function' ? secretMatch.url() : secretMatch.url;
+      window.location.href = url;
+      return;
+    }
+    
+    // Check for Prospit/Derse first (external pages)
+    if (searchLower === 'prospit') {
+      window.location.href = './prospit.html';
+      return;
+    }
+    if (searchLower === 'derse') {
+      window.location.href = './derse.html';
+      return;
+    }
+    // Check for Canon page
+    if (searchLower === 'canon' || searchLower === 'characters') {
+      window.location.href = './canon.html';
+      return;
+    }
+    
+    // Build list of all pages
+    const allPages = [];
+    
+    // Classes
+    Object.keys(classesNumeric).forEach(cls => {
+      allPages.push({
+        path: `/class/${cls.toLowerCase()}`,
+        terms: [cls.toLowerCase()]
+      });
+    });
+    
+    // Aspects
+    Object.keys(aspectsNumeric).forEach(asp => {
+      allPages.push({
+        path: `/aspect/${asp.toLowerCase()}`,
+        terms: [asp.toLowerCase()]
+      });
+    });
+    
+    // Classpects
+    Object.keys(classesNumeric).forEach(cls => {
+      Object.keys(aspectsNumeric).forEach(asp => {
+        allPages.push({
+          path: `/classpect/${cls.toLowerCase()}-of-${asp.toLowerCase()}`,
+          terms: [
+            `${cls.toLowerCase()} of ${asp.toLowerCase()}`,
+            `${cls.toLowerCase()}of${asp.toLowerCase()}`,
+            `${cls.toLowerCase()} ${asp.toLowerCase()}`
+          ]
+        });
+      });
+    });
+    
+    // Find exact match
+    const match = allPages.find(page => 
+      page.terms.some(term => term === searchLower)
+    );
+    
+    if (match) {
+      window.location.hash = match.path;
+      setPath(match.path);
+    } else {
+      // Find partial match
+      const partialMatch = allPages.find(page =>
+        page.terms.some(term => term.includes(searchLower))
+      );
+      
+      if (partialMatch) {
+        window.location.hash = partialMatch.path;
+        setPath(partialMatch.path);
+      } else {
+        // No match, stay on homepage
+        window.location.hash = '/';
+      }
+    }
+  };
+  
+  // Handle random from external page
+  const handleExternalRandom = () => {
+    const allPages = [];
+    
+    Object.keys(classesNumeric).forEach(cls => {
+      Object.keys(aspectsNumeric).forEach(asp => {
+        allPages.push(`/classpect/${cls.toLowerCase()}-of-${asp.toLowerCase()}`);
+      });
+    });
+    
+    Object.keys(classesNumeric).forEach(cls => {
+      allPages.push(`/class/${cls.toLowerCase()}`);
+    });
+    
+    Object.keys(aspectsNumeric).forEach(asp => {
+      allPages.push(`/aspect/${asp.toLowerCase()}`);
+    });
+    
+    const randomPath = allPages[Math.floor(Math.random() * allPages.length)];
+    window.location.hash = randomPath;
+    setPath(randomPath);
+  };
+  
+  // Handle browser back/forward and hash changes
+  useEffect(() => {
+    const handlePopState = () => {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#/')) {
+        setPath(hash.substring(1));
+      } else {
+        setPath(window.location.pathname || '/');
+      }
+    };
+    
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#/')) {
+        setPath(hash.substring(1));
+      }
+    };
+    
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handleHashChange);
+    
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
+  
+  // Determine theme based on current path
+  const getTheme = () => {
+    if (path.startsWith("/aspect/")) {
+      const a = path.replace("/aspect/","");
+      const an = Object.keys(aspectsNumeric).find(x=>x.toLowerCase()===a);
+      return an && aspectThemes[an] ? aspectThemes[an] : defaultTheme;
+    }
+    if (path.startsWith("/classpect/")) {
+      const [c,a] = path.replace("/classpect/","").split("-of-");
+      const an = Object.keys(aspectsNumeric).find(x=>x.toLowerCase()===a);
+      return an && aspectThemes[an] ? aspectThemes[an] : defaultTheme;
+    }
+    // Homepage, class pages, and other pages use default theme
+    return defaultTheme;
+  };
+
+  const theme = getTheme();
+  
+  // Show loading message while data loads
+  if (!dataLoaded) {
+    return (
+      <div style={{ backgroundColor: '#626262', color: '#ffffff', minHeight: '100vh', padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="text-center">
+          <p className="text-2xl font-bold">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  // Navigate and update browser history
+  const navigate = (newPath) => {
+    setPath(newPath);
+    if (window.location.protocol !== 'file:') {
+      // Use hash-based navigation for compatibility with external pages
+      window.location.hash = newPath;
+    }
+  };
+  
+  // Get current aspect from path for tiled background
+  const getCurrentAspect = () => {
+    if (path.startsWith("/aspect/")) {
+      const a = path.replace("/aspect/","");
+      return Object.keys(aspectsNumeric).find(x=>x.toLowerCase()===a);
+    }
+    if (path.startsWith("/classpect/")) {
+      const [c,a] = path.replace("/classpect/","").split("-of-");
+      return Object.keys(aspectsNumeric).find(x=>x.toLowerCase()===a);
+    }
+    return null;
+  };
+
+  const currentAspect = getCurrentAspect();
+  
+  // Determine if we should show header and search bar (not on About page)
+  const showHeaderAndSearch = path !== '/about';
+  
+  const renderPage = () => {
+    // Homepage
+    if (path === '/' || path === '' || path === '/index.html') {
+      return <Homepage onNavigate={navigate} theme={theme} />;
+    }
+    
+    // Classpect pages
+    if (path.startsWith("/classpect/")) {
+      const [c,a] = path.replace("/classpect/","").split("-of-");
+      const cn = Object.keys(classesNumeric).find(x=>x.toLowerCase()===c);
+      const an = Object.keys(aspectsNumeric).find(x=>x.toLowerCase()===a);
+      
+      if (cn && an) {
+        return <ClasspectPage className={cn} aspectName={an} onNavigate={navigate} theme={theme}/>;
+      }
+    }
+    
+    // Class pages
+    if (path.startsWith("/class/")) {
+      const c = path.replace("/class/","");
+      const cn = Object.keys(classesNumeric).find(x=>x.toLowerCase()===c);
+      
+      if (cn) {
+        return <ClassPage className={cn} onNavigate={navigate} theme={theme}/>;
+      }
+    }
+    
+    // Aspect pages
+    if (path.startsWith("/aspect/")) {
+      const a = path.replace("/aspect/","");
+      const an = Object.keys(aspectsNumeric).find(x=>x.toLowerCase()===a);
+      
+      if (an) {
+        return <AspectPage aspectName={an} onNavigate={navigate} theme={theme}/>;
+      }
+    }
+    
+    // About page
+    if (path === '/about') {
+      return <div className="text-center"><h1 className="font-verdana-title mb-4">About</h1><p className="font-courier">About page content coming soon...</p></div>;
+    }
+    
+    // Canon page
+    if (path === '/canon') {
+      return <CanonPage onNavigate={navigate} theme={theme} />;
+    }
+    
+    // 404 - Default to homepage instead
+    return <Homepage onNavigate={navigate} theme={theme} />;
+  };
+
+  return (
+    <div style={{ backgroundColor: theme.bg, color: theme.textColor, minHeight: '100vh', position: 'relative' }}>
+      {/* Tiled aspect background (only on aspect/classpect pages) */}
+      {currentAspect && <TiledAspectBackground aspectName={currentAspect} />}
+      
+      {/* Header - Full width, outside container */}
+      {showHeaderAndSearch && <Header onNavigate={navigate} theme={theme} />}
+      
+      {/* Container for search and content */}
+      <div className="px-6 pb-6" style={{position: 'relative', zIndex: 1}}>
+        <div className="max-w-4xl mx-auto">
+          {/* Search Bar - Outside content box */}
+          {showHeaderAndSearch && (
+            <div className="mb-4">
+              <SearchBar onNavigate={navigate} theme={theme} />
+            </div>
+          )}
+          
+          {/* Main Content Box */}
+          <div style={{ 
+            backgroundColor: theme.contentBg, 
+            color: theme.textColor, 
+            padding: '24px', 
+            borderRadius: '8px', 
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)', 
+            border: `2px solid ${theme.accentBg}` 
+          }}>
+            {renderPage()}
+          </div>
+          
+          {/* Footer */}
+          <Footer theme={theme} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   MOUNT
+   ========================= */
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Prospit - The Classpect Connector</title>
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Shared Components -->
+   <script type="text/babel" src="./components/constants.js"></script>
+   <script type="text/babel" src="./components/header.js"></script>
+   <script type="text/babel" src="./components/searchbar.js"></script>
+   <script type="text/babel" src="./components/footer.js"></script>
+  
+  <style>
+    @font-face {
+      font-family: 'Carima';
+      src: url('./fonts/Carima-Regular.ttf') format('truetype');
+      font-display: swap;
+    }
+    
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('./fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+    
+    /* Font families */
+    .font-courier { font-family: 'Courier New', monospace; }
+    .font-courier-bold { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem;
+      font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem;
+      font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem;
+      font-weight: normal;
+    }
+    .font-verdana { 
+      font-family: Verdana, Arial, sans-serif; 
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    .font-carima {
+      font-family: 'Carima', Verdana, serif;
+      font-size: 3rem;
+      font-weight: normal;
+    }
+    
+    .font-verdana-title { 
+      font-family: Verdana, Arial, sans-serif;
+      font-size: 2.25rem;
+      font-weight: bold;
+    }
+    
+    /* Homestuck command style */
+    .homestuck-command {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: #000000;
+    }
+    
+    
+/* Homestuck command style (dark pages like Prospit/Derse) */
+.homestuck-command-dark {
+  font-family: Verdana, Arial, sans-serif;
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: #ffd700; /* default gold; can be overridden inline */
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  text-align: left;
+}
+.font-pixelated {
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+      -webkit-font-smoothing: none;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Background image */
+    .prospit-bg {
+      background-image: url('./images/special/prospitpalace.png');
+      background-size: cover;
+      background-position: center 40%; /* Recentering to match room center */
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useMemo } = React;
+
+/* =========================
+   PROSPIT THEME
+   ========================= */
+const prospitTheme = {
+  bg: "#fbc400",           // Gold background (from hs-hexes Moons section)
+  contentBg: "#2a2000",    // Dark brown/gold content background (darker for contrast)
+  textColor: "#ffffff",    // White text on dark background
+  accentBg: "#d69500",     // Darker gold for accents
+  headerBg: "#f4a72c",     // Medium gold for header
+  isDark: true             // Changed to true for white text
+};
+
+/* =========================
+   DATA LOADING
+   ========================= */
+let characterData = { canon: {}, nonCanon: {} };
+let moonsData = {};
+
+const loadData = async () => {
+  try {
+    const [charactersRes, moonsRes] = await Promise.all([
+      fetch('./data/characters.json'),
+      fetch('./data/moons.json')
+    ]);
+    
+    characterData = await charactersRes.json();
+    moonsData = await moonsRes.json();
+    
+    return true;
+  } catch (error) {
+    console.error('Error loading data:', error);
+    return false;
+  }
+};
+
+
+/* =========================
+   PROSPIT PAGE
+   ========================= */
+const ProspitPage = () => {
+  const [dataLoaded, setDataLoaded] = useState(false);
+  
+  useEffect(() => {
+    loadData().then(success => {
+      if (success) setDataLoaded(true);
+    });
+  }, []);
+  
+  if (!dataLoaded) {
+    return (
+      <div className="text-center">
+        <p className="text-2xl font-bold">Loading...</p>
+      </div>
+    );
+  }
+  
+  // Get all canon Prospit dreamers (including Dual dreamers)
+  const prospitDreamers = Object.entries(characterData.canon)
+    .filter(([_, data]) => data.lunarsway === "Prospit" || data.lunarsway === "Dual")
+    .map(([name, data]) => ({
+      name,
+      classpect: data.classpect,
+      color: data.color
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  
+  const description = moonsData.Prospit?.description || "Description loading...";
+  
+  return (
+    <div className="space-y-6">
+      {/* Title with Icon */}
+      <div className="flex items-center justify-between p-4 rounded" style={{backgroundColor: 'rgba(0,0,0,0.4)'}}>
+        <h1 className="font-carima" style={{color: '#ffd700', fontSize: '4rem'}}>PROSPIT</h1>
+        <img 
+          src="./images/special/prospit_bg.png" 
+          alt="Prospit" 
+          style={{height: '100px', width: 'auto'}}
+        />
+      </div>
+      
+      {/* Extended Zodiac Description */}
+      <div className="p-4 rounded" style={{backgroundColor: 'rgba(0,0,0,0.4)'}}>
+        <button
+          className="homestuck-command-dark mb-3"
+          style={{color: '#d4af37', textDecoration: 'none', cursor: 'text'}}
+        >
+          {'>'} Read Extended Zodiac Description of Prospit Dreamers.
+        </button>
+        <p className="font-courier leading-relaxed" style={{color: '#ffffff'}}>
+          {description}
+        </p>
+      </div>
+      
+      {/* Canon Examples */}
+      <div>
+        <h2 className="homestuck-command-dark mb-3">Canon Examples</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+          {prospitDreamers.map(({ name, classpect }) => {
+            const [className, aspectName] = classpect;
+            const path = `./index.html#/classpect/${className.toLowerCase()}-of-${aspectName.toLowerCase()}`;
+            return (
+              <div key={name}>
+                <a
+                  href={path}
+                  className="font-courier-bold hover:underline"
+                  style={{color: '#d4af37'}}
+                >
+                  {name}
+                </a>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   APP
+   ========================= */
+const App = () => {
+  return (
+    <div className="prospit-bg" style={{ 
+      backgroundColor: prospitTheme.bg, 
+      minHeight: '100vh'
+    }}>
+      <Header theme={prospitTheme} />
+      
+      <div className="px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <SearchBar theme={prospitTheme} />
+          
+          <div style={{ 
+            backgroundColor: prospitTheme.contentBg, 
+            color: prospitTheme.textColor, 
+            padding: '24px', 
+            borderRadius: '8px', 
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)', 
+            border: `2px solid ${prospitTheme.accentBg}` 
+          }}>
+            <ProspitPage />
+          </div>
+          
+          <Footer theme={prospitTheme} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   MOUNT
+   ========================= */
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+
+</script>
+</body>
+</html>

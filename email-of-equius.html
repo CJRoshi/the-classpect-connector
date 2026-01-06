@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>D --> Build My Ma%ine - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="./images/special/CCLogoRegular.png" />
+  
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('./fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: #000000;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .logo-home {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      cursor: pointer;
+      z-index: 1000;
+      transition: opacity 0.3s;
+    }
+    
+    .logo-home:hover {
+      opacity: 0.7;
+    }
+    
+    .logo-home img {
+      width: 48px;
+      height: 48px;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+    }
+    
+    .email-container {
+      text-align: center;
+      padding: 40px 20px;
+      max-width: 900px;
+    }
+    
+    .subject-line {
+      font-family: Garamond, Georgia, serif;
+      font-weight: bold;
+      font-size: 3rem;
+      color: #6b8cff;
+      text-shadow: 
+        0 0 20px #000056,
+        0 0 40px #000056,
+        0 0 60px #000056,
+        0 0 80px #2563eb,
+        0 0 100px #2563eb;
+      margin-bottom: 40px;
+      animation: glow-pulse 3s ease-in-out infinite;
+      letter-spacing: 0.05em;
+    }
+    
+    @keyframes glow-pulse {
+      0%, 100% {
+        text-shadow: 
+          0 0 20px #000056,
+          0 0 40px #000056,
+          0 0 60px #2563eb,
+          0 0 80px #2563eb,
+          0 0 100px #2563eb;
+      }
+      50% {
+        text-shadow: 
+          0 0 30px #000056,
+          0 0 60px #2563eb,
+          0 0 90px #2563eb,
+          0 0 120px #3b82f6,
+          0 0 150px #3b82f6;
+      }
+    }
+    
+    .email-image-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 60px;
+    }
+    
+    .email-image {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 
+        0 0 30px #000056,
+        0 0 60px #000056,
+        0 0 90px #2563eb,
+        0 0 120px #2563eb;
+      animation: image-glow 3s ease-in-out infinite;
+    }
+    
+    @keyframes image-glow {
+      0%, 100% {
+        box-shadow: 
+          0 0 30px #000056,
+          0 0 60px #000056,
+          0 0 90px #2563eb,
+          0 0 120px #2563eb;
+      }
+      50% {
+        box-shadow: 
+          0 0 40px #2563eb,
+          0 0 80px #2563eb,
+          0 0 120px #3b82f6,
+          0 0 160px #3b82f6,
+          0 0 200px #60a5fa;
+      }
+    }
+    
+    /* Outer glow effect */
+    .email-image-wrapper::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: -20px;
+      bottom: -20px;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(37, 99, 235, 0.3) 0%,
+        rgba(0, 0, 86, 0.2) 40%,
+        transparent 70%
+      );
+      border-radius: 20px;
+      animation: outer-glow 3s ease-in-out infinite;
+      pointer-events: none;
+    }
+    
+    @keyframes outer-glow {
+      0%, 100% {
+        opacity: 0.6;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+    }
+    
+    .sollux-reactions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .sollux-reaction {
+      width: 50px;
+      height: 50px;
+      animation: float 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+    }
+    
+    .sollux-reaction:nth-child(1) { animation-delay: 0s; }
+    .sollux-reaction:nth-child(2) { animation-delay: 0.2s; }
+    .sollux-reaction:nth-child(3) { animation-delay: 0.4s; }
+    .sollux-reaction:nth-child(4) { animation-delay: 0.6s; }
+    .sollux-reaction:nth-child(5) { animation-delay: 0.8s; }
+    .sollux-reaction:nth-child(6) { animation-delay: 1s; }
+    .sollux-reaction:nth-child(7) { animation-delay: 1.2s; }
+    .sollux-reaction:nth-child(8) { animation-delay: 1.4s; }
+    .sollux-reaction:nth-child(9) { animation-delay: 1.6s; }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .subject-line {
+        font-size: 2rem;
+      }
+      
+      .sollux-reaction {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Home logo in corner -->
+  <a href="./index.html" class="logo-home">
+    <img src="./images/special/CCLogoLight.png" alt="Home" />
+  </a>
+
+  <div class="email-container">
+    <!-- Subject line -->
+    <h1 class="subject-line">D --> Build My Ma%ine</h1>
+    
+    <!-- Email image with glow -->
+    <div class="email-image-wrapper">
+      <img 
+        src="./images/special/equius_email.webp" 
+        alt="Equius Email" 
+        class="email-image"
+      />
+    </div>
+    
+    <!-- Sollux reactions -->
+    <div class="sollux-reactions">
+      <img src="./images/special/tiredsollux.webp" alt="Tired Sollux" class="sollux-reaction" />
+      <img src="./images/special/tiredsollux.webp" alt="Tired Sollux" class="sollux-reaction" />
+      <img src="./images/special/tiredsollux.webp" alt="Tired Sollux" class="sollux-reaction" />
+      <img src="./images/special/tiredsollux.webp" alt="Tired Sollux" class="sollux-reaction" />
+      <img src="./images/special/tiredsollux.webp" alt="Tired Sollux" class="sollux-reaction" />
+      <img src="./images/special/tiredsollux.webp" alt="Tired Sollux" class="sollux-reaction" />
+      <img src="./images/special/tiredsollux.webp" alt="Tired Sollux" class="sollux-reaction" />
+      <img src="./images/special/tiredsollux.webp" alt="Tired Sollux" class="sollux-reaction" />
+      <img src="./images/special/tiredsollux.webp" alt="Tired Sollux" class="sollux-reaction" />
+    </div>
+  </div>
+
+</body>
+</html>

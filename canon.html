@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Canon Characters - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="./images/special/CCLogoRegular.png" />
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Shared Components -->
+  <script type="text/babel" src="./components/constants.js"></script>
+  <script type="text/babel" src="./components/header.js"></script>
+  <script type="text/babel" src="./components/searchbar.js"></script>
+  <script type="text/babel" src="./components/footer.js"></script>
+  
+  <style>
+    @font-face {
+      font-family: 'Carima';
+      src: url('./fonts/Carima-Regular.ttf') format('truetype');
+    }
+    
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('./fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+    
+    /* Font families */
+    .font-courier { font-family: 'Courier New', monospace; }
+    .font-courier-bold { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem;
+      font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem;
+      font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem;
+      font-weight: normal;
+    }
+    .font-verdana { 
+      font-family: Verdana, Arial, sans-serif; 
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    .font-verdana-title { 
+      font-family: Verdana, Arial, sans-serif;
+      font-size: 2.25rem;
+      font-weight: bold;
+    }
+    
+    /* Homestuck command style */
+    .homestuck-command {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: #000000;
+    }
+    
+    .homestuck-command-dark {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: #ffffff;
+    }
+    
+    .font-pixelated {
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+      -webkit-font-smoothing: none;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+/* =========================
+   DEFAULT THEME
+   ========================= */
+const defaultTheme = { 
+  bg: "#626262", 
+  contentBg: "#d0d0d0", 
+  textColor: "#000000", 
+  accentBg: "#a0a0a0",
+  isDark: false,
+  aspectLinkColor: "graph"
+};
+
+/* =========================
+   DATA LOADING
+   ========================= */
+let characterData = { canon: {}, nonCanon: {} };
+
+const loadData = async () => {
+  try {
+    const charactersRes = await fetch('./data/characters.json');
+    characterData = await charactersRes.json();
+    return true;
+  } catch (error) {
+    console.error('Error loading data:', error);
+    return false;
+  }
+};
+
+/* =========================
+   CANON PAGE
+   ========================= */
+const CanonPage = ({ theme }) => {
+  const [dataLoaded, setDataLoaded] = useState(false);
+  
+  useEffect(() => {
+    loadData().then(success => {
+      if (success) setDataLoaded(true);
+    });
+  }, []);
+  
+  if (!dataLoaded) {
+    return (
+      <div className="text-center">
+        <p className="text-2xl font-bold">Loading...</p>
+      </div>
+    );
+  }
+  
+  // Get all canon characters and sort alphabetically
+  const canonCharacters = Object.entries(characterData.canon)
+    .map(([name, data]) => ({
+      name,
+      classpect: data.classpect,
+      color: data.color,
+      lunarsway: data.lunarsway
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  
+  return (
+    <div className="space-y-6">
+      {/* Title */}
+      <div className="text-center">
+        <h1 className="font-typostuck-title mb-2" style={{fontSize: "3rem"}}>Canon Characters</h1>
+        <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#4b5563"}}>
+          All canon Homestuck characters and their classpects (if confirmed).
+        </p>
+      </div>
+      
+      {/* Character List */}
+      <div>
+        <h2 className={theme?.isDark ? "homestuck-command-dark mb-3" : "homestuck-command mb-3"}>
+          All Canon Classpects
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+          {canonCharacters.map(({ name, classpect, color }) => {
+            const [className, aspectName] = classpect;
+            const path = `./index.html#/classpect/${className.toLowerCase()}-of-${aspectName.toLowerCase()}`;
+            return (
+              <div key={name} className="font-courier" style={{display: 'flex', gap: '0.5rem'}}>
+                <span style={{color: color || (theme?.isDark ? "#ffffff" : "#000000"), fontWeight: 'bold'}}>
+                  {name}:
+                </span>
+                <a
+                  href={path}
+                  className="font-courier-bold hover:underline"
+                  style={{color: theme?.isDark ? "#6dd1f4" : "#0000ee", textDecoration: 'none'}}
+                >
+                  {className} of {aspectName}
+                </a>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   APP
+   ========================= */
+const App = () => {
+  // Dummy navigation function for external page
+  const handleNavigate = (path) => {
+    // On external pages, always go to index.html with hash
+    window.location.href = `./index.html#${path}`;
+  };
+  
+  return (
+    <div style={{ 
+      backgroundColor: defaultTheme.bg, 
+      minHeight: '100vh'
+    }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme} />
+      
+      <div className="px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <SearchBar onNavigate={handleNavigate} theme={defaultTheme} />
+          
+          <div style={{ 
+            backgroundColor: defaultTheme.contentBg, 
+            color: defaultTheme.textColor, 
+            padding: '24px', 
+            borderRadius: '8px', 
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)', 
+            border: `2px solid ${defaultTheme.accentBg}` 
+          }}>
+            <CanonPage theme={defaultTheme} />
+          </div>
+          
+          <Footer theme={defaultTheme} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   MOUNT
+   ========================= */
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+
+</script>
+</body>
+</html>

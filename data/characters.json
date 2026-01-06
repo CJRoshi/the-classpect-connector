@@ -1,0 +1,346 @@
+{
+  "canon": {
+    "June Egbert": {
+      "color": "#0715cd",
+      "classpect": ["Heir", "Breath"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "hi there!", "color": "#0715cd" }
+      ]
+    },
+    "Rose Lalonde": {
+      "color": "#b536da",
+      "classpect": ["Seer", "Light"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "Hello. Looking to learn more about me, then?", "color": "#b536da" }
+      ]
+    },
+    "Dave Strider": {
+      "color": "#e00707",
+      "classpect": ["Knight", "Time"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "oh sick yo whats up", "color": "#e00707", "link": "https://www.homestuck.com/005796" }
+      ]
+    },
+    "Jade Harley": {
+      "color": "#4ac925",
+      "classpect": ["Witch", "Space"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "hi!!! :D", "color": "#4ac925" }
+      ]
+    },
+    "Jane Crocker": {
+      "color": "#00d5f2",
+      "classpect": ["Maid", "Life"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "Shucks, you want to learn about me?", "color": "#00d5f2" }
+      ]
+    },
+    "Jake English": {
+      "color": "#1f9400",
+      "classpect": ["Page", "Hope"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "Well christ on a cracker, i didnt think id be getting this much action!", "color": "#1f9400" }
+      ]
+    },
+    "Roxy Lalonde": {
+      "color": "#ff6ff2",
+      "classpect": ["Rogue", "Void"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "wow u wanna kno abt me??? flattered", "color": "#ff6ff2" }
+      ]
+    },
+    "Dirk Strider": {
+      "color": "#f2a400",
+      "classpect": ["Prince", "Heart"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "You've picked the best of the bunch.", "color": "#f2a400" }
+      ]
+    },
+    "Aradia Megido": {
+      "color": "#a10000",
+      "classpect": ["Maid", "Time"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "hello! 0u0\nno wait that looks stupid", "color": "#a10000" }
+      ]
+    },
+    "Tavros Nitram": {
+      "color": "#a15000",
+      "classpect": ["Page", "Breath"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "hELLO THERE,,, pERSON WHO WANTS TO KNOW ABOUT ME FOR SOME REASON,,, }:D", "color": "#a15000" }
+      ]
+    },
+    "Sollux Captor": {
+      "color": "#a1a100",
+      "classpect": ["Mage", "Doom"],
+      "lunarsway": "Dual",
+      "reaction": [
+        { "text": "w0w, really? fuck 0ff.", "color": "#a1a100" }
+      ]
+    },
+    "Karkat Vantas": {
+      "color": "#626262",
+      "classpect": ["Knight", "Blood"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "I DON'T BELIEVE YOU. I CAN'T BE THAT INTERESTING.", "color": "#626262" }
+      ]
+    },
+    "Nepeta Leijon": {
+      "color": "#416600",
+      "classpect": ["Rogue", "Heart"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": ":33 < *ac perks up her ears curiously at the sound of her sw33t hero title!*", "color": "#416600" }
+      ]
+    },
+    "Kanaya Maryam": {
+      "color": "#008141",
+      "classpect": ["Sylph", "Space"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "I Think Its Quite Obvious Really What Else Is There To Know About Me", "color": "#008141" }
+      ]
+    },
+    "Terezi Pyrope": {
+      "color": "#008282",
+      "classpect": ["Seer", "Mind"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "SUR3 WHY NOT. 1M BOR3D.", "color": "#008282" }
+      ]
+    },
+    "Vriska Serket": {
+      "color": "#005682",
+      "classpect": ["Thief", "Light"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "No dou8les!!!!!!!!", "color": "#005682" }
+      ]
+    },
+    "Equius Zahhak": {
+      "color": "#000056",
+      "classpect": ["Heir", "Void"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { 
+          "text": "D --> Why are you wasting your time on this f001ishness", 
+          "color": "#000056", 
+          "link": "./email-of-equius.html"
+        }
+      ]
+    },
+    "Gamzee Makara": {
+      "color": "#2b0057",
+      "classpect": ["Bard", "Rage"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "mOtHa fUcKiN MiRaClEs :o)", "color": "#2b0057" }
+      ]
+    },
+    "Eridan Ampora": {
+      "color": "#6a006a",
+      "classpect": ["Prince", "Hope"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "oh NOWW you care", "color": "#6a006a" }
+      ]
+    },
+    "Feferi Peixes": {
+      "color": "#77003c",
+      "classpect": ["Witch", "Life"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "I'm so --EXCIT--ED! Glub glub!", "color": "#77003c" }
+      ]
+    },
+    "Damara Megido": {
+      "color": "#a10000",
+      "classpect": ["Witch", "Time"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "こんにちは、変態さん。", "color": "#a10000" }
+      ]
+    },
+    "Rufioh Nitram": {
+      "color": "#a15000",
+      "classpect": ["Rogue", "Breath"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "hey doll... you wanted to know about me?", "color": "#a15000" }
+      ]
+    },
+    "Mituna Captor": {
+      "color": "#a1a100",
+      "classpect": ["Heir", "Doom"],
+      "lunarsway": "Dual",
+      "reaction": [
+        { "text": "5DGJDK5GDFHV8L0K5", "color": "#a1a100" }
+      ]
+    },
+    "Kankri Vantas": {
+      "color": "#ff0000",
+      "classpect": ["Seer", "Blood"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "Traceback (most recent call last):\n  File \"c:\\\\Users\\\\Kankri\\\\D9cuments\\\\Manifest9s\\\\read_me_display.^cake\", line 612...\nMemoryError", "color": "#ff0000" }
+      ]
+    },
+    "Meulin Leijon": {
+      "color": "#416600",
+      "classpect": ["Mage", "Heart"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "\\(=^..^)/ YOU WANT TO KNOW ABOUT ME. THATS GREAT.", "color": "#416600" }
+      ]
+    },
+    "Porrim Maryam": {
+      "color": "#008141",
+      "classpect": ["Maid", "Space"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "Sure, why no+t.", "color": "#008141" }
+      ]
+    },
+    "Latula Pyrope": {
+      "color": "#008282",
+      "classpect": ["Knight", "Mind"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "you w4nt to know 4bout m3? r4d!", "color": "#008282" }
+      ]
+    },
+    "Aranea Serket": {
+      "color": "#005682",
+      "classpect": ["Sylph", "Light"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "The Sylph is in. ::::)", "color": "#005682" }
+      ]
+    },
+    "Horuss Zahhak": {
+      "color": "#000056",
+      "classpect": ["Page", "Void"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "8=D NEIGH, you seek me? I am so f*dging e%ited!", "color": "#000056" }
+      ]
+    },
+    "Kurloz Makara": {
+      "color": "#2b0057",
+      "classpect": ["Prince", "Rage"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": ":o|", "color": "#2b0057" }
+      ]
+    },
+    "Cronus Ampora": {
+      "color": "#6a006a",
+      "classpect": ["Bard", "Hope"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "were not talkin aboat this guy", "color": "#77003c" },
+        { "text": "oh come on, meenah!", "color": "#6a006a" },
+        { "text": "nope youre done", "color": "#77003c" }
+      ]
+    },
+    "Meenah Peixes": {
+      "color": "#77003c",
+      "classpect": ["Thief", "Life"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "you wanna know aboat me? alright thats cool thats cool", "color": "#77003c" }
+      ]
+    },
+    "Caliborn": {
+      "color": "#2ed73a",
+      "classpect": ["Lord", "Time"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "HA HA HA HA HA HA! YOU CANNOT ESCAPE ME. EVEN ON THE DARK INTER WEBS!", "color": "#2ed73a" }
+      ]
+    },
+    "Calliope": {
+      "color": "#929292",
+      "classpect": ["Muse", "Space"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "i'm not very Used to introdUcing the real me to others. u_u", "color": "#929292" }
+      ]
+    },
+    "Kalian Delfin": {
+      "color": "#6a006a",
+      "classpect": ["Bard", "Blood"],
+      "lunarsway": "Prospit",
+      "reaction": null
+    },
+    "Cridea Jeevik": {
+      "color": "#6a006a",
+      "classpect": ["Sylph", "Heart"],
+      "lunarsway": "Prospit",
+      "reaction": null
+    },
+    "Jerann Mussel": {
+      "color": "#6a006a",
+      "classpect": ["Seer", "Space"],
+      "lunarsway": "Derse",
+      "reaction": null
+    }
+  },
+  "nonCanon": {
+    "MUTT OF SLOP": {
+      "color": "#3b3131",
+      "classpect": ["Muse", "Time"],
+      "lunarsway": null,
+      "reaction": [
+        {
+          "text": "bark! woof! (stickers!)",
+          "color": "#3b3131",
+          "link": "https://homestuckofficial.store/products/oil-dogs-sticker-sheet"
+        }
+      ]
+    },
+    "Thorn Derosin": {
+      "color": "#1b7539",
+      "classpect": ["Mage", "Time"],
+      "lunarsway": "Dual",
+      "reaction": [
+        { "text": "Mirë se erdhe.", "color": "#1b7539" }
+      ]
+    },
+    "Sweet Bro": {
+      "color": "#e5032e",
+      "classpect": ["Page", "Time"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "IT KEEPS HAPPENING", "color": "#e5032e", "link":"http://www.mspaintadventures.com/sweetbroandhellajeff/" }
+      ]
+    },
+    "Hella Jeff": {
+      "color": "#023cff",
+      "classpect": ["Bard", "Breath"],
+      "lunarsway": "Derse",
+      "reaction": [
+        { "text": "I TOLD YOU DOG!", "color": "#023cff", "link":"http://www.mspaintadventures.com/sweetbroandhellajeff/" }
+      ]
+    },
+    "Noxy Nalonde": {
+      "color": "#ff85cc",
+      "classpect": ["Lord", "Life"],
+      "lunarsway": null,
+      "reaction": [
+        { "text": "im just bored i guess idk", "color": "#ff85cc", "link": "https://mspfa.com/?s=65765&p=1" }
+      ]
+    }
+  }
+}
