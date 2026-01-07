@@ -295,6 +295,14 @@
       "classpect": ["Seer", "Space"],
       "lunarsway": "Derse",
       "reaction": null
+    },
+    "MSPA Reader": {
+      "color": "#000000",
+      "classpect": ["Seer", "Void"],
+      "lunarsway": "Prospit",
+      "reaction": [
+        { "text": "Oh sweet, a new page.", "color": "#000000", "link": "https://homestuck.com/problemsleuth/001743" } 
+      ]
     }
   },
   "nonCanon": {
