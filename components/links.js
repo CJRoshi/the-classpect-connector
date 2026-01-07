@@ -69,7 +69,7 @@ const AspectLink = ({a,onClick,theme,isTitle})=>{
     >
       <span>{a}</span>
       <img 
-        src={`/images/aspects/with-bg/${a.toLowerCase()}bg.png`}
+        src={`./images/aspects/with-bg/${a.toLowerCase()}bg.png`}
         alt=""
         style={{width: iconSize, height: iconSize, display: 'inline-block', verticalAlign: 'middle'}}
         onError={(e) => e.target.style.display = 'none'}

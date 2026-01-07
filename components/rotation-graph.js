@@ -109,7 +109,7 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
             return (
               <image
                 key={`y-label-${asp}`}
-                href={`/images/aspects/no-bg/${asp.toLowerCase()}.webp`}
+                href={`./images/aspects/no-bg/${asp.toLowerCase()}.webp`}
                 x={toSvgX(7) + 10}
                 y={toSvgY(aspValue) - 12}
                 width="24"

@@ -34,7 +34,7 @@ const AspectPage = ({aspectName, onNavigate, theme}) => {
       <div className="text-center">
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginBottom: '0.5rem'}}>
           <img 
-            src={`/images/aspects/with-bg/${aspectName.toLowerCase()}bg.png`} 
+            src={`./images/aspects/with-bg/${aspectName.toLowerCase()}bg.png`} 
             alt={`${aspectName} icon`}
             style={{width: '48px', height: '48px'}}
             onError={(e) => e.target.style.display = 'none'}
@@ -43,7 +43,7 @@ const AspectPage = ({aspectName, onNavigate, theme}) => {
             {aspectName.toUpperCase()}
           </h1>
           <img 
-            src={`/images/aspects/with-bg/${aspectName.toLowerCase()}bg.png`} 
+            src={`./images/aspects/with-bg/${aspectName.toLowerCase()}bg.png`} 
             alt={`${aspectName} icon`}
             style={{width: '48px', height: '48px'}}
             onError={(e) => e.target.style.display = 'none'}
