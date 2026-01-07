@@ -341,14 +341,6 @@
       "reaction": [
         { "text": "I TOLD YOU DOG!", "color": "#023cff", "link":"http://www.mspaintadventures.com/sweetbroandhellajeff/" }
       ]
-    },
-    "Noxy Nalonde": {
-      "color": "#ff85cc",
-      "classpect": ["Lord", "Life"],
-      "lunarsway": null,
-      "reaction": [
-        { "text": "im just bored i guess idk", "color": "#ff85cc", "link": "https://mspfa.com/?s=65765&p=1" }
-      ]
     }
   }
 }
