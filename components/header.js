@@ -7,29 +7,26 @@
 const Header = ({ onNavigate, theme }) => {
   const handleHomeClick = (e) => {
     e.preventDefault();
-    // If we're on an external page (prospit.html, derse.html), go to index.html
-    if (window.location.pathname.includes('prospit.html') || 
-        window.location.pathname.includes('derse.html') ||
-        window.location.pathname.includes('about.html')) {
+    // If we're on an external page, go to index.html
+    if (window.location.pathname.includes('.html') && 
+        !window.location.pathname.includes('index.html') &&
+        !window.location.pathname.endsWith('/')) {
       window.location.href = './index.html';
     } else {
       // On index.html - use React navigation and clear hash
       if (window.location.protocol !== 'file:') {
         window.location.hash = '/';
       }
-      onNavigate('/');
+      if (onNavigate) {
+        onNavigate('/');
+      }
     }
-  };
-
-  const handleAboutClick = (e) => {
-    e.preventDefault();
-    window.location.href = './about.html';
   };
 
   // Choose logo based on theme
   const getLogo = () => {
-    // Force regular logo for specific aspects
-    const regularLogoAspects = ['Void', 'Doom', 'Rage'];
+    // Force regular logo for specific aspects (empty for now)
+    const regularLogoAspects = [];
     
     // Determine if we're on an aspect/classpect page and which aspect
     const path = window.location.hash || window.location.pathname;
@@ -46,7 +43,7 @@ const Header = ({ onNavigate, theme }) => {
       }
     }
     
-    // Use regular logo for specific aspects
+    // Use regular logo for bright aspects
     if (currentAspect && regularLogoAspects.includes(currentAspect)) {
       return './images/special/CCLogoRegular.png';
     }
@@ -71,11 +68,17 @@ const Header = ({ onNavigate, theme }) => {
       <div className="flex items-center justify-between max-w-6xl mx-auto">
         {/* Left: Logo + Title */}
         <div className="flex items-center gap-3">
-          <img 
-            src={getLogo()} 
-            alt="Classpect Connector Logo" 
-            style={{width: '48px', height: '48px'}}
-          />
+          <a 
+            href="#/"
+            onClick={handleHomeClick}
+            style={{cursor: 'pointer'}}
+          >
+            <img 
+              src={getLogo()} 
+              alt="Classpect Connector Logo" 
+              style={{width: '48px', height: '48px'}}
+            />
+          </a>
           <a 
             href="#/"
             onClick={handleHomeClick}
@@ -86,35 +89,89 @@ const Header = ({ onNavigate, theme }) => {
           </a>
         </div>
         
-        {/* Right: Buttons */}
-        <div className="flex gap-4">
+        {/* Right: Navigation Buttons */}
+        <div className="flex gap-3 items-center">
           <a
             href="#/"
             onClick={handleHomeClick}
-            className="font-typostuck px-4 py-2 rounded hover:opacity-80"
+            className="font-typostuck px-3 py-2 rounded hover:opacity-80"
             style={{
               backgroundColor: 'rgba(0,0,0,0.2)',
               color: theme?.textColor || '#000',
               textDecoration: 'none',
               cursor: 'pointer',
-              fontSize: '1.1rem'
+              fontSize: '1rem'
             }}
           >
             Home
           </a>
           <a
             href="./about.html"
-            onClick={handleAboutClick}
-            className="font-typostuck px-4 py-2 rounded hover:opacity-80"
+            className="font-typostuck px-3 py-2 rounded hover:opacity-80"
             style={{
               backgroundColor: 'rgba(0,0,0,0.2)',
               color: theme?.textColor || '#000',
               textDecoration: 'none',
               cursor: 'pointer',
-              fontSize: '1.1rem'
+              fontSize: '1rem'
             }}
           >
             About
+          </a>
+          <a
+            href="./faq.html"
+            className="font-typostuck px-3 py-2 rounded hover:opacity-80"
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.2)',
+              color: theme?.textColor || '#000',
+              textDecoration: 'none',
+              cursor: 'pointer',
+              fontSize: '1rem'
+            }}
+          >
+            FAQ
+          </a>
+          <a
+            href="./theory.html"
+            className="font-typostuck px-3 py-2 rounded hover:opacity-80"
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.2)',
+              color: theme?.textColor || '#000',
+              textDecoration: 'none',
+              cursor: 'pointer',
+              fontSize: '1rem'
+            }}
+          >
+            Theory
+          </a>
+          <a
+            href="./credits.html"
+            className="font-typostuck px-3 py-2 rounded hover:opacity-80"
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.2)',
+              color: theme?.textColor || '#000',
+              textDecoration: 'none',
+              cursor: 'pointer',
+              fontSize: '1rem'
+            }}
+          >
+            Credits
+          </a>
+          <a
+            href="https://www.fruityrumpus.com/forums/t/classpecting-graphs-rotations-and-groups"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-typostuck px-3 py-2 rounded hover:opacity-80"
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.4)',
+              color: '#00e371',
+              textDecoration: 'none',
+              cursor: 'pointer',
+              fontSize: '1rem',
+              fontWeight: 'bold'
+            }}
+          >
+            Theory on FRAF
           </a>
         </div>
       </div>

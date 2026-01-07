@@ -96,4 +96,3 @@ const Homepage = ({ onNavigate, theme }) => {
     </div>
   );
 };
-

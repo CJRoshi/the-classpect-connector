@@ -9,7 +9,7 @@ const AspectPage = ({aspectName, onNavigate, theme}) => {
   const aspectsData = window.aspectsData || {};
   const characterData = window.characterData || { canon: {}, nonCanon: {} };
   
-  // Get Extended Zodiac description - aspectsData is a simple object mapping aspect names to description strings
+  // Get Extended Zodiac description
   const ezDescription = aspectsData[aspectName] || "Description not available.";
   
   const value = getAspectValue(aspectName);
@@ -122,6 +122,3 @@ const AspectPage = ({aspectName, onNavigate, theme}) => {
     </div>
   );
 };
-/* =========================
-   PAGE (CLASSPECT)
-   ========================= */

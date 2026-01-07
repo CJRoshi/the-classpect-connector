@@ -8,63 +8,111 @@
     "links": []
   },
   "Witch": {
-    "blurb": "",
-    "links": []
+    "blurb": "One who transforms or controls their Aspect, actively. As a control class, Witches often transform their Aspect to suit their needs, though not at no cost. Witches often have to shake off an existing understanding of their Aspect before they can control it effectively.",
+    "links": [
+      {
+        "label": "Read on rosespecting (Tumblr).",
+        "url": "https://www.tumblr.com/rosespecting/792868189934649344/witches-and-maids",
+        "author": "rosespecting"
+      }
+    ]
   },
   "Heir": {
-    "blurb": "",
+    "blurb": "One who prepares for or accommodates their Aspect, passively. As a supporter class, Heirs are often given a strong connection to their Aspect that makes them highly adaptable to whatever lets them fulfill their Aspect's needs. Heirs often set up the events of the story through their gifts, and might not need to do much during the session itself.",
     "links": []
   },
   "Maid": {
-    "blurb": "",
-    "links": []
+    "blurb": "One who prepares for or accommodates their Aspect, semi-passively. As a supporter class, Maids usually have to put in hard work to fulfill the needs of their Aspect, but once the way is made, they themselves tend benefit from it greatly, alongside their team. Maids are often the biggest fans of their Aspects, or topics related to them. You could almost say they're 'maid' of their Aspect.",
+    "links": [
+      {
+        "label": "Read on rosespecting (Tumblr).",
+        "url": "https://www.tumblr.com/rosespecting/792868189934649344/witches-and-maids",
+        "author": "rosespecting"
+      }
+    ]
   },
   "Sylph": {
-    "blurb": "",
+    "blurb": "One who transforms or controls their Aspect, semi-actively. As a control class, Sylphs can sometimes control their Aspect directly-- but their main use of their Aspect is to heal or transform others with it, letting them use the Aspect for the benefit of the Sylph. Like Maids, Sylphs tend to be big fans of their Aspect, or topics related to them, though not as overtly.",
     "links": []
   },
   "Knight": {
-    "blurb": "One who fights to preserve their Aspect, actively. As a defender class, Knights are staunch protectors of their Aspect and often deal with an active seige on their Aspect, being consistently strong throughout a session.",
+    "blurb": "One who fights to preserve their Aspect, actively. As a defender class, Knights are staunch protectors of their Aspect and often deal with an active seige on their Aspect, being consistently strong throughout a session. The stress they undergo tends to have them put up a facade, masking internal struggles.",
     "links": [
       {
-        "label": "Read on rosespecting (Tumblr)",
+        "label": "Read on rosespecting (Tumblr).",
         "url": "https://www.tumblr.com/rosespecting/792919673299681280/knights-and-pages",
         "author": "rosespecting"
       }
     ]
   },
   "Page": {
-    "blurb": "One who fights to preserve their Aspect, passively. As a defender class, Pages may seem to start out weak, but given time to prepare, they can meet any threat coming their way, especially if that threat comes to their Aspect.",
+    "blurb": "One who fights to preserve their Aspect, passively. As a defender class, Pages may seem to start out weak, but given time to prepare, they can meet any threat coming their way, especially if that threat comes to their Aspect. The main challenge for Pages is overcoming their doubts in order to train up and get ready.",
     "links": [
       {
-        "label": "Read on rosespecting (Tumblr)",
+        "label": "Read on rosespecting (Tumblr).",
         "url": "https://www.tumblr.com/rosespecting/792919673299681280/knights-and-pages",
         "author": "rosespecting"
       }
     ]
   },
   "Mage": {
-    "blurb": "",
-    "links": []
+    "blurb": "One who understands or studies their Aspect, actively. As a knowledge class, Mages often have intuitive insights into their Aspect-- often unwanted-- and put their knowledge to use in seemingly magical ways. They can be tough to get insights from, as they are often far beyond the level of the average person.",
+    "links": [
+      {
+        "label": "Read on rosespecting (Tumblr).",
+        "url": "https://www.tumblr.com/rosespecting/792929697399996416/mages-and-seers",
+        "author": "rosespecting"
+      }
+    ]
   },
   "Seer": {
-    "blurb": "",
-    "links": []
+    "blurb": "One who understands or studies their Aspect, passively. As a knowledge class, Seers often get the answers about their Aspect without trying, and see most things through the lens of their Aspect. They tend to share their knowledge with their friends, as they have great conviction in their beliefs; this makes them the go-to planners.",
+    "links": [
+      {
+        "label": "Read on rosespecting (Tumblr).",
+        "url": "https://www.tumblr.com/rosespecting/792929697399996416/mages-and-seers",
+        "author": "rosespecting"
+      }
+    ]
   },
   "Thief": {
-    "blurb": "",
-    "links": []
+    "blurb": "One who steals or redistributes their Aspect, actively. As a stealth class, Thieves often make hoards of their Aspect for themselves, and usually take it from others come hell or high water. They can be selfish, true, but their cunning, scrappiness, and go-getter attitude make them valuable members of any team.",
+    "links": [
+      {
+        "label": "Read on rosespecting (Tumblr).",
+        "url": "https://www.tumblr.com/rosespecting/792965914693877760/thieves-and-rogues",
+        "author": "rosespecting"
+      }
+    ]
   },
   "Rogue": {
-    "blurb": "",
-    "links": []
+    "blurb": "One who steals or redistributes their Aspect, passively. As a stealth class, Rogues often make heists of their Aspect for others, usually taking it from those who they think have too much of it. Perhaps selfless to a fault, Rogues are willing to take big risks in the name of fairness, and are excellent team players.",
+    "links": [
+      {
+        "label": "Read on rosespecting (Tumblr).",
+        "url": "https://www.tumblr.com/rosespecting/792965914693877760/thieves-and-rogues",
+        "author": "rosespecting"
+      }
+    ]
   },
   "Prince": {
-    "blurb": "",
-    "links": []
+    "blurb": "One who destroys or attacks using their Aspect, actively. As an offense class, Princes tend to have a destructive relationship with their Aspect, and while it is powerful in their hands, it usually means collateral damage. To themselves. Princes often have to tear down the way they think about their Aspect in order to grow.",
+    "links": [
+      {
+        "label": "Read on rosespecting (Tumblr).",
+        "url": "https://www.tumblr.com/rosespecting/792977162917576704/princes-and-bards",
+        "author": "rosespecting"
+      }
+    ]
   },
   "Bard": {
-    "blurb": "",
-    "links": []
+    "blurb": "One who destroys or attacks using their Aspect, passively. As an offense class, Bards have a chaotic relationship with their Aspect, often believing that their Aspect has it out for them. Bards are the ultimate critics of their Aspect, and while their criticism can be destructive (in the right way), whether or not others actually listen to them makes them the wildcards of their team.",
+    "links": [
+      {
+        "label": "Read on rosespecting (Tumblr).",
+        "url": "https://www.tumblr.com/rosespecting/792977162917576704/princes-and-bards",
+        "author": "rosespecting"
+      }
+    ]
   }
 }

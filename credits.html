@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Credits - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="./images/special/CCLogoRegular.png" />
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Shared Components -->
+  <script type="text/babel" src="./components/constants.js"></script>
+  <script type="text/babel" src="./components/header.js"></script>
+  <script type="text/babel" src="./components/footer.js"></script>
+  
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('./fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+    
+    /* Font families */
+    .font-courier { font-family: 'Courier New', monospace; }
+    .font-courier-bold { 
+      font-family: 'Courier New', monospace; 
+      font-weight: bold;
+    }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem;
+      font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem;
+      font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem;
+      font-weight: normal;
+    }
+    .font-verdana { 
+      font-family: Verdana, Arial, sans-serif; 
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    
+    .discord-channel {
+      font-family: 'Courier New', monospace;
+      color: #0000ee;
+      font-weight: bold;
+    }
+    
+    .credit-section {
+      margin-bottom: 32px;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+/* =========================
+   DEFAULT THEME
+   ========================= */
+const defaultTheme = { 
+  bg: "#626262", 
+  contentBg: "#d0d0d0", 
+  textColor: "#000000", 
+  accentBg: "#a0a0a0",
+  isDark: false
+};
+
+/* =========================
+   CREDITS PAGE
+   ========================= */
+const CreditsPage = () => {
+  return (
+    <div className="space-y-6">
+      <h1 className="font-typostuck-title mb-6 text-center">Credits</h1>
+      
+      <div className="font-courier space-y-8" style={{lineHeight: '1.6'}}>
+        {/* Main Credits */}
+        <div className="credit-section">
+          <h2 className="font-courier-bold text-xl mb-3">Site Development, Writing, Coding:</h2>
+          <p>
+            <a href="https://www.fruityrumpus.com/forums/p/caprinecappuccino" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="underline" 
+               style={{color: '#0000ee'}}>
+              Nino Roshi
+            </a>
+            {' '}AKA caprineCappuccino
+          </p>
+        </div>
+        
+        <div className="credit-section">
+          <h2 className="font-courier-bold text-xl mb-3">Theory Contributions:</h2>
+          <p>
+            bellCarved, duckBuster/Rosespecting
+          </p>
+          {/* TODO: Add bellCarved and duckBuster FRAF profile links once found */}
+        </div>
+        
+        <div className="credit-section">
+          <h2 className="font-courier-bold text-xl mb-3">Figures:</h2>
+          <p>bellCarved, caprineCappuccino</p>
+        </div>
+        
+        <div className="credit-section">
+          <h2 className="font-courier-bold text-xl mb-3">Aspect Assets, Typostuck font:</h2>
+          <p>vibri, Andrew Hussie</p>
+        </div>
+        
+        <div className="credit-section">
+          <h2 className="font-courier-bold text-xl mb-3">Site Logo:</h2>
+          <p>caprineCappuccino</p>
+        </div>
+        
+        <div className="credit-section">
+          <h2 className="font-courier-bold text-xl mb-3">Extended Zodiac Descriptions:</h2>
+          <p>Andrew Hussie</p>
+        </div>
+        
+        {/* Special Thanks */}
+        <div className="mt-12 pt-6 border-t-4" style={{borderColor: '#a0a0a0'}}>
+          <h2 className="font-typostuck-header mb-6 text-center">Special Thanks</h2>
+          
+          <div className="space-y-4">
+            <p>
+              <a href="https://www.fruityrumpus.com/forums/p/fazzie" 
+                 target="_blank" 
+                 rel="noopener noreferrer"
+                 className="underline" 
+                 style={{color: '#0000ee'}}>
+                Fazzie
+              </a>, for tolerating my ranting about webdev and the theories behind this project
+            </p>
+            
+            <p>
+              Hussie, for writing Homestuck and inadvertently inspiring all of this
+            </p>
+            
+            <p>
+              The HSOD <span className="discord-channel">#classpecting</span> channel, for being cool and 
+              discussing all of this stuff, even if it's kind of silly
+            </p>
+            
+            <p className="mt-6 text-center font-courier-bold text-lg">
+              And you, the reader. You rock.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   APP
+   ========================= */
+const App = () => {
+  const handleNavigate = (path) => {
+    window.location.href = `./index.html#${path}`;
+  };
+  
+  return (
+    <div style={{ 
+      backgroundColor: defaultTheme.bg, 
+      minHeight: '100vh'
+    }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme} />
+      
+      <div className="px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div style={{ 
+            backgroundColor: defaultTheme.contentBg, 
+            color: defaultTheme.textColor, 
+            padding: '24px', 
+            borderRadius: '8px', 
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)', 
+            border: `2px solid ${defaultTheme.accentBg}` 
+          }}>
+            <CreditsPage />
+          </div>
+          
+          <Footer theme={defaultTheme} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   MOUNT
+   ========================= */
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+
+</script>
+</body>
+</html>

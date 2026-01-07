@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>About - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="./images/special/CCLogoRegular.png" />
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Shared Components -->
+  <script type="text/babel" src="./components/constants.js"></script>
+  <script type="text/babel" src="./components/header.js"></script>
+  <script type="text/babel" src="./components/footer.js"></script>
+  
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('./fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+    
+    /* Font families */
+    .font-courier { font-family: 'Courier New', monospace; }
+    .font-courier-bold { 
+      font-family: 'Courier New', monospace; 
+      font-weight: bold;
+    }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem;
+      font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem;
+      font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem;
+      font-weight: normal;
+    }
+    .font-verdana { 
+      font-family: Verdana, Arial, sans-serif; 
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    
+    .font-pixelated {
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+      -webkit-font-smoothing: none;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .signature {
+      color: #1b7539;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+/* =========================
+   DEFAULT THEME
+   ========================= */
+const defaultTheme = { 
+  bg: "#626262", 
+  contentBg: "#d0d0d0", 
+  textColor: "#000000", 
+  accentBg: "#a0a0a0",
+  isDark: false
+};
+
+/* =========================
+   ABOUT PAGE
+   ========================= */
+const AboutPage = () => {
+  return (
+    <div className="space-y-4">
+      <h1 className="font-typostuck-title mb-4 text-center">About</h1>
+      
+      <div className="font-courier space-y-4" style={{lineHeight: '1.6'}}>
+        <p>
+          Hi! Welcome to The Classpect Connector.
+        </p>
+        
+        <p>
+          This is a webapp/tool that I developed in order to explore and promote some classpecting theories 
+          made by myself [CC], bellCarved [BC], and duckBuster [DB] on the Homestuck Official Discord (HSOD).
+        </p>
+        
+        <p>
+          The main use of this site is to look at classpects, and see what relations they have between one another! 
+          It's pretty easy to do— just go to the{' '}
+          <a href="./index.html" className="underline" style={{color: '#0000ee'}}>
+            homepage
+          </a>
+          , hit the random button, and go wild. I find it easy to get lost in this, but in a good way, of course!
+        </p>
+        
+        <p>
+          I would also recommend using this site to examine your OCs. If, for example, you're having trouble 
+          designing a fansession, the rotation graph provides you a handy way to change or substitute a classpect 
+          with at least some meaning behind it.
+        </p>
+        
+        <p>
+          That's basically it from me! Have fun!
+        </p>
+        
+        <p className="signature mt-6">
+          -- Signing off, CC.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   APP
+   ========================= */
+const App = () => {
+  const handleNavigate = (path) => {
+    window.location.href = `./index.html#${path}`;
+  };
+  
+  return (
+    <div style={{ 
+      backgroundColor: defaultTheme.bg, 
+      minHeight: '100vh'
+    }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme} />
+      
+      <div className="px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div style={{ 
+            backgroundColor: defaultTheme.contentBg, 
+            color: defaultTheme.textColor, 
+            padding: '24px', 
+            borderRadius: '8px', 
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)', 
+            border: `2px solid ${defaultTheme.accentBg}` 
+          }}>
+            <AboutPage />
+          </div>
+          
+          <Footer theme={defaultTheme} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   MOUNT
+   ========================= */
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+
+</script>
+</body>
+</html>

@@ -31,7 +31,6 @@
   <script type="text/babel" src="./components/class-page.js"></script>
   <script type="text/babel" src="./components/aspect-page.js"></script>
   <script type="text/babel" src="./components/classpect-page.js"></script>
-  <script type="text/babel" src="./components/canon-page.js"></script>
   
   <style>
     @font-face {
@@ -289,7 +288,7 @@ const defaultTheme = {
    APP COMPONENT
    ========================= */
 const App = () => {
-  // Clean up the path - if we're coming from prospit.html or derse.html, start fresh
+  // Clean up the path
   const initialPath = (() => {
     const urlPath = window.location.pathname;
     const hash = window.location.hash;
@@ -582,7 +581,7 @@ const App = () => {
 
   const currentAspect = getCurrentAspect();
   
-  // Determine if we should show header and search bar (not on About page)
+  // Determine if we should show header and search bar
   const showHeaderAndSearch = path !== '/about';
   
   const renderPage = () => {
@@ -620,16 +619,6 @@ const App = () => {
       if (an) {
         return <AspectPage aspectName={an} onNavigate={navigate} theme={theme}/>;
       }
-    }
-    
-    // About page
-    if (path === '/about') {
-      return <div className="text-center"><h1 className="font-verdana-title mb-4">About</h1><p className="font-courier">About page content coming soon...</p></div>;
-    }
-    
-    // Canon page
-    if (path === '/canon') {
-      return <CanonPage onNavigate={navigate} theme={theme} />;
     }
     
     // 404 - Default to homepage instead

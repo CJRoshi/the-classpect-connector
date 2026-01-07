@@ -133,7 +133,3 @@ const ClassPage = ({className, onNavigate, theme}) => {
     </div>
   );
 };
-
-/* =========================
-   ASPECT PAGE
-   ========================= */

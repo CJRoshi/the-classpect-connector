@@ -266,5 +266,3 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
     </div>
   );
 };
-
-// BG COMPONENT

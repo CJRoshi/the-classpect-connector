@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>FAQ - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="./images/special/CCLogoRegular.png" />
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Shared Components -->
+  <script type="text/babel" src="./components/constants.js"></script>
+  <script type="text/babel" src="./components/header.js"></script>
+  <script type="text/babel" src="./components/footer.js"></script>
+  
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('./fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+    
+    /* Font families */
+    .font-courier { font-family: 'Courier New', monospace; }
+    .font-courier-bold { 
+      font-family: 'Courier New', monospace; 
+      font-weight: bold;
+    }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem;
+      font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem;
+      font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem;
+      font-weight: normal;
+    }
+    .font-verdana { 
+      font-family: Verdana, Arial, sans-serif; 
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    
+    .font-pixelated {
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+    }
+    
+    .homestuck-command {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: #000000;
+    }
+    
+    .glossary-box {
+      background-color: #f0f0f0;
+      border: 2px solid #a0a0a0;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState } = React;
+
+/* =========================
+   DEFAULT THEME
+   ========================= */
+const defaultTheme = { 
+  bg: "#626262", 
+  contentBg: "#d0d0d0", 
+  textColor: "#000000", 
+  accentBg: "#a0a0a0",
+  isDark: false
+};
+
+/* =========================
+   FAQ PAGE
+   ========================= */
+const FAQPage = () => {
+  return (
+    <div className="space-y-6">
+      <h1 className="font-typostuck-title mb-4 text-center">FAQ/Glossary</h1>
+      
+      {/* Quick navigation box */}
+      <div className="glossary-box">
+        <p className="font-verdana text-center">
+          <a href="#glossary" className="underline" style={{color: '#0000ee'}}>
+            Jump to Glossary =={'>'}
+          </a>
+        </p>
+      </div>
+      
+      {/* FAQ Section */}
+      <div className="font-courier space-y-6" style={{lineHeight: '1.6'}}>
+        
+        {/* Q1 */}
+        <div>
+          <h2 className="homestuck-command mb-2">&gt; Is this canon?</h2>
+          <p>
+            Hell no! This is a tool I made FOR FUN, and I fully expect that it will be obliterated by the 
+            "Classpectology" book that is allegedly in some future plans for Hussie. I don't mind updating 
+            it when that happens, though. I strive to make this stuff as applicable as possible.
+          </p>
+        </div>
+        
+        {/* Q2 */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; Why is there no Waste/Gent? / Why is there no Voice/Lips/[Other "super aspects"]?
+          </h2>
+          <p>
+            Look, this might not be canon, but I want to stick at least close to the text. You get 14 classes 
+            and 12 aspects. That's it.
+          </p>
+        </div>
+        
+        {/* Q3 */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; Why is [Aspect] not more active/passive? / How did you assign the numbers to the Aspects?
+          </h2>
+          <p>
+            Did you read{' '}
+            <a href="./theory.html" className="underline" style={{color: '#0000ee'}}>theory</a>
+            ? I'd recommend reading that first. The way we assigned the Aspects their numbers was that we went 
+            and asked the question of "which Class best matches each Aspect?". This gave a few obvious answers, like{' '}
+            <a href="./index.html#/classpect/heir-of-space" className="underline" style={{color: '#0000ee'}}>
+              Heir of Space
+            </a>,{' '}
+            <a href="./index.html#/classpect/thief-of-life" className="underline" style={{color: '#0000ee'}}>
+              Thief of Life
+            </a>,{' '}
+            <a href="./index.html#/classpect/maid-of-time" className="underline" style={{color: '#0000ee'}}>
+              Maid of Time
+            </a>, and so on. Then we filled in the gaps.
+          </p>
+        </div>
+        
+        {/* Q4 */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; Why is Time not most active/why is it the most active passive?
+          </h2>
+          <p>
+            Read{' '}
+            <a href="./theory.html" className="underline" style={{color: '#0000ee'}}>theory</a>, please. 
+            It's paired with Maid because of the fact that Time players, and their activity, is in support of a 
+            mostly-passive force. Maids accommodate their Aspect somewhat actively, and Time players are always 
+            accommodating the future, or the timeline.{' '}
+            <img 
+              src="./images/special/speedcali.webp" 
+              alt="Speedy Calliope" 
+              style={{display: 'inline', height: '1.2em', verticalAlign: 'middle', marginLeft: '4px'}}
+            />
+          </p>
+        </div>
+        
+        {/* Q5 */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; Why is Hope most active, isn't Jake a bum?
+          </h2>
+          <p>
+            Go read{' '}
+            <a href="https://beyondcanon.com/story/716" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="underline" 
+               style={{color: '#0000ee'}}>
+              Beyond Canon
+            </a>.
+          </p>
+        </div>
+        
+        {/* Q6 */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; What does pair/quasipair/antipair/numeric mean, exactly?
+          </h2>
+          <p>
+            I give a better definition in the{' '}
+            <a href="#glossary" className="underline" style={{color: '#0000ee'}}>glossary</a>
+            {' '}and in{' '}
+            <a href="./theory.html" className="underline" style={{color: '#0000ee'}}>theory</a>, 
+            but I'll TL;DR it here for you, because I'm so nice. The pair is the canonical pair of your Class or 
+            Aspect-- for example, for Maid this is Heir, and for Time this is Space. The quasipair is an alternate 
+            pairing derived from the Class activity scale and later applied to the Aspects, like Bard/Seer, 
+            Maid/Sylph, or Void/Blood, Time/Rage. The antipair uses the "odd member out" within your group-- stuff 
+            like Prince/Seer or Light/Blood. Numeric pairing just means you take the opposite value-- unless you're 
+            in the Magic/Rulebreaker Group, this is identical to taking your pair.
+          </p>
+        </div>
+        
+        {/* Q7 */}
+        <div>
+          <h2 className="homestuck-command mb-2">&gt; What's a sibling?</h2>
+          <p>
+            See the{' '}
+            <a href="#glossary" className="underline" style={{color: '#0000ee'}}>glossary</a>. 
+            I'm gonna use a few theory terms here, but it's a classpect where the class lies in the same group as 
+            the original and the overall value is preserved. The belief is that your behaviors might be similar to 
+            these classpects. They're not guaranteed to exist.
+          </p>
+        </div>
+        
+        {/* Q8 */}
+        <div>
+          <h2 className="homestuck-command mb-2">&gt; What's a shadow?</h2>
+          <p>
+            Again, see the{' '}
+            <a href="#glossary" className="underline" style={{color: '#0000ee'}}>glossary</a>. 
+            This is a classpect where the class lies in the same group as the original and the overall value is 
+            inverted. You might be opposed to or otherwise dislike the behavior of these classpects. You might 
+            mirror their behavior in your worst moments.
+          </p>
+        </div>
+        
+        {/* Q9 */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; My sibling is [character I don't like], can I change this?
+          </h2>
+          <p>No.{' '}
+            <span className="text-xs">(One of my siblings is Cronus, I am allowed to say this.)</span>{' '}
+            <img 
+              src="./images/special/speedcali.webp" 
+              alt="Speedy Calliope" 
+              style={{display: 'inline', height: '1.2em', verticalAlign: 'middle', marginLeft: '4px'}}
+            />
+          </p>
+        </div>
+        
+        {/* Q10 */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; Can you explain the layout of the classpect page?
+          </h2>
+          <p>
+            Sure. At the very top is the numeric-numeric relation-- inverting both components numerically. This is 
+            guaranteed to be a shadow. In the Magic/Rulebreaker Group, this leads to "odd" inversions of components. 
+            The next header has the pair-pair, antipair-antipair, and quasipair-quasipair relations. Then it's the 
+            headings for siblings and shadows. Then you have my rotation graph system, which also displays the 
+            reflective inverse (about the line of symmetry, Class = Aspect). You get a list of all classpects of the 
+            same/opposite value. And finally, the boring results table, which applies all four types of class changing 
+            and then all six types of aspect changing. This does produce at least one duplicate row.
+          </p>
+        </div>
+        
+        {/* Q11 */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; Can I have my work featured on a Class page?
+          </h2>
+          <p>
+            Sure! Let me have a readthrough of it, and if I like it, I'll throw the link on there.
+          </p>
+        </div>
+        
+        {/* Q12 */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; CC, this project is so awesome. Is there anything I can do to support you?
+          </h2>
+          <p className="mb-4">
+            Yeah. Feel free to buy me a coffee. This project isn't for profit, but if you feel like donating, 
+            that is your option.
+          </p>
+          <a href='https://ko-fi.com/O5O41RN9YS' target='_blank' rel="noopener noreferrer">
+            <img 
+              height='36' 
+              style={{border: '0px', height: '36px'}} 
+              src='https://storage.ko-fi.com/cdn/kofi3.png?v=6' 
+              alt='Buy Me a Coffee at ko-fi.com' 
+            />
+          </a>
+        </div>
+        
+        {/* Q13 */}
+        <div>
+          <h2 className="homestuck-command mb-2">&gt; I found a bug. What do I do?</h2>
+          <p>
+            Report it on{' '}
+            <a href="https://github.com/CJRoshi/the-classpect-connector" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="underline" 
+               style={{color: '#0000ee'}}>
+              GitHub
+            </a>. I'll take a look and update the site! Or just message me, my{' '}
+            <a href="https://cjroshi.carrd.co/" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="underline" 
+               style={{color: '#0000ee'}}>
+              carrd
+            </a>
+            {' '}gives you plenty of ways to do that.
+          </p>
+        </div>
+      </div>
+      
+      {/* Glossary Section */}
+      <div id="glossary" className="mt-12 pt-6 border-t-4" style={{borderColor: '#a0a0a0'}}>
+        <h1 className="font-typostuck-title mb-6 text-center">Glossary</h1>
+        
+        <div className="font-courier space-y-4" style={{lineHeight: '1.6'}}>
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Class:</h3>
+            <p>
+              One of fourteen titles given by the Game to its players. A class indicates a level of activity and mode 
+              with which the player interacts with their Aspect and to some degree the game as a whole. Synonymous with Role.
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Aspect:</h3>
+            <p>
+              One of twelve aspects that composes the world of the game. Each has thematic, literal, and metanarrative 
+              meanings. They also indicate some ways in which a player might interact with the game as a whole. Under this 
+              theory, they also indicate a level of activity. Synonymous with Domain.
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Classpect/Hero Title:</h3>
+            <p>
+              The combination of a Class and an Aspect. Ex.{' '}
+              <a href="./index.html#/classpect/knight-of-time" className="underline" style={{color: '#0000ee'}}>
+                Knight of Time
+              </a>,{' '}
+              <a href="./index.html#/classpect/witch-of-space" className="underline" style={{color: '#0000ee'}}>
+                Witch of Space
+              </a>,{' '}
+              <a href="./index.html#/classpect/heir-of-breath" className="underline" style={{color: '#0000ee'}}>
+                Heir of Breath
+              </a>,{' '}
+              <a href="./index.html#/classpect/seer-of-light" className="underline" style={{color: '#0000ee'}}>
+                Seer of Light
+              </a>. 
+              Its activity level is the combination of the component Class and Aspect. Synonymous with Romaine.
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Group:</h3>
+            <p className="mb-2">
+              Any of three groups of four Classes or Aspects, excluding the Master Classes.
+            </p>
+            <p style={{fontSize: '0.9rem'}}>
+              These are the Vizier Group, the Magic Group/Rulebreaker Group, and the Laws and Outlaws Group. The first 
+              consists of Mage/Seer and Prince/Bard, and is consistent with the idea of being viziers to the monarch, 
+              or to the common folk. The second consists of Witch/Sylph and Maid/Heir, and is similar to e.g. the 
+              Cinderella myth. I also call it the Rulebreaker group because it contains the dual actives and passives. 
+              The final group consists of Knight/Page and Thief/Rogue, consistent with an idea of laws and outlaws in 
+              a fantasy kingdom.
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Pair:</h3>
+            <p>
+              The canonical Pair of your Class or Aspect. For classes, these are the confirmed pairs outlined above, 
+              like Mage/Seer. For Aspects, this is the paired Aspect from the comic and on the wheel of the Extended 
+              Zodiac, like Breath/Blood or Time/Space.
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Quasipair:</h3>
+            <p>
+              An alternate pairing of a Class and/or Aspect. For Classes, these are derived from a redrawing of the 
+              activity scale where you "follow the tails", and the Aspects then borrow from this.
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Antipair:</h3>
+            <p className="mb-3">
+              The pairing of your Class and/or Aspect within your Group, not covered by the Quasipair or Pair. An 
+              alternate way to explain it is this: Imagine taking the original list of classes, in order, and breaking 
+              it down the middle, excising the Master classes, before putting the two new halves side by side such that 
+              the classes of equal magnitude lie next to one another. Then, start drawing diagonals all the way across-- 
+              You'll see Heir/Sylph, Witch/Maid, Prince/Seer, and so on as they get closer to the middle. These are the 
+              Antipairs. Across the gap are the Pairs, except in the Rulebreaker Group, where these are the Quasipairs 
+              instead. Otherwise, within the same column is your Quasipair-- i.e. Prince and Mage lie in the same column.
+            </p>
+            <div className="flex gap-4 justify-center items-end flex-wrap mb-2">
+              <div className="text-center">
+                <img src="./images/figures/normalpairs.png" alt="Normal Pairs" style={{maxHeight: '300px', marginBottom: '8px'}} />
+                <p className="text-sm">regular pairs</p>
+              </div>
+              <div className="text-center">
+                <img src="./images/figures/quasipairs.png" alt="Quasipairs" style={{maxHeight: '300px', marginBottom: '8px'}} />
+                <p className="text-sm">quasipairs</p>
+              </div>
+              <div className="text-center">
+                <img src="./images/figures/antipairs.png" alt="Antipairs" style={{maxHeight: '350px', marginBottom: '8px'}} />
+                <p className="text-sm">antipairs</p>
+              </div>
+            </div>
+            <p className="text-xs mb-4">Credit: Hussie, bellCarved, caprineCappuccino (respectively)</p>
+          </div>
+          
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Numeric Opposite:</h3>
+            <p>
+              The result of taking the negative of your Class or Aspect. This yields the Pair in all Groups but 
+              Rulebreaker, where it instead yields the Quasipair.
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Classpect Vector:</h3>
+            <p>
+              The vector defined by components [Class, Aspect]. Can be treated as a mathematical object for the sake 
+              of rotation, reflection, and other simple transformations.
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Rotations:</h3>
+            <p>
+              Applying standard rotation operations to the point (class, aspect), in steps of thirty degrees. Proceeds 
+              anticlockwise. If a noninteger result is found, rounding is done to the nearest valid classpect.
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Reflective Inverse:</h3>
+            <p>
+              Swap the Class and Aspect activity values. If defined, guaranteed to share the same numeric value. This 
+              is a reflection about A=C.
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Symmetry:</h3>
+            <p>
+              When Class Value = Aspect Value, i.e. you lie on the line A = C. Classpects lying on this line are the 
+              result of "matching" a Class with its paired Aspect.
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Balance:</h3>
+            <p>
+              When Class Value + Aspect Value = 0, i.e. you lie on the line A = -C.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   APP
+   ========================= */
+const App = () => {
+  const handleNavigate = (path) => {
+    window.location.href = `./index.html#${path}`;
+  };
+  
+  return (
+    <div style={{ 
+      backgroundColor: defaultTheme.bg, 
+      minHeight: '100vh'
+    }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme} />
+      
+      <div className="px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div style={{ 
+            backgroundColor: defaultTheme.contentBg, 
+            color: defaultTheme.textColor, 
+            padding: '24px', 
+            borderRadius: '8px', 
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)', 
+            border: `2px solid ${defaultTheme.accentBg}` 
+          }}>
+            <FAQPage />
+          </div>
+          
+          <Footer theme={defaultTheme} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   MOUNT
+   ========================= */
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Theory - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="./images/special/CCLogoRegular.png" />
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Shared Components -->
+  <script type="text/babel" src="./components/constants.js"></script>
+  <script type="text/babel" src="./components/header.js"></script>
+  <script type="text/babel" src="./components/footer.js"></script>
+  
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('./fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+    
+    /* Font families */
+    .font-courier { font-family: 'Courier New', monospace; }
+    .font-courier-bold { 
+      font-family: 'Courier New', monospace; 
+      font-weight: bold;
+    }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem;
+      font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem;
+      font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem;
+      font-weight: normal;
+    }
+    .font-verdana { 
+      font-family: Verdana, Arial, sans-serif; 
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    
+    .discord-channel {
+      font-family: 'Courier New', monospace;
+      color: #0000ee;
+      font-weight: bold;
+    }
+    
+    .nav-box {
+      background-color: #f0f0f0;
+      border: 2px solid #a0a0a0;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+    
+    .quote-indent {
+      margin-left: 40px;
+      font-style: italic;
+      border-left: 4px solid #a0a0a0;
+      padding-left: 16px;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+/* =========================
+   DEFAULT THEME
+   ========================= */
+const defaultTheme = { 
+  bg: "#626262", 
+  contentBg: "#d0d0d0", 
+  textColor: "#000000", 
+  accentBg: "#a0a0a0",
+  isDark: false
+};
+
+/* =========================
+   THEORY PAGE
+   ========================= */
+const TheoryPage = () => {
+  return (
+    <div className="space-y-6">
+      <h1 className="font-typostuck-title mb-4 text-center">Theory</h1>
+      <p className="text-center text-sm mb-6">(Mirrored on FRAF)</p>
+      
+      {/* Quick navigation box */}
+      <div className="nav-box">
+        <h3 className="font-verdana mb-3 text-center">Quick Navigation</h3>
+        <div className="grid md:grid-cols-2 gap-2 font-courier text-sm">
+          <a href="#intro" className="underline" style={{color: '#0000ee'}}>
+            {'>'} Background/Introduction
+          </a>
+          <a href="#part1" className="underline" style={{color: '#0000ee'}}>
+            {'>'} Part 1: Pair Theories
+          </a>
+          <a href="#part2" className="underline" style={{color: '#0000ee'}}>
+            {'>'} Part 2: Aspect Activity
+          </a>
+          <a href="#part3" className="underline" style={{color: '#0000ee'}}>
+            {'>'} Part 3: Pairs, Siblings, and Shadows
+          </a>
+          <a href="#part4" className="underline" style={{color: '#0000ee'}}>
+            {'>'} Part 4: Rotations and Reflections
+          </a>
+          <a href="#part5" className="underline" style={{color: '#0000ee'}}>
+            {'>'} Part 5: Conclusions
+          </a>
+        </div>
+      </div>
+      
+      <div className="font-courier space-y-6" style={{lineHeight: '1.6'}}>
+        <p>
+          OK. Time for the big theorypost. I gotta break this into sections, it's a little long. (Hehehe.)
+        </p>
+        
+        {/* Background/Introduction */}
+        <div id="intro" className="pt-6">
+          <h2 className="font-typostuck-header mb-4">Background/Introduction</h2>
+          
+          <p className="mb-4">
+            On October 29, 2025, Andrew Hussie answered an ask in the HSOD's{' '}
+            <span className="discord-channel">#q-n-a</span> channel and showed us the canonical pairings and 
+            more importantly, numeric activity levels for every single class. This uprooted tons of theory that 
+            existed in the community, especially about how to interrelate classpects to one another.
+          </p>
+          
+          <p className="mb-4">
+            On that same day, duckBuster and myself both came up with different types of "inversion" where all the 
+            classes, except the master classes, were divided into groups, and new types of relations could be made 
+            between them. This concept later became the centerpiece of DB's new{' '}
+            <a href="https://rosespecting.tumblr.com/post/792817810256560128/new-classpecting-guide" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="underline" 
+               style={{color: '#0000ee'}}>
+              classpecting guide
+            </a>, at least when it comes to inversions-- for me, it forms the basis of a whole set of ways to pair 
+            classpects with one another.
+          </p>
+          
+          <p className="mb-4">
+            Later on, bellCarved asked the question of "what if the Aspects had a scale of activity?", and then 
+            "how might we assign that?" The result was a pairing of Classes to the Aspects based on the relatively 
+            simple rule of assigning them based on "which class fits best?"
+          </p>
+          
+          <p className="mb-4">
+            This creates two numeric scales-- one for classes, and one for aspects-- that is easily able to be manipulated 
+            mathematically. Remember math? There's going to be a small amount of it here.
+          </p>
+          
+          <p className="mb-4">
+            At the same time, there are now four ways to relate one class to another-- the usual pair, the numeric 
+            opposite, the relation me and DB discovered, and which I call an "antipair"-- and, as a natural extension 
+            on the group theory-- the "quasipair".
+          </p>
+          
+          <p className="mb-4">
+            With the combination of numeric theories and pair-based theories, I realized that it might be convenient 
+            to not only build on both systems, but to also contribute new ideas, like rotation. (Just imagine rotating 
+            the classpects in your mind...)
+          </p>
+          
+          <p className="mb-4">And so, I present to you:</p>
+          
+          <h1 className="font-typostuck-title text-center my-8">
+            Classpecting: Graphs, Rotations, and Groups
+          </h1>
+        </div>
+        
+        {/* Part 1: Pair Theories */}
+        <div id="part1" className="pt-6">
+          <h2 className="font-typostuck-header mb-4">Part 1: Pair Theories</h2>
+          
+          <p className="mb-4">
+            The first thing that I should explain is also the oldest-- it's the pair theory.
+          </p>
+          
+          <p className="mb-4">
+            So, let's start at the beginning, with the image posted by Hussie:
+          </p>
+          
+          <div className="text-center my-6">
+            <img src="./images/figures/normalpairs.png" alt="Normal Pairs" style={{maxHeight: '400px', margin: '0 auto'}} />
+          </div>
+          
+          <p className="mb-4">
+            What you see here is a list from -7 to +7 of all the classes, alongside bars connecting them. Calliope's 
+            pairs are here and correct, while the pairs people were most unsure of-- Witch, Sylph, Maid, and Heir-- were 
+            confirmed to be dual active and dual passive respectively by this post.
+          </p>
+          
+          <p className="mb-4">
+            We started playing with this image immediately. In my head, I always found that Homestuck, and later Beyond 
+            Canon, was trying to say something about Princes and Seers-- not only with Rose being compared and contrasted 
+            to Eridan, and later with Dirk, but also in the ways that Rose and Terezi interact with Dirk on Deltritus.
+          </p>
+          
+          <p className="mb-4">
+            What I realized was that you could do the following to this list. Ignoring Lord and Muse, because nothing 
+            fills out their set of four, you can take the list, and fold it in half, like this:
+          </p>
+          
+          <div className="text-center my-6">
+            <img src="./images/figures/antipairs_noconnections.png" alt="Antipairs without connections" style={{maxHeight: '400px', margin: '0 auto'}} />
+          </div>
+          
+          <p className="mb-4">
+            Then, you start drawing diagonals all the way across, like so:
+          </p>
+          
+          <div className="text-center my-6">
+            <img src="./images/figures/antipairs.png" alt="Antipairs" style={{maxHeight: '400px', margin: '0 auto'}} />
+          </div>
+          
+          <p className="mb-4">
+            This creates the following sets of Antipairs, divided into three groups:
+          </p>
+          
+          <ul className="list-none ml-6 mb-4">
+            <li className="mb-2"><strong>Group 1 (outermost):</strong> Witch/Maid and Sylph/Heir</li>
+            <li className="mb-2"><strong>Group 2 (in-between):</strong> Prince/Seer and Mage/Bard</li>
+            <li className="mb-2"><strong>Group 3 (central):</strong> Thief/Page and Knight/Rogue</li>
+          </ul>
+          
+          <p className="mb-4">
+            Obviously, with the appearance of so many "obvious bait" inversions here, I felt I had to go further, so 
+            I attached a small myth and a name to each of these groups.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            <strong>Group 1,</strong> I dubbed the <strong>Magic Group</strong>. I did this because it reminds me so much of Cinderella 
+            and Snow White, as old as those films may be-- the notion of "true inheritance" to a kingdom (Heirs), of 
+            fairies in a forest (Sylphs), Witches that might not be all too bad, and downtrodden Maids given a chance 
+            to shine. I also call this group the <strong>Rulebreaker Group</strong> because of the fact that it contains the Dual Actives 
+            and Passives-- a major motivating factor for the assignment of Aspects to Classes down the line.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            <strong>Group 2,</strong> I called the <strong>Vizier's Group</strong>. This is because all four members of the group can 
+            serve a role of advising a monarch. Princes and Bards are the more "powerful" in that their words more 
+            easily rouse a monarch to action, but Mages and Seers are equally important in introducing new angles to 
+            an issue. In other words: all of them can be the scheming eunuch, if they want.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            <strong>Group 3</strong> is the <strong>Laws and Outlaws Group</strong>. This one is, I think, self-evident-- Knights and 
+            Pages are the "Law" side and Rogues and Thieves form the "Outlaw" side. All can have noble-- or ignoble-- intentions, 
+            regardless of what side of the law they stand on. One imagines a Rapacious Knight, too gallant for their own 
+            good, or a noble Rogue who takes from the rich and gives to the poor.
+          </p>
+          
+          <p className="mb-4">
+            This obviously leaves Lord and Muse stranded. What's their relation to one another? Right now, they are both 
+            their own Pairs and Antipairs, and also their own Quasipairs. Were there to be a class of zero value, like 
+            the Waste, both would be Quasipaired with it, but such a Class does not exist. If it ever gets canonized, 
+            I'm updating this post.
+          </p>
+          
+          <p className="mb-4">
+            On that note, we may well discuss the notion of Quasipairs. BC actually developed these independently of me, 
+            but it turns out that they are well covered by asking the question of "which Class in my group is not covered 
+            by neither my Pair, nor my Antipair?" BC is also responsible for this lovely diagram illustrating the idea.
+          </p>
+          
+          <div className="text-center my-6">
+            <img src="./images/figures/quasipairs.png" alt="Quasipairs" style={{maxHeight: '400px', margin: '0 auto'}} />
+          </div>
+          
+          <p className="mb-4">
+            And as expected, this is exactly consistent with the above-- it's the class that is "left out".
+          </p>
+          
+          <p className="mb-4">
+            What does this mean? Yes, that's a good question. The real answer is "I don't know yet," but certainly we 
+            can ascribe some meaning here!
+          </p>
+          
+          <p className="mb-4">My take is this:</p>
+          
+          <p className="quote-indent mb-4">
+            "While you generally act alike to all the Classes in your group, you act most similarly to your Pair and 
+            Quasipair and least similarly to the Antipair."
+          </p>
+          
+          <p className="mb-4">
+            Seems noncommittal, I get it, but there's no real way to account for the nuance of human experience without 
+            sounding at least a bit noncommittal. Other people have dug into this idea much more than I have, and I 
+            recommend you sink your teeth into their ideas too, because a lot of them are really good.
+          </p>
+          
+          <p className="mb-4">"Do you have examples?"</p>
+          
+          <p className="mb-4">
+            I do. I like to think of Jade, June, Kanaya, and Aradia for the Magic Group-- that's what I'll use here.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            Jade and Kanaya are paired; June and Aradia are paired. In general, one notices that they have somewhat 
+            inverted arcs when it comes to personal freedom-- Jade and Kanaya start happy and free but begin to become 
+            burdened with Space-related duties over time, while June and Aradia start off overburdened and become 
+            somewhat freer and happier as the plot progresses or as time rolls on, respectively. Jade and June are 
+            quasipaired-- it is no secret that they act similar to one another, especially when you factor in them being 
+            ecto-siblings. Similarly, Aradia and Kanaya both have a similarly pleasant (if sometimes macabre) tone and 
+            sense of humor. These are general observations, but I think you get the idea-- June acts least like Kanaya 
+            and Jade acts least like Aradia in this group of four, and vice versa.
+          </p>
+          
+          <p className="mb-4">
+            You could keep going, but I don't want to lengthen an already long section-- other ideas and interpretations 
+            are up to you to decide. I am just giving you the tools.
+          </p>
+          
+          <p className="mb-4">And now, the crappy segue into:</p>
+        </div>
+        
+        {/* Part 2: Aspect Activity */}
+        <div id="part2" className="pt-6">
+          <h2 className="font-typostuck-header mb-4">Part 2: Aspect Activity</h2>
+          
+          <p className="mb-4">
+            This was actually not that hard to do, at least for me and BC. The question was pretty simple:
+          </p>
+          
+          <p className="mb-4">"Which Class behaves most like each Aspect?"</p>
+          
+          <p className="mb-4">The following are our answers:</p>
+          
+          <div className="text-center my-6">
+            <img src="./images/figures/activityscale_extended.png" alt="Activity Scale Extended" style={{maxHeight: '600px', margin: '0 auto'}} />
+          </div>
+          
+          <p className="mb-4">
+            I'd like to go through and explain these, not necessarily in order.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            <strong>Heir of Space</strong> was perhaps the most obvious assignment of all. Hussie describes Heirs as 
+            "making room for their Aspect to fill" with June, and Space is literally "that room". I can't think of 
+            anything more natural than an Heir inheriting an estate.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            <strong>Thief of Life</strong> is another obvious one--  even without the context of Meenah, a thief typically 
+            takes wealth and sometimes power-- all symbols of Life as an Aspect.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            <strong>Bard of Void</strong> makes sense when one considers the way in which Bards put on performances or 
+            even "airs of madness", if you buy into the Shakespearean idea.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            <strong>Hope</strong> was placed at the very top because it seems to overpower basically every other Aspect, 
+            and the moments in which it is used (Jake's hopesplosions, Eridan's use of "wwhite science") are all extremely 
+            active no matter the class. They also overpower Space on both occasions. You know, the Aspect that is said to 
+            "collapse in on itself, taking all else with it"? So, it makes sense that a Witch of Space might be constantly 
+            stymied (by Vriska, by Alt!Calliope), while a Witch of Hope is much more permitted to act. Active Class with 
+            active Aspect versus active Class with passive Aspect.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            <strong>Seer of Blood</strong> and <strong>Mage of Breath</strong> are both linked to this idea of connections 
+            and flows-- in other words, the classes that deal with knowledge make a lot of connections. Kankri being here 
+            becomes less surprising in light of this thought. Also, blood flow is passive and involuntary, while breathing 
+            can be controlled; that's part of how we decided active/passive here.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            <strong>Knight of Mind</strong> was found through this idea of "stress"-- something BC and I use as part of 
+            describing Knights-- in that Knights are often put under stress while dealing with the siege on their Aspect, 
+            and Mind has a lot to do with making choices under pressure (think [S] Flip). This creates Latula, who 
+            exhibits the strongest example of a Knightly facade perhaps ever.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            <strong>Maid of Time</strong> makes sense when you think about Time for a while-- Time is ultimately a passive 
+            force, only becoming "violent" when one is poorly prepared for it, at least in my view. That Homestuck also 
+            has this immutable Alpha Timeline doesn't exactly scream "active"-- everything seems preplanned. Compare and 
+            contrast Dave with Doc Scratch here, how Dave is under constant pressure while Doc Scratch has everything 
+            planned and acts calmly. Aradia exhibits both behaviors. Time players are fundamentally always preparing for 
+            the future-- Maids, in general, accommodate or prepare for their Aspect in the same way an Heir does, but more 
+            actively, of course.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            At this point, the gaps can be filled in using the pairs-- most of them make a lot of sense. For Rogue of Doom, 
+            here's a freebie. Remember that Life is often associated with the upper class. Rogues work in support of the 
+            lower class-- Doom by extension. (Thank you Fazzie for phrasing it this way, genuinely enlightening.)
+          </p>
+          
+          <p className="mb-4">
+            All the pairing discussed in Part 1 can be extended to the Aspects, too, now that we have a numeric scale 
+            for them.
+          </p>
+          
+          <p className="mb-4">
+            Before we move on, I really want to make sure you see DB's answer to this question, because it's different 
+            from mine and BC's. Check it out{' '}
+            <a href="https://www.tumblr.com/rosespecting/794420402552258560/aspectsigning-classes?source=share" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="underline" 
+               style={{color: '#0000ee'}}>
+              here
+            </a>.
+          </p>
+        </div>
+        
+        {/* Part 3: Pairs, Siblings, and Shadows */}
+        <div id="part3" className="pt-6">
+          <h2 className="font-typostuck-header mb-4">Part 3: Pairs, Siblings, and Shadows</h2>
+          
+          <p className="mb-4">
+            OK. Now, with all this stuff-- numbers and pairs for both Classes and Aspects-- what might we do?
+          </p>
+          
+          <p className="mb-4">
+            There are some major relationships between classpects that I promote-- I'll list them below, and explain how 
+            each is obtained.
+          </p>
+          
+          <h3 className="font-courier-bold text-lg mt-6 mb-3">Pairs</h3>
+          
+          <ul className="list-none ml-6 mb-4">
+            <li className="mb-2">
+              <strong>Numeric-Numeric:</strong> Take the numeric inverse of both your Class and Aspect, e.g. Maid of 
+              Space into Sylph of Hope.
+            </li>
+            <li className="mb-2">
+              <strong>Pair-Pair:</strong> AKA the original, use the pairs of both. Maid of Space into Heir of Time.
+            </li>
+            <li className="mb-2">
+              <strong>Quasipair-Quasipair:</strong> You get the gist. Maid of Space into Sylph of Hope (again).
+            </li>
+            <li className="mb-2">
+              <strong>Antipair-Antipair:</strong> Maid of Space into Witch of Rage.
+            </li>
+          </ul>
+          
+          <h3 className="font-courier-bold text-lg mt-6 mb-3">Siblings</h3>
+          
+          <p className="mb-4">(I picked a bad classpect for this one, but you need to see the math!)</p>
+          
+          <ul className="list-none ml-6 mb-4">
+            <li className="mb-2">
+              <strong>Pair-Preserving:</strong> you want to change the class to that of the Pair (Heir), but preserve 
+              the overall value (+1 + +6 = +7); Heir is +6; we need the Aspect that is +1, Time. Maid of Space into 
+              Heir of Time.
+            </li>
+            <li className="mb-2">
+              <strong>QP-Preserving:</strong> Same idea, but with the Quasipair. Sylph (-1) doesn't have any Aspect 
+              that can be added to it to preserve the over-all value, so this is undefined.
+            </li>
+            <li className="mb-2">
+              <strong>AP-Preserving:</strong> Again, but with Witch (-6) you're even further off base. Still undefined.
+            </li>
+          </ul>
+          
+          <h3 className="font-courier-bold text-lg mt-6 mb-3">Shadows</h3>
+          
+          <ul className="list-none ml-6 mb-4">
+            <li className="mb-2">
+              <strong>Pair-Inverting:</strong> Change the class to that of the Pair, but pick the Aspect that INVERTS 
+              the overall value. Heir (+6) has no Aspect that can make -7, so this is undefined.
+            </li>
+            <li className="mb-2">
+              <strong>QP-Inv:</strong> Same idea, Sylph needs Hope, so Maid of Space into Sylph of Hope.
+            </li>
+            <li className="mb-2">
+              <strong>AP-Inv:</strong> You get the idea. Witch of Rage.
+            </li>
+          </ul>
+          
+          <p className="mb-4">
+            Now certainly, you can imagine applying this to EVERY classpect, but WHAT does any of it mean? That's a 
+            very good question.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            The <strong>Pairs</strong> are very "I dunno". Numeric-Numeric is a Guaranteed Shadow, so I'll talk about it more. I'll 
+            be frank when I say this is the dying gasp of old inversion theory into relation-theory like what I am 
+            doing right now. Some of this might be good for setting up "classical foils", where you want two characters 
+            to examine different themes, or maybe the same theme from a different view. If you're like me and think 
+            Kris Dreemurr is a Maid of Blood, then the obvious pairwise inversion to an Heir of Breath-- June Egbert-- could 
+            not make it clearer that I think both protagonists are kind of examining some similar themes, especially 
+            when it comes to "narratives" and how we interact with them.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            <strong>Siblings.</strong> This is my favorite part of this whole thing. My belief is that in your strongest 
+            moments, you can act a lot like a sibling classpect. The example I gave is{' '}
+            <a href="./index.html#/classpect/seer-of-mind" className="underline" style={{color: '#0000ee'}}>
+              Terezi
+            </a>, who has the siblings of 
+            Mage of Time, Prince of Doom, and Bard of Hope. Before Flip, we see Terezi peering into and being solely 
+            burdened with the knowledge of alternate timelines-- by the time of Remem8er, Terezi is also burdened by NOT 
+            knowing alternate timelines. These both seem pretty clearly like Mage of Time tendencies (speaking from some 
+            experience {'>'}{':'}3). And then there's the retcon, wherein Terezi 
+            clearly acts like a Bard of Hope, if you didn't have context of her being a Mind player. Terezi directly 
+            invites June to destroy the current timeline in exchange for a newer one with brighter hopes, perfectly 
+            fitting the role. Also, funnily enough, we know that Jake hopesplodes in GAME OVER, while in the new 
+            timeline, he does not do that-- the Hope player was made weaker, indirectly due to Terezi's influence. Isn't 
+            this fun? Tell me how this isn't fun.
+          </p>
+          
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            <strong>Shadows.</strong> These are the classpects you act like while you are at your worst (and vice versa, 
+            they act like you at their worst). Consider Jake. One of his shadows is a Rogue of Rage. It is not hard to 
+            see how Jake at his worst engenders anger in others while being totally pacified himself, mostly due to him 
+            being a blockhead. The numeric inverse is guaranteed to be one of these, so it's important to remember it.
+          </p>
+          
+          <p className="mb-4">
+            At this point, you're now ready to tackle The Big Stuff. The graph. Rotations, and Reflections.
+          </p>
+        </div>
+        
+        {/* Part 4: Rotations and Reflections */}
+        <div id="part4" className="pt-6">
+          <h2 className="font-typostuck-header mb-4">Part 4: Rotations and Reflections</h2>
+          
+          <p className="mb-4">
+            Okay. This is where the real math begins. So, I want you to imagine the{' '}
+            <a href="./index.html#/classpect/sylph-of-light" className="underline" style={{color: '#0000ee'}}>
+              Sylph of Light
+            </a>, as a classpect. Now that we have two numeric scales, we can place this classpect on a Cartesian 
+            grid-- the point (-1, -5). We can also place the reflective inverse-- swapping Class and Aspect-- here too. 
+            This is the Prince of Rage, (-5, -1).
+          </p>
+          
+          <div className="text-center my-6">
+            <img src="./images/figures/araneareflection.png" alt="Aranea Reflection" style={{maxHeight: '400px', margin: '0 auto'}} />
+          </div>
+          
+          <p className="mb-4">
+            Now, I want you to consider applying the standard rotation operator to this. "What's that?" I mean this 
+            vector operator:
+          </p>
+          
+          <div className="text-center my-6">
+            <img src="./images/figures/vecrot.png" alt="Vector Rotation" style={{maxHeight: '120px', margin: '0 auto'}} />
+          </div>
+          
+          <p className="mb-4">
+            Because there are 12 Aspects, all spaced at thirty degrees from one another, the natural choice is to 
+            calculate a rotated classpect every thirty degrees. Because this can yield noninteger or otherwise invalid 
+            results, what I do is this:
+          </p>
+          
+          <ul className="list-none ml-6 mb-4">
+            <li className="mb-2">
+              Are the values noninteger?
+              <ul className="list-none ml-6">
+                <li>If so, round X, Y to the nearest integer-valued point.</li>
+              </ul>
+            </li>
+            <li className="mb-2">
+              Is the classpect invalid? Is X or Y too large, or is one of them zero?
+              <ul className="list-none ml-6">
+                <li>If so, don't display it.</li>
+              </ul>
+            </li>
+            <li className="mb-2">
+              Are there duplicates?
+              <ul className="list-none ml-6">
+                <li>If so, don't display it.</li>
+              </ul>
+            </li>
+          </ul>
+          
+          <p className="mb-4">For Aranea's classpect, you get this:</p>
+          
+          <div className="text-center my-6">
+            <img src="./images/figures/aranearotations.png" alt="Aranea Rotations" style={{maxHeight: '400px', margin: '0 auto'}} />
+          </div>
+          
+          <p className="mb-4">Thankfully, all the rotations are valid.</p>
+          
+          <p className="mb-4">
+            Examining this circle is fun-- on it, there is a Bard of Rage, at 90 degrees to Aranea, and a Seer of Light, 
+            sandwiched between. There are a few ways to interpret all of this. What I generally have taken away from 
+            rotation theory is that a difference of less than 90 degrees implies some similarity of action while a 
+            difference of more than that implies some difference. In other words, Rose can sometimes act similar to 
+            Aranea and Gamzee (the latter is less obvious, but I want you to compare Rose observing events through the 
+            crystal ball and Gamzee observing the Critical Moment), while Rose probably acts nothing alike to a Page 
+            of Doom or Thief of Heart.
+          </p>
+          
+          <p className="mb-4">
+            Some other examinations lend themselves to humor. For example, Kankri and Dave lie on the same circle at a 
+            120-degree difference. Unsurprisingly, both make an absurd amount of red text on the screen. Kanaya and June 
+            also lie at 120 degrees from one another. This one's a reach, but I want to say it's because both of them 
+            used made-up meters for things? (Prankster's Gambit, Flighty Broads and Their Snarky Horseshitometer?) Again, 
+            the ball is in your court now. Go wild with interpretation.
+          </p>
+          
+          <p className="mb-4">
+            Reflection, or the Reflective Inverse, is tough to interpret. Certainly, Kurloz and Aranea both did weird 
+            and bad things, but they did it differently-- Aranea in a Lighty way, out in the open, and Kurloz in a Ragey 
+            way, secretly and frustratingly. They also did it for different people-- Aranea acts against Lord English, 
+            while Kurloz does what he does in support of the same. After diving deep into it, the pattern I see is that 
+            your reflective inverse is a very good "foil" to the original classpect.
+          </p>
+        </div>
+        
+        {/* Part 5: Conclusions */}
+        <div id="part5" className="pt-6">
+          <h2 className="font-typostuck-header mb-4">Part 5: Conclusions</h2>
+          
+          <p className="mb-4">
+            So, you've seen it all. You have watched this absurd journey into classpecting theory. So, it's time to 
+            answer some questions and give advice.
+          </p>
+          
+          <p className="mb-4">
+            <strong>"Is this canon? Should I take it seriously?"</strong>
+          </p>
+          
+          <p className="mb-4">
+            This is probably not canonical, unless Hussie takes pity on this weary soul and canonizes it. A lot of it 
+            makes sense intuitively, but that's because I am a big math nerd. "Should you take it seriously?" Well, do 
+            you want to? At the end of the day, this is classpecting. It's not all too serious. But it's a fun theory, 
+            and it's still pretty open to interpretation and exploration, so go wild with it! If you want to dive deeper, 
+            do that. I support you.
+          </p>
+          
+          <p className="mb-4">
+            <strong>"How would you use this tool?"</strong>
+          </p>
+          
+          <p className="mb-4">
+            I would recommend you use it to design your own fansessions or OCs! Maybe you don't like a classpect, and 
+            this theory can help you substitute. Maybe you want to design a session using the circles. Maybe you're 
+            having trouble figuring out a character; the idea of siblings, or shadows, or rotations, can be very useful 
+            in figuring out a personality or other traits.
+          </p>
+          
+          <p className="mb-4">
+            <strong>"Are you sleeping OK? How did you develop this site so fast."</strong>
+          </p>
+          
+          <p className="mb-4">
+            My watch says I got a 92 out of 100 on sleep. Is that a good score? Are you gonna kick me out for getting an A and 
+            not an A+? Look, OK, this was a passion project, passion does so much for stuff like this. When you're 
+            having as much fun as I have had developing this tool, even if very few people will use it, sleep basically 
+            doesn't matter.
+          </p>
+          
+          <p className="mb-4">OK, with those answered, I have some closing remarks:</p>
+          
+          <p className="mb-4">
+            I want to say thanks to duckBuster and bellCarved, who made huge theory contributions here. I also want to 
+            thank Andrew Hussie, for Homestuck and the Extended Zodiac. This wouldn't have been possible without you.
+          </p>
+          
+          <p className="mb-4">
+            I want to give special thanks to{' '}
+            <a href="https://www.fruityrumpus.com/forums/p/fazzie" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="underline" 
+               style={{color: '#0000ee'}}>
+              Fazzie
+            </a>, for tolerating my inane webdev and classpecting ranting, and to the folks in{' '}
+            <span className="discord-channel">#classpecting</span> who gave me valuable feedback on site appearance and 
+            other things like that.
+          </p>
+          
+          <p className="mb-4">
+            And finally, I want to give special thanks to YOU, the reader. This was a lot of theory, and I'm glad you 
+            read all of it.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   APP
+   ========================= */
+const App = () => {
+  const handleNavigate = (path) => {
+    window.location.href = `./index.html#${path}`;
+  };
+  
+  return (
+    <div style={{ 
+      backgroundColor: defaultTheme.bg, 
+      minHeight: '100vh'
+    }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme} />
+      
+      <div className="px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div style={{ 
+            backgroundColor: defaultTheme.contentBg, 
+            color: defaultTheme.textColor, 
+            padding: '24px', 
+            borderRadius: '8px', 
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)', 
+            border: `2px solid ${defaultTheme.accentBg}` 
+          }}>
+            <TheoryPage />
+          </div>
+          
+          <Footer theme={defaultTheme} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   MOUNT
+   ========================= */
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+
+</script>
+</body>
+</html>
