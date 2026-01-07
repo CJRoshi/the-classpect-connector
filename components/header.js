@@ -158,7 +158,7 @@ const Header = ({ onNavigate, theme }) => {
             Credits
           </a>
           <a
-            href="https://www.fruityrumpus.com/forums/t/classpecting-graphs-rotations-and-groups"
+            href="https://www.fruityrumpus.com/forums/t/classpecting-with-graphs-rotations-and-groups"
             target="_blank"
             rel="noopener noreferrer"
             className="font-typostuck px-3 py-2 rounded hover:opacity-80"
@@ -168,10 +168,10 @@ const Header = ({ onNavigate, theme }) => {
               textDecoration: 'none',
               cursor: 'pointer',
               fontSize: '1rem',
-              fontWeight: 'bold'
+              fontWeight: 'normal'
             }}
           >
-            Theory on FRAF
+            FRAFpost
           </a>
         </div>
       </div>
