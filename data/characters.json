@@ -282,19 +282,31 @@
       "color": "#6a006a",
       "classpect": ["Bard", "Blood"],
       "lunarsway": "Prospit",
-      "reaction": null
+      "reaction": "omg and is this who i think it is??"
     },
     "Cridea Jeevik": {
       "color": "#6a006a",
       "classpect": ["Sylph", "Heart"],
       "lunarsway": "Prospit",
-      "reaction": null
+      "reaction": "As they say, #SharingIsCaring!"
     },
     "Jerann Mussel": {
       "color": "#6a006a",
       "classpect": ["Seer", "Space"],
       "lunarsway": "Derse",
-      "reaction": null
+      "reaction": "A Fellow Truth Seeker Then"
+    },
+    "Mallek Adalov": {
+      "color": "#005682",
+      "classpect": ["Rogue", "Time"],
+      "lunarsway": "Prospit",
+      "reaction": "hello world; /= this cool;"
+    },
+    "Azdaja Knelax": {
+      "color": "#a1a100",
+      "classpect": ["Prince", "Mind"],
+      "lunarsway": "Prospit",
+      "reaction": "||| Beneath me. Fight someone else. |||"
     },
     "MSPA Reader": {
       "color": "#000000",
