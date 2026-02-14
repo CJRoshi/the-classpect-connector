@@ -325,7 +325,14 @@
       "reaction": [
         { "text": "Oh sweet, a new page.", "color": "#000000", "link": "https://homestuck.com/problemsleuth/001743" } 
       ]
-    }
+    },
+    "Ruthie Gold": {
+      "color": "#a10000",
+      "classpect": ["Prince", "Time"],
+      "lunarsway": null,
+      "reaction": [
+        { "text": "heeey there whats up", "color": "#a10000" }
+      ]
   },
   "nonCanon": {
     "MUTT OF SLOP": {
