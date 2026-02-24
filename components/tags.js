@@ -124,6 +124,11 @@ const TAG_METADATA = {
     textColor: '#000000',
     route: '/tag/pesterquest'
   },
+  'influencer': {
+    label: 'The Influencers',
+    color: '#6e11e6',
+    route: null
+  },
   
   // Non-canon special tags (no routes)
   'original-character': {
