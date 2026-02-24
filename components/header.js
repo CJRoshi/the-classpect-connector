@@ -30,6 +30,11 @@ const Header = ({ onNavigate, theme }) => {
     }
   };
 
+  // Detect if we're in subdirectory for relative paths
+  const isInSubdirectory = window.location.pathname.includes('/tag/') ||
+                           window.location.pathname.split('/').filter(p => p).length > 1;
+  const pathPrefix = isInSubdirectory ? '../' : './';
+
   // Choose logo based on theme and current location
   const getLogo = () => {
     // Detect if we're in a subdirectory (like /tag/)
@@ -72,11 +77,6 @@ const Header = ({ onNavigate, theme }) => {
       return pathPrefix + 'images/special/CCLogoDark.png';
     }
   };
-
-  // Detect if we're in subdirectory for relative paths
-  const isInSubdirectory = window.location.pathname.includes('/tag/') ||
-                           window.location.pathname.split('/').filter(p => p).length > 1;
-  const pathPrefix = isInSubdirectory ? '../' : './';
 
   // Shared styles
   const navLinkStyle = {

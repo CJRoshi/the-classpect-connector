@@ -19,7 +19,7 @@ The "Fresh Coat" Update (2/24/2026):
 
 ### Hotfixes
 
-None yet for this update.
+Hotfix 1 -- Site Logo Fix
 
 ### Past Updates
 
