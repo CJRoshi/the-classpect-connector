@@ -52,7 +52,11 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
   // Handler for tag clicks
   const handleTagClick = (route) => {
     if (route) {
-      window.location.href = route + '.html';
+      // Use a relative path (leading '.') so it works under any deployment
+      // subdirectory (e.g. GitHub Pages at /the-classpect-connector/).
+      // '/tag/sburb-beta' → './tag/sburb-beta.html'
+      // '/balanced'       → './balanced.html'
+      window.location.href = '.' + route + '.html';
     }
   };
 
