@@ -92,14 +92,14 @@ const SearchBar = ({ onNavigate, theme }) => {
       type: 'tag',
       display: 'SBURB Beta',
       path: './tag/sburb-beta.html',
-      searchTerms: ['sburb beta', 'sburbbeta', 'sburb-beta', 'beta kids', 'betakids', 'beta session'],
+      searchTerms: ['sburb beta', 'sburbbeta', 'sburb-beta', 'beta kids', 'betakids', 'beta session', 'earth a', 'eartha', 'earth-a'],
       isExternal: true
     });
     pages.push({
       type: 'tag',
       display: 'SBURB Alpha',
       path: './tag/sburb-alpha.html',
-      searchTerms: ['sburb alpha', 'sburbalpha', 'sburb-alpha', 'alpha kids', 'alphakids', 'alpha session'],
+      searchTerms: ['sburb alpha', 'sburbalpha', 'sburb-alpha', 'alpha kids', 'alphakids', 'alpha session', 'earth b', 'earthb', 'earth-b'],
       isExternal: true
     });
     pages.push({
@@ -120,35 +120,35 @@ const SearchBar = ({ onNavigate, theme }) => {
       type: 'tag',
       display: 'Homestuck',
       path: './tag/homestuck.html',
-      searchTerms: ['homestuck', 'hs'],
+      searchTerms: ['homestuck', 'hs', 'hs1'],
       isExternal: true
     });
     pages.push({
       type: 'tag',
       display: 'Beyond Canon',
       path: './tag/beyond-canon.html',
-      searchTerms: ['beyond canon', 'beyondcanon', 'beyond-canon', 'epilogues', 'meat', 'candy'],
+      searchTerms: ['beyond canon', 'beyondcanon', 'beyond-canon', 'epilogues', 'meat', 'candy', 'the prince', 'the muse'],
       isExternal: true
     });
     pages.push({
       type: 'tag',
-      display: 'Hiveswap',
+      display: 'Hiveswap & Hauntswitch',
       path: './tag/hiveswap.html',
       searchTerms: ['hiveswap', 'hauntswitch'],
       isExternal: true
     });
     pages.push({
-      type: 'special',
+      type: 'tag',
       display: 'Balanced Classpects',
       path: './balanced.html',
-      searchTerms: ['balanced', 'balance'],
+      searchTerms: ['balanced', 'balance', 'zero value', 'zero-sum', 'zero sum'],
       isExternal: true
     });
     pages.push({
-      type: 'special',
+      type: 'tag',
       display: 'Symmetric Classpects',
       path: './symmetric.html',
-      searchTerms: ['symmetric', 'symmetry'],
+      searchTerms: ['symmetric', 'symmetry', 'extreme'],
       isExternal: true
     });
     
