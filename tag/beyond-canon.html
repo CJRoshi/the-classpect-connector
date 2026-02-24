@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beyond Canon - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="../images/special/CCLogoRegular.png" />
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../components/mobile.css">
+
+  <script type="text/babel" src="../components/constants.js"></script>
+  <script type="text/babel" src="../components/header.js"></script>
+  <script type="text/babel" src="../components/searchbar.js"></script>
+  <script type="text/babel" src="../components/footer.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('../fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+
+    .font-courier      { font-family: 'Courier New', monospace; }
+    .font-courier-bold { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem; font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem; font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem; font-weight: normal;
+    }
+    .homestuck-command {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold; font-size: 1.25rem; color: #000;
+    }
+    .homestuck-command-dark {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold; font-size: 1.25rem; color: #fff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body, html {
+      width: 100%;
+      min-height: 100vh;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ── TIMELINE BADGES ─────────────────────────────── */
+    .timeline-badges {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      vertical-align: middle;
+      margin-left: 6px;
+      flex-shrink: 0;
+    }
+
+    .timeline-icon {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+    }
+
+    .timeline-unknown {
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      color: #888;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    /* Lock icon for MSPAR */
+    .lock-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .lock-badge svg {
+      opacity: 0.45;
+    }
+
+    .lock-label {
+      font-family: 'Courier New', monospace;
+      font-size: 0.72rem;
+      color: #888;
+      font-style: italic;
+    }
+
+    /* Section divider */
+    .section-divider {
+      border: none;
+      border-top: 2px solid #a0a0a0;
+      margin: 24px 0;
+    }
+
+    /* ── MOBILE ──────────────────────────────────────────── */
+    @media (max-width: 639px) {
+      .timeline-icon { width: 13px; height: 13px; }
+      .lock-badge svg { width: 11px; height: 11px; }
+      .lock-label { font-size: 0.6rem; }
+      .timeline-unknown { font-size: 0.7rem; }
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const defaultTheme = {
+  bg: "#626262",
+  contentBg: "#d0d0d0",
+  textColor: "#000000",
+  accentBg: "#a0a0a0",
+  isDark: false,
+};
+
+// ── TIMELINE OVERRIDES ────────────────────────────────────
+// M = Meat only, C = Candy only, MC = both, '???' = unknown
+// Characters not listed here default to 'MC'
+const TIMELINE = {
+  // Beta Kids
+  'June Egbert':   'MC',
+  'Rose Lalonde':  'MC',
+  'Dave Strider':  'MC',
+  'Jade Harley':   'MC',
+  // Alpha Kids
+  'Jane Crocker':  'MC',
+  'Jake English':  'MC',
+  'Roxy Lalonde':  'MC',
+  'Dirk Strider':  'MC',
+  // Beta Trolls
+  'Karkat Vantas': 'MC',
+  'Kanaya Maryam': 'MC',
+  'Gamzee Makara': 'MC',
+  'Vriska Serket': 'MC',
+  'Aradia Megido': 'MC',
+  'Terezi Pyrope': 'M',
+  'Sollux Captor': 'C',
+  'Tavros Nitram': 'MC',
+  'Eridan Ampora': 'C',
+  'Feferi Peixes': 'C',
+  'Nepeta Leijon': '???',
+  // Alpha Trolls
+  'Meenah Peixes': 'MC',
+  // Influencers
+  'Ruthie Gold':   'C',
+  // Special
+  'MSPA Reader':   'locked',
+  // Cherubs
+  'Caliborn':      'M',
+  'Calliope':      'MC',
+};
+
+
+// Group sort order — determines how groups appear relative to each other
+const GROUP_SORT = {
+  'sburb-beta':   1,
+  'sburb-alpha':  2,
+  'sgrub-beta':   3,
+  'sgrub-alpha':  4,
+  'cherubs':      5,
+  'influencer':   6,
+  'other':        99,
+};
+
+const getGroupKey = (tags) => {
+  for (const [tag, order] of Object.entries(GROUP_SORT)) {
+    if (tags.includes(tag)) return order;
+  }
+  return GROUP_SORT.other;
+};
+
+
+const TimelineBadge = ({ timeline }) => {
+  if (timeline === 'locked') {
+    return (
+      <span className="lock-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+          <rect x="5" y="11" width="14" height="10" rx="2" fill="#666"/>
+          <path d="M8 11V7a4 4 0 018 0v4" stroke="#666" strokeWidth="2.5"
+            fill="none" strokeLinecap="round"/>
+        </svg>
+        <span className="lock-label">Locked.</span>
+      </span>
+    );
+  }
+  if (timeline === '???') {
+    return (
+      <span className="timeline-badges">
+        <span className="timeline-unknown">???</span>
+      </span>
+    );
+  }
+  const showMeat   = timeline === 'M'  || timeline === 'MC';
+  const showCandy  = timeline === 'C'  || timeline === 'MC';
+  return (
+    <span className="timeline-badges">
+      {showMeat  && <img src="../images/special/meat.png"  className="timeline-icon" alt="Meat"  title="Meat"/>}
+      {showCandy && <img src="../images/special/candy.png" className="timeline-icon" alt="Candy" title="Candy"/>}
+    </span>
+  );
+};
+
+// ── CHARACTER ROW ─────────────────────────────────────────
+const CharRow = ({ char }) => {
+  const [cls, asp] = char.classpect;
+  const path = `../index.html#/classpect/${cls.toLowerCase()}-of-${asp.toLowerCase()}`;
+  const timeline = TIMELINE[char.name] ?? 'MC';
+
+  return (
+    <div className="border-l-4 pl-4" style={{ borderColor: char.color }}>
+      <div className="flex items-center gap-1 flex-wrap">
+        <span className="font-courier-bold" style={{ color: char.color, fontSize: 'clamp(0.9rem, 3.5vw, 1.1rem)' }}>
+          {char.name}:
+        </span>
+        <a href={path}
+          className="font-courier-bold hover:underline"
+          style={{ color: '#0000ee', textDecoration: 'none' }}>
+          {cls} of {asp}
+        </a>
+        <TimelineBadge timeline={timeline}/>
+      </div>
+    </div>
+  );
+};
+
+// ── PAGE ──────────────────────────────────────────────────
+const BeyondCanonPage = () => {
+  const [chars, setChars] = React.useState([]);
+  const [loaded, setLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    fetch('../data/characters.json')
+      .then(r => r.json())
+      .then(data => {
+        const canon = data.canon || {};
+        const bc = Object.entries(canon)
+          .filter(([name, char]) =>
+            char.tags?.includes('beyond-canon') &&
+            char.classpect &&
+            TIMELINE[name] !== 'omit'
+          )
+          .map(([name, char]) => ({
+            name,
+            color: char.color,
+            classpect: char.classpect,
+            groupKey: getGroupKey(char.tags || []),
+          }))
+          .sort((a, b) =>
+            a.groupKey !== b.groupKey
+              ? a.groupKey - b.groupKey
+              : a.name.localeCompare(b.name)
+          );
+        setChars(bc);
+        setLoaded(true);
+      })
+      .catch(() => setLoaded(true));
+  }, []);
+
+  const handleNavigate = path => { window.location.href = `../index.html#${path}`; };
+
+  return (
+    <div style={{ backgroundColor: defaultTheme.bg, minHeight: '100vh' }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme}/>
+
+      <div className="px-3 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <SearchBar onNavigate={handleNavigate} theme={defaultTheme}/>
+        </div>
+      </div>
+
+      <div className="px-3 sm:px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="content-box-mobile" style={{
+            backgroundColor: defaultTheme.contentBg,
+            color: defaultTheme.textColor,
+            padding: '24px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+            border: `2px solid ${defaultTheme.accentBg}`,
+          }}>
+            <div className="text-center mb-6">
+              <h1 className="font-typostuck-title mb-2">Beyond Canon</h1>
+              <p className="font-courier italic" style={{ fontSize: '1.0rem', color: '#4b5563' }}>
+                The Homestuck Epilogues, and Beyond.{' '}
+                <img src="../images/special/meat.png"  style={{width:16,height:16,display:'inline',verticalAlign:'middle'}} alt="Meat"/>
+                {' '}= Meat,{' '}
+                <img src="../images/special/candy.png" style={{width:16,height:16,display:'inline',verticalAlign:'middle'}} alt="Candy"/>
+                {' '}= Candy.
+              </p>
+            </div>
+
+            {!loaded ? (
+              <p className="font-courier text-center" style={{ color: '#666' }}>Loading...</p>
+            ) : (
+              <div className="space-y-2">
+                {chars.map((char, i) => {
+                  const prevGroup = i > 0 ? chars[i - 1].groupKey : null;
+                  const showDivider = i > 0 && char.groupKey !== prevGroup;
+                  return (
+                    <React.Fragment key={char.name}>
+                      {showDivider && (
+                        <div style={{
+                          borderTop: '1px solid #b0b0b0',
+                          margin: '8px 0',
+                        }}/>
+                      )}
+                      <CharRow char={char}/>
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          <Footer theme={defaultTheme}/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<BeyondCanonPage/>);
+</script>
+</body>
+</html>

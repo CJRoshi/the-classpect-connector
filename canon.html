@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Canon Characters - The Classpect Connector</title>
   <link rel="icon" type="image/png" href="./images/special/CCLogoRegular.png" />
 
@@ -14,6 +15,7 @@
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./components/mobile.css">
 
   <!-- Shared Components -->
   <script type="text/babel" src="./components/constants.js"></script>
@@ -22,11 +24,6 @@
   <script type="text/babel" src="./components/footer.js"></script>
   
   <style>
-    @font-face {
-      font-family: 'Carima';
-      src: url('./fonts/Carima-Regular.ttf') format('truetype');
-    }
-    
     @font-face {
       font-family: 'Typostuck';
       src: url('./fonts/TYPOSTUCK.ttf') format('truetype');
@@ -50,16 +47,6 @@
       font-size: 1.75rem;
       font-weight: normal;
     }
-    .font-verdana { 
-      font-family: Verdana, Arial, sans-serif; 
-      font-size: 1.25rem;
-      font-weight: bold;
-    }
-    .font-verdana-title { 
-      font-family: Verdana, Arial, sans-serif;
-      font-size: 2.25rem;
-      font-weight: bold;
-    }
     
     /* Homestuck command style */
     .homestuck-command {
@@ -74,13 +61,6 @@
       font-weight: bold;
       font-size: 1.25rem;
       color: #ffffff;
-    }
-    
-    .font-pixelated {
-      font-family: 'Courier New', monospace;
-      font-size: 0.875rem;
-      -webkit-font-smoothing: none;
-      -moz-osx-font-smoothing: grayscale;
     }
   </style>
 </head>
@@ -120,6 +100,154 @@ const loadData = async () => {
 };
 
 /* =========================
+   CHARACTER GROUPING
+   ========================= */
+const getLastName = (fullName) => {
+  const parts = fullName.split(' ');
+  return parts[parts.length - 1];
+};
+
+const groupCharacters = (characters) => {
+  const groups = {
+    'SBURB Beta': [],
+    'SBURB Alpha': [],
+    'SGRUB Beta': [],
+    'SGRUB Alpha': [],
+    'Cherubs': [],
+    'Hiveswap': [],
+    'Hauntswitch': [],
+    'Pesterquest': [],
+    'Beyond Canon': []
+  };
+  
+  // Troll blood caste order
+  const trollOrderBeta = [
+    'Aradia Megido', 'Tavros Nitram', 'Sollux Captor', 'Karkat Vantas',
+    'Nepeta Leijon', 'Kanaya Maryam', 'Terezi Pyrope', 'Vriska Serket',
+    'Equius Zahhak', 'Gamzee Makara', 'Eridan Ampora', 'Feferi Peixes'
+  ];
+  
+  const trollOrderAlpha = [
+    'Damara Megido', 'Rufioh Nitram', 'Mituna Captor', 'Kankri Vantas',
+    'Meulin Leijon', 'Porrim Maryam', 'Latula Pyrope', 'Aranea Serket',
+    'Horuss Zahhak', 'Kurloz Makara', 'Cronus Ampora', 'Meenah Peixes'
+  ];
+  
+  // Tag to group mapping
+  const TAG_TO_GROUP = {
+    'sburb-beta':   'SBURB Beta',
+    'sburb-alpha':  'SBURB Alpha',
+    'sgrub-beta':   'SGRUB Beta',
+    'sgrub-alpha':  'SGRUB Alpha',
+    'cherubs':      'Cherubs',
+    'hiveswap':     'Hiveswap',
+    'hauntswitch':  'Hauntswitch',
+    'pesterquest':  'Pesterquest',
+    'beyond-canon': 'Beyond Canon',
+  };
+
+  // Group priority — lower = higher priority group
+  // Characters who should be forced into a specific group regardless of tags
+  const GROUP_OVERRIDES = {
+    'MSPA Reader': 'Beyond Canon',
+  };
+
+  const GROUP_PRIORITY = {
+    'SBURB Beta':   1,
+    'SBURB Alpha':  2,
+    'SGRUB Beta':   3,
+    'SGRUB Alpha':  4,
+    'Cherubs':      5,
+    'Beyond Canon': 6,
+    'Hiveswap':     7,
+    'Hauntswitch':  8,
+    'Pesterquest':  9,
+  };
+
+  characters.forEach(char => {
+    const tags = char.tags || [];
+
+    // Hard override for specific characters
+    if (GROUP_OVERRIDES[char.name]) {
+      groups[GROUP_OVERRIDES[char.name]].push(char);
+      return;
+    }
+
+    // Find the highest-priority group this character belongs to
+    let bestGroup = null;
+    let bestPriority = Infinity;
+
+    tags.forEach(tag => {
+      const group = TAG_TO_GROUP[tag];
+      if (group && GROUP_PRIORITY[group] < bestPriority) {
+        bestGroup = group;
+        bestPriority = GROUP_PRIORITY[group];
+      }
+    });
+
+    if (bestGroup) {
+      groups[bestGroup].push(char);
+    }
+  });
+  
+  // Sort humans by last name
+  ['SBURB Beta', 'SBURB Alpha'].forEach(group => {
+    groups[group].sort((a, b) => getLastName(a.name).localeCompare(getLastName(b.name)));
+  });
+  
+  // Sort trolls by blood caste
+  groups['SGRUB Beta'].sort((a, b) => {
+    return trollOrderBeta.indexOf(a.name) - trollOrderBeta.indexOf(b.name);
+  });
+  
+  groups['SGRUB Alpha'].sort((a, b) => {
+    return trollOrderAlpha.indexOf(a.name) - trollOrderAlpha.indexOf(b.name);
+  });
+  
+  // Sort other groups alphabetically
+  ['Cherubs', 'Hiveswap', 'Hauntswitch', 'Pesterquest', 'Beyond Canon'].forEach(group => {
+    groups[group].sort((a, b) => a.name.localeCompare(b.name));
+  });
+  
+  return groups;
+};
+
+const GROUP_ROUTES = {
+  'SBURB Beta':    './tag/sburb-beta.html',
+  'SBURB Alpha':   './tag/sburb-alpha.html',
+  'SGRUB Beta':    './tag/sgrub-beta.html',
+  'SGRUB Alpha':   './tag/sgrub-alpha.html',
+  'Cherubs':       './tag/cherubs.html',
+  'Hiveswap':      './tag/hiveswap.html',
+  'Hauntswitch':   './tag/hauntswitch.html',
+  'Beyond Canon':  './tag/beyond-canon.html',
+  'Pesterquest':   null,
+};
+
+/* =========================
+   CHARACTER ENTRY COMPONENT
+   ========================= */
+const CharacterEntry = ({ name, classpect, color, theme }) => {
+  const [className, aspectName] = classpect;
+  const path = `./index.html#/classpect/${className.toLowerCase()}-of-${aspectName.toLowerCase()}`;
+  
+  return (
+    <div className="font-courier" style={{display: 'flex', gap: '0.5rem'}}>
+      <span style={{color: color || (theme?.isDark ? "#ffffff" : "#000000"), fontWeight: 'bold', minWidth: '150px'}}>
+        {name}:
+      </span>
+      <a
+        href={path}
+        className="font-courier-bold hover:underline"
+        style={{color: theme?.isDark ? "#6dd1f4" : "#0000ee", textDecoration: 'none'}}
+      >
+        {className} of {aspectName}
+      </a>
+    </div>
+  );
+};
+
+/* =========================
    CANON PAGE
    ========================= */
 const CanonPage = ({ theme }) => {
@@ -139,52 +267,57 @@ const CanonPage = ({ theme }) => {
     );
   }
   
-  // Get all canon characters and sort alphabetically
+  // Get all canon characters
   const canonCharacters = Object.entries(characterData.canon)
     .map(([name, data]) => ({
       name,
       classpect: data.classpect,
       color: data.color,
-      lunarsway: data.lunarsway
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+      tags: data.tags || []
+    }));
+  
+  const groups = groupCharacters(canonCharacters);
   
   return (
     <div className="space-y-6">
       {/* Title */}
       <div className="text-center">
-        <h1 className="font-typostuck-title mb-2" style={{fontSize: "3rem"}}>Canon Characters</h1>
+        <h1 className="font-typostuck-title mb-2" style={{fontSize: "clamp(1.75rem, 7vw, 3rem)"}}>Canon Characters</h1>
         <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#4b5563"}}>
-          All canon Homestuck characters and their classpects (if confirmed).
+          All canon characters and their classpects (if confirmed).
         </p>
       </div>
       
-      {/* Character List */}
-      <div>
-        <h2 className={theme?.isDark ? "homestuck-command-dark mb-3" : "homestuck-command mb-3"}>
-          All Canon Classpects
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
-          {canonCharacters.map(({ name, classpect, color }) => {
-            const [className, aspectName] = classpect;
-            const path = `./index.html#/classpect/${className.toLowerCase()}-of-${aspectName.toLowerCase()}`;
-            return (
-              <div key={name} className="font-courier" style={{display: 'flex', gap: '0.5rem'}}>
-                <span style={{color: color || (theme?.isDark ? "#ffffff" : "#000000"), fontWeight: 'bold'}}>
-                  {name}:
-                </span>
-                <a
-                  href={path}
-                  className="font-courier-bold hover:underline"
-                  style={{color: theme?.isDark ? "#6dd1f4" : "#0000ee", textDecoration: 'none'}}
+      {/* Groups */}
+      {Object.entries(groups).map(([groupName, characters]) => {
+        if (characters.length === 0) return null;
+        
+        return (
+          <div key={groupName}>
+            <h2 className={theme?.isDark ? "homestuck-command-dark mb-3" : "homestuck-command mb-3"}>
+              {GROUP_ROUTES[groupName] ? (
+                <a href={GROUP_ROUTES[groupName]} style={{ textDecoration: 'none', color: 'inherit' }}
+                  onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
+                  onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}
                 >
-                  {className} of {aspectName}
+                  {groupName}
                 </a>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+              ) : groupName}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+              {characters.map(({ name, classpect, color }) => (
+                <CharacterEntry 
+                  key={name}
+                  name={name}
+                  classpect={classpect}
+                  color={color}
+                  theme={theme}
+                />
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
@@ -193,9 +326,7 @@ const CanonPage = ({ theme }) => {
    APP
    ========================= */
 const App = () => {
-  // Dummy navigation function for external page
   const handleNavigate = (path) => {
-    // On external pages, always go to index.html with hash
     window.location.href = `./index.html#${path}`;
   };
   
@@ -206,17 +337,17 @@ const App = () => {
     }}>
       <Header onNavigate={handleNavigate} theme={defaultTheme} />
       
-      <div className="px-6 pb-6">
+      <div className="px-3 sm:px-6 pb-6">
         <div className="max-w-4xl mx-auto">
           <SearchBar onNavigate={handleNavigate} theme={defaultTheme} />
           
-          <div style={{ 
-            backgroundColor: defaultTheme.contentBg, 
-            color: defaultTheme.textColor, 
-            padding: '24px', 
-            borderRadius: '8px', 
-            boxShadow: '0 4px 6px rgba(0,0,0,0.3)', 
-            border: `2px solid ${defaultTheme.accentBg}` 
+          <div className="content-box-mobile" style={{
+            backgroundColor: defaultTheme.contentBg,
+            color: defaultTheme.textColor,
+            padding: '24px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+            border: `2px solid ${defaultTheme.accentBg}`
           }}>
             <CanonPage theme={defaultTheme} />
           </div>

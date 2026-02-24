@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SGRUB Beta - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="../images/special/CCLogoRegular.png" />
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../components/mobile.css">
+
+  <script type="text/babel" src="../components/constants.js"></script>
+  <script type="text/babel" src="../components/header.js"></script>
+  <script type="text/babel" src="../components/searchbar.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('../fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+
+    .font-courier       { font-family: 'Courier New', monospace; }
+    .font-courier-bold  { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck     { font-family: 'Typostuck', 'Courier New', monospace; font-size: 1.25rem; font-weight: normal; }
+    .font-typostuck-title  { font-family: 'Typostuck', 'Courier New', monospace; font-size: 2.5rem; font-weight: normal; }
+    .font-typostuck-header { font-family: 'Typostuck', 'Courier New', monospace; font-size: 1.75rem; font-weight: normal; }
+    .homestuck-command-dark { font-family: Verdana, Arial, sans-serif; font-weight: bold; font-size: 1.25rem; color: #ffffff; }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { width: 100%; min-height: 100vh; font-family: 'Courier New', monospace; background: #000; }
+
+    /* ── PAGE TITLE ───────────────────────────────────── */
+    .page-title-block { text-align: center; padding: 28px 20px 8px; }
+    .page-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.8rem; font-weight: normal; color: #ffffff;
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 20px rgba(180,80,255,0.8), 0 0 50px rgba(140,40,220,0.4);
+      margin-bottom: 14px;
+    }
+    .page-subtitle {
+      font-family: 'Courier New', monospace; font-size: 0.95rem;
+      color: rgba(200,180,230,0.85); letter-spacing: 0.05em; line-height: 1.6;
+      text-shadow: 0 0 8px rgba(0,0,0,0.9);
+    }
+    .subtitle-link-blue { color: #66aaff; text-decoration: none; transition: color 0.2s; }
+    .subtitle-link-blue:hover { color: #99ccff; }
+    .subtitle-link-red { color: #ff3300; text-decoration: none; animation: redPulse 2.4s ease-in-out infinite; }
+    @keyframes redPulse {
+      0%, 100% { color: #ff3300; text-shadow: 0 0 6px rgba(255,50,0,0.5); }
+      50%       { color: #ff6644; text-shadow: 0 0 14px rgba(255,80,0,0.9); }
+    }
+
+    /* ── MOBILE/DESKTOP VISIBILITY ────────────────────── */
+    .wheel-section { display: block; }
+    .mobile-list-section { display: none; }
+    @media (max-width: 639px) {
+      .wheel-section { display: none; }
+      .mobile-list-section { display: block; }
+      .page-title { font-size: 2rem; margin-bottom: 10px; }
+      .page-subtitle { font-size: 0.85rem; }
+      .page-title-block { padding: 18px 16px 6px; }
+    }
+
+    /* ── WHEEL CONTAINER ──────────────────────────────── */
+    .zodiac-wrap { display: flex; justify-content: center; align-items: center; padding: 10px 0 60px; overflow: hidden; }
+    .zodiac-scale-outer { position: relative; flex-shrink: 0; }
+    .zodiac-scale-inner { position: absolute; top: 0; left: 0; width: 700px; height: 700px; transform-origin: top left; }
+    .zodiac-container   { position: relative; width: 700px; height: 700px; }
+    .zodiac-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+
+    /* ── CENTER VIEWPORT ──────────────────────────────── */
+    .center-viewport {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 200px; height: 200px; border-radius: 50%;
+      border: 2.5px solid rgba(160,60,255,0.85);
+      box-shadow: 0 0 18px rgba(138,43,226,0.85), 0 0 50px rgba(138,43,226,0.35), inset 0 0 28px rgba(138,43,226,0.25);
+      overflow: hidden; background: #000; display: flex; align-items: center; justify-content: center;
+      z-index: 20; transition: box-shadow 0.35s ease;
+    }
+    .center-viewport.hovered {
+      box-shadow: 0 0 28px var(--hover-color,rgba(138,43,226,1)), 0 0 70px var(--hover-color-dim,rgba(138,43,226,0.45)), inset 0 0 36px rgba(138,43,226,0.35);
+    }
+    .viewport-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .static-bg { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+    .zodiac-sign-bg { position: absolute; width: 65%; height: 65%; object-fit: contain; opacity: 0.38; mix-blend-mode: screen; z-index: 0; }
+    .troll-info { position: relative; z-index: 1; text-align: center; padding: 0 10px; }
+    .troll-name { font-family: 'Courier New', monospace; font-weight: bold; font-size: 1.0rem; line-height: 1.3; margin-bottom: 5px; letter-spacing: 0.02em; text-shadow: 0 0 6px #000, 0 0 14px #000, 0 0 28px #000; }
+    .troll-title { font-family: 'Courier New', monospace; font-size: 0.8rem; color: #ddc8ff; letter-spacing: 0.04em; text-shadow: 0 0 6px #000, 0 0 14px #000; }
+
+    /* ── ASPECT NODES ─────────────────────────────────── */
+    .aspect-node { position: absolute; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 15; transition: transform 0.22s ease; }
+    .aspect-node:hover { transform: translate(-50%,-50%) scale(1.12); }
+    .aspect-icon { width: 58%; height: 58%; object-fit: contain; position: relative; z-index: 2; filter: drop-shadow(0 0 3px rgba(200,160,255,0.40)) drop-shadow(0 0 7px rgba(180,120,255,0.18)); transition: filter 0.22s ease; }
+    .aspect-node:hover .aspect-icon { filter: drop-shadow(0 0 4px rgba(255,230,255,0.70)) drop-shadow(0 0 11px rgba(220,180,255,0.38)); }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useMemo, useEffect } = React;
+
+const darkTheme = { bg:"transparent", contentBg:"rgba(0,0,0,0.7)", textColor:"#ffffff", accentBg:"#4a0080", isDark:true };
+
+const TROLLS = {
+  'Time':   { name:'Aradia Megido', color:'#a10000', classpect:['Maid',  'Time'],   zodiac:'aries'       },
+  'Light':  { name:'Vriska Serket', color:'#005682', classpect:['Thief', 'Light'],  zodiac:'scorpio'     },
+  'Life':   { name:'Feferi Peixes', color:'#77003c', classpect:['Witch', 'Life'],   zodiac:'pisces'      },
+  'Breath': { name:'Tavros Nitram', color:'#a15000', classpect:['Page',  'Breath'], zodiac:'taurus'      },
+  'Hope':   { name:'Eridan Ampora', color:'#6a006a', classpect:['Prince','Hope'],   zodiac:'aquarius'    },
+  'Mind':   { name:'Terezi Pyrope', color:'#008282', classpect:['Seer',  'Mind'],   zodiac:'libra'       },
+  'Space':  { name:'Kanaya Maryam', color:'#008141', classpect:['Sylph', 'Space'],  zodiac:'virgo'       },
+  'Void':   { name:'Equius Zahhak', color:'#000056', classpect:['Heir',  'Void'],   zodiac:'sagittarius' },
+  'Doom':   { name:'Sollux Captor', color:'#a1a100', classpect:['Mage',  'Doom'],   zodiac:'gemini'      },
+  'Blood':  { name:'Karkat Vantas', color:'#626262', classpect:['Knight','Blood'],  zodiac:'cancer'      },
+  'Rage':   { name:'Gamzee Makara', color:'#2b0057', classpect:['Bard',  'Rage'],   zodiac:'capricorn'   },
+  'Heart':  { name:'Nepeta Leijon', color:'#416600', classpect:['Rogue', 'Heart'],  zodiac:'leo'         },
+};
+
+const ASPECT_ORDER = ['Time','Light','Life','Breath','Hope','Mind','Space','Void','Doom','Blood','Rage','Heart'];
+
+const CX=350, CY=350, CANVAS=700;
+const NODE_R=295, NODE_SIZE=52;
+const CAP_R=210,  CAP_SIZE=18;
+const PETAL_R=150, PETAL_SIZE=48;
+const CHORD_CLEAR=120;
+
+function polar(index,r) {
+  const rad=(-index*30)*Math.PI/180;
+  return {x:CX+r*Math.cos(rad), y:CY+r*Math.sin(rad)};
+}
+function lineDist(x1,y1,x2,y2,px,py) {
+  const dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy);
+  if(len===0) return Math.hypot(px-x1,py-y1);
+  return Math.abs(dy*px-dx*py+x2*y1-y2*x1)/len;
+}
+function hexToRgba(hex,alpha){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+function brightenHex(hex,t=0.45){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return `rgb(${Math.round(r+(255-r)*t)},${Math.round(g+(255-g)*t)},${Math.round(b+(255-b)*t)})`;
+}
+function nodeHue(i){const d=(360-i*30+90)%360,t=d<=180?d/180:(360-d)/180;return 220+t*80;}
+function nodeStroke(i,a=0.85){return `hsla(${nodeHue(i)},100%,68%,${a})`;}
+function nodeGlow(i,  a=0.50){return `hsla(${nodeHue(i)},100%,60%,${a})`;}
+
+const nodePts  = ASPECT_ORDER.map((_,i)=>polar(i,NODE_R));
+const capPts   = ASPECT_ORDER.map((_,i)=>polar(i,CAP_R));
+const petalPts = ASPECT_ORDER.map((_,i)=>polar(i,PETAL_R));
+const chords=[];
+for(let i=0;i<12;i++) for(let j=i+1;j<12;j++){
+  const {x:x1,y:y1}=capPts[i],{x:x2,y:y2}=capPts[j];
+  if(lineDist(x1,y1,x2,y2,CX,CY)>=CHORD_CLEAR) chords.push([i,j]);
+}
+
+const WheelGeometry=({activeIndex})=>{
+  const hov=activeIndex;
+  const ht=hov!==null?TROLLS[ASPECT_ORDER[hov]]:null;
+  const hb=ht?brightenHex(ht.color,0.55):null;
+  return(
+    <svg className="zodiac-svg" viewBox={`0 0 ${CANVAS} ${CANVAS}`}>
+      <defs>
+        <filter id="fBloom" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="16" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="fGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="fCrisp" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="fNode" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="11" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="fTiny" x="-15%" y="-15%" width="130%" height="130%"><feGaussianBlur stdDeviation="1.1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <radialGradient id="gAtmos" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#ee99ff" stopOpacity="0.85"/><stop offset="12%" stopColor="#bb55ff" stopOpacity="0.70"/><stop offset="30%" stopColor="#8822dd" stopOpacity="0.50"/><stop offset="55%" stopColor="#550099" stopOpacity="0.28"/><stop offset="80%" stopColor="#220044" stopOpacity="0.10"/><stop offset="100%" stopColor="#000000" stopOpacity="0.00"/></radialGradient>
+        <radialGradient id="gPetal" cx="40%" cy="35%" r="65%"><stop offset="0%" stopColor="#cc77ff" stopOpacity="0.50"/><stop offset="50%" stopColor="#8833cc" stopOpacity="0.22"/><stop offset="100%" stopColor="#330066" stopOpacity="0.04"/></radialGradient>
+        <radialGradient id="gCap" cx="40%" cy="35%" r="65%"><stop offset="0%" stopColor="#dd99ff" stopOpacity="0.80"/><stop offset="55%" stopColor="#8833cc" stopOpacity="0.40"/><stop offset="100%" stopColor="#220044" stopOpacity="0.05"/></radialGradient>
+      </defs>
+      <circle cx={CX} cy={CY} r={330} fill="url(#gAtmos)" filter="url(#fBloom)"/>
+      <circle cx={CX} cy={CY} r={140} fill="rgba(170,50,255,0.28)" filter="url(#fBloom)"/>
+      <g filter="url(#fGlow)" opacity="0.50">{[35,68,93].map(r=><circle key={r} cx={CX} cy={CY} r={r} fill="none" stroke="rgba(190,100,255,0.50)" strokeWidth="5"/>)}</g>
+      <g filter="url(#fCrisp)">{[18,26,35,45,56,68,80,93].map((r,i)=><circle key={r} cx={CX} cy={CY} r={r} fill="none" stroke={`rgba(${220-i*8},${Math.round((220-i*8)*0.6)},255,${0.92-i*0.04})`} strokeWidth={i<3?1.5:i<6?1.2:1.0}/>)}</g>
+      <circle cx={CX} cy={CY} r={11} fill="rgba(240,200,255,0.95)" filter="url(#fGlow)"/>
+      <circle cx={CX} cy={CY} r={4}  fill="white"/>
+      <g filter="url(#fGlow)" opacity="0.55">{petalPts.map((p,i)=><circle key={i} cx={p.x} cy={p.y} r={PETAL_SIZE} fill="none" stroke="rgba(200,110,255,0.60)" strokeWidth="6"/>)}</g>
+      <g opacity="0.75">{petalPts.map((p,i)=><circle key={i} cx={p.x} cy={p.y} r={PETAL_SIZE} fill="url(#gPetal)"/>)}</g>
+      <g filter="url(#fCrisp)">{petalPts.map((p,i)=><circle key={i} cx={p.x} cy={p.y} r={PETAL_SIZE} fill="none" stroke="rgba(210,130,255,0.85)" strokeWidth="1.5"/>)}</g>
+      <g filter="url(#fGlow)" opacity="0.70">{capPts.map((p,i)=><circle key={i} cx={p.x} cy={p.y} r={CAP_SIZE} fill="rgba(220,150,255,0.45)" stroke="rgba(220,150,255,0.70)" strokeWidth="5"/>)}</g>
+      <g filter="url(#fCrisp)">{capPts.map((p,i)=><circle key={i} cx={p.x} cy={p.y} r={CAP_SIZE} fill="url(#gCap)" stroke="rgba(230,170,255,0.92)" strokeWidth="1.5"/>)}</g>
+      <g filter="url(#fGlow)" stroke="rgba(175,85,255,0.15)" strokeWidth="3" fill="none">{chords.map(([i,j])=><line key={`cb${i}-${j}`} x1={capPts[i].x} y1={capPts[i].y} x2={capPts[j].x} y2={capPts[j].y}/>)}</g>
+      <g filter="url(#fTiny)" stroke="rgba(210,130,255,0.38)" strokeWidth="0.9" fill="none">{chords.map(([i,j])=><line key={`cc${i}-${j}`} x1={capPts[i].x} y1={capPts[i].y} x2={capPts[j].x} y2={capPts[j].y}/>)}</g>
+      {nodePts.map((p,i)=>{
+        const isH=hov===i;
+        const sc=isH&&hb?hexToRgba(hb,0.95):nodeStroke(i);
+        const gc=isH&&hb?hexToRgba(hb,0.60):nodeGlow(i);
+        const ic=isH&&hb?hexToRgba(hb,0.50):nodeStroke(i,0.38);
+        return(<g key={i}><circle cx={p.x} cy={p.y} r={NODE_SIZE} fill="none" stroke={gc} strokeWidth={isH?18:13} filter="url(#fNode)" opacity={isH?1.0:0.80}/><circle cx={p.x} cy={p.y} r={NODE_SIZE} fill="rgba(0,0,20,0.93)" stroke={sc} strokeWidth="2.5" filter="url(#fCrisp)"/><circle cx={p.x} cy={p.y} r={NODE_SIZE-9} fill="none" stroke={ic} strokeWidth="1.2" filter="url(#fCrisp)"/></g>);
+      })}
+    </svg>
+  );
+};
+
+// Mobile troll card — list format
+const TrollCard=({aspect})=>{
+  const t=TROLLS[aspect];
+  const [cls,asp]=t.classpect;
+  const nc=brightenHex(t.color,0.65);
+  const bc=hexToRgba(brightenHex(t.color,0.45),0.5);
+  return(
+    <a href={`../index.html#/classpect/${cls.toLowerCase()}-of-${asp.toLowerCase()}`}
+      style={{display:'flex',alignItems:'center',gap:'10px',padding:'10px 12px',background:'rgba(0,0,20,0.88)',
+        border:`1px solid ${bc}`,borderLeft:`3px solid ${nc}`,borderRadius:'6px',textDecoration:'none',minHeight:'52px'}}>
+      <img src={`../images/aspects/no-bg/${aspect.toLowerCase()}.webp`}
+        style={{width:34,height:'auto',flexShrink:0,filter:'drop-shadow(0 0 4px rgba(200,160,255,0.5))'}} alt={aspect}/>
+      <div>
+        <div style={{fontFamily:'Courier New',fontWeight:'bold',fontSize:'0.82rem',color:nc,lineHeight:1.25}}>{t.name}</div>
+        <div style={{fontFamily:'Courier New',fontSize:'0.72rem',color:'#ddc8ff'}}>{cls} of {asp}</div>
+      </div>
+    </a>
+  );
+};
+
+const SGRUBBetaPage=()=>{
+  const [hoveredIndex,setHoveredIndex]=useState(null);
+  const [selectedIndex,setSelectedIndex]=useState(null);
+  const [wheelScale,setWheelScale]=useState(1);
+
+  useEffect(()=>{
+    const update=()=>setWheelScale(Math.min(1,(window.innerWidth-16)/CANVAS));
+    update();
+    window.addEventListener('resize',update);
+    return()=>window.removeEventListener('resize',update);
+  },[]);
+
+  const handleNavigate=path=>{window.location.href=`../index.html#${path}`;};
+  const handleClick=i=>{
+    const[cls,asp]=TROLLS[ASPECT_ORDER[i]].classpect;
+    window.location.href=`../index.html#/classpect/${cls.toLowerCase()}-of-${asp.toLowerCase()}`;
+  };
+
+  const activeIndex=selectedIndex!==null?selectedIndex:hoveredIndex;
+  const hovTroll=activeIndex!==null?TROLLS[ASPECT_ORDER[activeIndex]]:null;
+
+  const viewportStyle=useMemo(()=>{
+    if(!hovTroll) return {};
+    const bright=brightenHex(hovTroll.color,0.55);
+    return{'--hover-color':bright,'--hover-color-dim':hexToRgba(brightenHex(hovTroll.color,0.4),0.40)};
+  },[hovTroll]);
+
+  const scaledSize=CANVAS*wheelScale;
+
+  return(
+    <div style={{minHeight:'100vh',background:'#000'}}>
+      <Header onNavigate={handleNavigate} theme={darkTheme}/>
+      <div className="px-3 sm:px-6"><div className="max-w-4xl mx-auto">
+        <SearchBar onNavigate={handleNavigate} theme={darkTheme}/>
+      </div></div>
+
+      <div className="page-title-block">
+        <div className="page-title">SGRUB Beta</div>
+        <div className="page-subtitle">
+          banished fr0m the{' '}<a href="../tag/sgrub-alpha.html" className="subtitle-link-blue">[universe]</a>{' '}we left behind<br/>
+          barred fr0m entry int0 the{' '}<a href="../tag/sburb-beta.html" className="subtitle-link-red">[universe]</a>{' '}we created
+        </div>
+      </div>
+
+      {/* ── MOBILE LIST (phones only) ─────────────────── */}
+      <div className="mobile-list-section" style={{padding:'16px 12px 40px'}}>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gridTemplateRows:'repeat(6,auto)',gridAutoFlow:'column',gap:'8px',maxWidth:'520px',margin:'0 auto'}}>
+          {ASPECT_ORDER.map(a=><TrollCard key={a} aspect={a}/>)}
+        </div>
+      </div>
+
+      {/* ── WHEEL (tablet/desktop) ────────────────────── */}
+      <div className="wheel-section">
+        <div className="zodiac-wrap" style={{padding:`10px 0 ${Math.round(60*wheelScale)}px`}}>
+          <div className="zodiac-scale-outer" style={{width:scaledSize,height:scaledSize}}>
+            <div className="zodiac-scale-inner" style={{transform:`scale(${wheelScale})`}}>
+              <div className="zodiac-container">
+                <WheelGeometry activeIndex={activeIndex}/>
+
+                <div className={`center-viewport${hovTroll?' hovered':''}`} style={viewportStyle}>
+                  {hovTroll?(
+                    <div className="viewport-content">
+                      <img src={`../images/tags/${hovTroll.zodiac}.png`} className="zodiac-sign-bg" alt=""/>
+                      <div className="troll-info">
+                        <div className="troll-name" style={{color:brightenHex(hovTroll.color,0.6)}}>{hovTroll.name}</div>
+                        <div className="troll-title">{hovTroll.classpect[0]} of {hovTroll.classpect[1]}</div>
+                        {selectedIndex!==null&&(
+                          <div style={{marginTop:6,fontSize:'0.68rem',color:'#b8a0ff',cursor:'pointer',textDecoration:'underline'}}
+                            onClick={()=>handleClick(activeIndex)}>tap again to visit →</div>
+                        )}
+                      </div>
+                    </div>
+                  ):(
+                    <img src="../images/tags/static.gif" className="static-bg" alt=""/>
+                  )}
+                </div>
+
+                {ASPECT_ORDER.map((aspect,i)=>{
+                  const{x,y}=nodePts[i];
+                  const isSel=selectedIndex===i;
+                  return(
+                    <div key={aspect} className="aspect-node"
+                      style={{left:x,top:y,width:NODE_SIZE*2,height:NODE_SIZE*2,transform:'translate(-50%,-50%)',
+                        outline:isSel?`2px solid ${brightenHex(TROLLS[aspect].color,0.7)}`:'none',outlineOffset:'2px'}}
+                      onMouseEnter={()=>setHoveredIndex(i)}
+                      onMouseLeave={()=>setHoveredIndex(null)}
+                      onClick={()=>{
+                        if(selectedIndex===i){handleClick(i);}
+                        else{setSelectedIndex(i);setHoveredIndex(i);}
+                      }}>
+                      <img src={`../images/aspects/no-bg/${aspect.toLowerCase()}.webp`} className="aspect-icon" alt={aspect}/>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const root=ReactDOM.createRoot(document.getElementById("root"));
+root.render(<SGRUBBetaPage/>);
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+/* ======================================================
+   THE CLASSPECT CONNECTOR — SHARED MOBILE RESPONSIVE CSS
+   Link this in every HTML page:
+     <link rel="stylesheet" href="./components/mobile.css">
+   ====================================================== */
+
+/* ─── Font scaling on small screens ─────────────────── */
+@media (max-width: 640px) {
+  .font-typostuck        { font-size: 1rem !important; }
+  .font-typostuck-title  { font-size: 1.75rem !important; }
+  .font-typostuck-header { font-size: 1.2rem !important; }
+  .font-verdana          { font-size: 1rem !important; }
+  .font-verdana-title    { font-size: 1.5rem !important; }
+  .font-verdana-subtitle { font-size: 1rem !important; }
+  .homestuck-command,
+  .homestuck-command-dark { font-size: 1rem !important; }
+}
+
+/* ─── Touch-friendly tap targets ────────────────────── */
+@media (max-width: 640px) {
+  /* Ensure clickable links have at least 44px touch target */
+  a.font-typostuck, button.font-typostuck {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* ─── Horizontally scrollable tables ────────────────── */
+/* Apply .table-scroll-mobile on a wrapper div around any table */
+.table-scroll-mobile {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Boring results table — give columns a min-width so they scroll, not squash */
+.boring-table th,
+.boring-table td {
+  min-width: 90px;
+  white-space: nowrap;
+}
+
+/* ─── Outer container padding ───────────────────────── */
+@media (max-width: 640px) {
+  .outer-padding-mobile {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  .content-box-mobile {
+    padding: 14px !important;
+  }
+}
+
+/* ─── Rotation graph SVG ─────────────────────────────── */
+/* Applied via inline style in rotation-graph.js — kept here for reference */
+
+/* ─── Aspect/class title on small screens ────────────── */
+@media (max-width: 640px) {
+  /* Prevent aspect icon from making the title line awkwardly tall */
+  .aspect-title-icon {
+    width: 32px !important;
+    height: 32px !important;
+  }
+}
+
+/* ─── General usability on mobile ───────────────────── */
+@media (max-width: 640px) {
+  /* Prevent images from overflowing their container */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Give figure images a horizontal scroll region */
+  .figure-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Tighten up spacing in content sections */
+  .space-y-6 > * + * {
+    margin-top: 1rem !important;
+  }
+}

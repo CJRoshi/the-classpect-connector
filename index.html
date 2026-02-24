@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Classpect Connector</title>
   <link rel="icon" type="image/png" href="./images/special/CCLogoRegular.png" />
 
@@ -14,6 +15,7 @@
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./components/mobile.css">
   
   <!-- Shared Components (load in dependency order) -->
   <script type="text/babel" src="./components/constants.js"></script>
@@ -25,6 +27,7 @@
   <script type="text/babel" src="./components/section.js"></script>
   <script type="text/babel" src="./components/rotation-graph.js"></script>
   <script type="text/babel" src="./components/tiled-background.js"></script>
+  <script type="text/babel" src="./components/tags.js"></script>
   
   <!-- Page Components -->
   <script type="text/babel" src="./components/homepage.js"></script>
@@ -96,6 +99,39 @@
       font-size: 0.875rem;
       -webkit-font-smoothing: none;
       -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ===========================
+       MOBILE RESPONSIVE OVERRIDES
+       =========================== */
+
+    /* Responsive font scaling */
+    @media (max-width: 640px) {
+      .font-typostuck { font-size: 1rem; }
+      .font-typostuck-title { font-size: 1.75rem; }
+      .font-typostuck-header { font-size: 1.2rem; }
+      .font-verdana { font-size: 1rem; }
+      .font-verdana-title { font-size: 1.5rem; }
+      .font-verdana-subtitle { font-size: 1rem; }
+      .homestuck-command, .homestuck-command-dark { font-size: 1rem; }
+    }
+
+    /* Horizontal scroll for all tables on mobile */
+    .table-scroll-mobile {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Min column widths in the boring results table so it scrolls rather than squishes */
+    .boring-table th, .boring-table td {
+      min-width: 90px;
+      white-space: nowrap;
+    }
+
+    /* Reduce inner content-box padding on small screens */
+    @media (max-width: 640px) {
+      .content-box-mobile { padding: 14px !important; }
+      .outer-padding-mobile { padding-left: 10px !important; padding-right: 10px !important; }
     }
   </style>
 </head>
@@ -634,7 +670,7 @@ const App = () => {
       {showHeaderAndSearch && <Header onNavigate={navigate} theme={theme} />}
       
       {/* Container for search and content */}
-      <div className="px-6 pb-6" style={{position: 'relative', zIndex: 1}}>
+      <div className="px-3 sm:px-6 pb-6 outer-padding-mobile" style={{position: 'relative', zIndex: 1}}>
         <div className="max-w-4xl mx-auto">
           {/* Search Bar - Outside content box */}
           {showHeaderAndSearch && (
@@ -644,13 +680,13 @@ const App = () => {
           )}
           
           {/* Main Content Box */}
-          <div style={{ 
-            backgroundColor: theme.contentBg, 
-            color: theme.textColor, 
-            padding: '24px', 
-            borderRadius: '8px', 
-            boxShadow: '0 4px 6px rgba(0,0,0,0.3)', 
-            border: `2px solid ${theme.accentBg}` 
+          <div className="content-box-mobile" style={{
+            backgroundColor: theme.contentBg,
+            color: theme.textColor,
+            padding: '24px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+            border: `2px solid ${theme.accentBg}`
           }}>
             {renderPage()}
           </div>

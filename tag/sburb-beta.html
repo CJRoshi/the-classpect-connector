@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SBURB Beta - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="../images/special/CCLogoRegular.png" />
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../components/mobile.css">
+
+  <!-- Shared Components -->
+  <script type="text/babel" src="../components/constants.js"></script>
+  <script type="text/babel" src="../components/header.js"></script>
+  <script type="text/babel" src="../components/searchbar.js"></script>
+  <script type="text/babel" src="../components/footer.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('../fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body, html {
+      width: 100%;
+      min-height: 100vh;
+      font-family: 'Courier New', monospace;
+    }
+    
+    /* Font classes */
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem;
+      font-weight: normal;
+    }
+    
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem;
+      font-weight: normal;
+    }
+    
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem;
+      font-weight: normal;
+    }
+    
+    .font-courier {
+      font-family: 'Courier New', monospace;
+    }
+    
+    .font-courier-bold {
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+    }
+    
+    .homestuck-command {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: #000000;
+    }
+    
+    .homestuck-command-dark {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: #ffffff;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+/* Default theme */
+const defaultTheme = { 
+  bg: "#626262",
+  contentBg: "#d0d0d0",
+  textColor: "#000000",
+  accentBg: "#a0a0a0",
+  isDark: false
+};
+
+/* Character data */
+const betaKids = [
+  {
+    name: "June Egbert",
+    color: "#0715cd",
+    classpect: ["Heir", "Breath"],
+    poem: "They wait for she who would extinguish candles whilst fanning a fire"
+  },
+  {
+    name: "Jade Harley",
+    color: "#4ac925",
+    classpect: ["Witch", "Space"],
+    poem: "They wait for she who would thaw solid flesh and resolve it into a dew"
+  },
+  {
+    name: "Rose Lalonde",
+    color: "#b536da",
+    classpect: ["Seer", "Light"],
+    poem: "They wait for she who would breed lilacs out of the dead land"
+  },
+  {
+    name: "Dave Strider",
+    color: "#e00707",
+    classpect: ["Knight", "Time"],
+    poem: "They wait for he who would drop it like it's hot whilst the pimp's in the crib"
+  }
+];
+
+const SBURBBetaPage = () => {
+  const [hoveredLilac, setHoveredLilac] = React.useState(false);
+  const [flicker, setFlicker] = React.useState(false);
+
+  // Intermittent ambient flicker: ly'lac ghosts through for ~100ms every 5–14s
+  React.useEffect(() => {
+    let t;
+    const scheduleFlicker = () => {
+      t = setTimeout(() => {
+        setFlicker(true);
+        setTimeout(() => {
+          setFlicker(false);
+          scheduleFlicker();
+        }, 80 + Math.random() * 60);
+      }, 5000 + Math.random() * 9000);
+    };
+    scheduleFlicker();
+    return () => clearTimeout(t);
+  }, []);
+
+  const handleNavigate = (path) => {
+    window.location.href = `../index.html#${path}`;
+  };
+  
+  // Function to render Rose's poem with special lilac/ly'lac interaction
+  const renderRosePoem = () => {
+    return (
+      <>
+        They wait for she who would breed{' '}
+        <a
+          href="https://beyondcanon.com/story/802"
+          target="_blank"
+          rel="noopener noreferrer"
+          onMouseEnter={() => setHoveredLilac(true)}
+          onMouseLeave={() => setHoveredLilac(false)}
+          style={{
+            color: hoveredLilac ? '#8e5594' : 'inherit',
+            textDecoration: 'none',
+            cursor: hoveredLilac ? 'pointer' : 'inherit',
+            fontStyle: 'italic',
+            transition: 'color 0.2s'
+          }}
+        >
+          {(hoveredLilac || flicker) ? "ly'lac" : "lilacs"}
+        </a>
+        {' '}out of the dead land
+      </>
+    );
+  };
+  
+  return (
+    <div style={{ 
+      backgroundColor: defaultTheme.bg, 
+      minHeight: '100vh'
+    }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme} />
+      
+      <div className="px-3 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <SearchBar onNavigate={handleNavigate} theme={defaultTheme} />
+        </div>
+      </div>
+
+      <div className="px-3 sm:px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div style={{ 
+            backgroundColor: defaultTheme.contentBg, 
+            color: defaultTheme.textColor, 
+            padding: '24px', 
+            borderRadius: '8px', 
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)', 
+            border: `2px solid ${defaultTheme.accentBg}` 
+          }}>
+            {/* Title */}
+            <div className="text-center mb-6">
+              <h1 className="font-typostuck-title mb-2">SBURB Beta</h1>
+              <p className="font-courier italic" style={{fontSize: '1.1rem', color: '#4b5563'}}>
+                Four Kids (And A Game They Played Together)
+              </p>
+            </div>
+            
+            {/* Characters */}
+            <div className="space-y-6">
+              {betaKids.map((kid) => {
+                const [className, aspectName] = kid.classpect;
+                const path = `../index.html#/classpect/${className.toLowerCase()}-of-${aspectName.toLowerCase()}`;
+                
+                // Special rendering for Rose
+                const isRose = kid.name === "Rose Lalonde";
+                
+                // Map names to logo files
+                const logoMap = {
+                  "June Egbert": "JohnLogo.png",
+                  "Jade Harley": "JadeLogo.png",
+                  "Rose Lalonde": "RoseLogo.png",
+                  "Dave Strider": "DaveLogoSlashed.png"
+                };
+                
+                return (
+                  <div key={kid.name} className="border-l-4 pl-4" style={{borderColor: kid.color}}>
+                    <div className="flex items-baseline gap-2 mb-2" style={{flexWrap:'wrap'}}>
+                      <img 
+                        src={`../images/tags/${logoMap[kid.name]}`}
+                        alt={`${kid.name} logo`}
+                        style={{height: '24px', width: 'auto', display: 'inline-block', verticalAlign: 'middle', marginRight: '4px'}}
+                      />
+                      <span className="font-courier-bold" style={{color: kid.color, fontSize: '1.2rem'}}>
+                        {kid.name}:
+                      </span>
+                      <a
+                        href={path}
+                        className="font-courier-bold hover:underline"
+                        style={{color: '#0000ee', textDecoration: 'none'}}
+                      >
+                        {className} of {aspectName}
+                      </a>
+                    </div>
+                    <p className="font-courier italic text-sm" style={{color: '#666', lineHeight: '1.5'}}>
+                      {isRose ? renderRosePoem() : kid.poem}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Poem attribution */}
+            <div className="mt-8 pt-4 border-t" style={{borderColor: defaultTheme.accentBg}}>
+              <p className="font-courier text-xs text-center" style={{color: '#888'}}>
+                From <a href="https://homestuck.com/005595" target="_blank" rel="noopener noreferrer" className="hover:underline" style={{color: '#0000ee'}}>"They Wait"</a> — Homestuck, Act 5 Act 2
+              </p>
+            </div>
+          </div>
+          
+          <Footer theme={defaultTheme} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<SBURBBetaPage />);
+</script>
+</body>
+</html>

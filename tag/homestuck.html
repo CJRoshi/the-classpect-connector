@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Homestuck - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="../images/special/CCLogoRegular.png" />
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../components/mobile.css">
+
+  <script type="text/babel" src="../components/constants.js"></script>
+  <script type="text/babel" src="../components/header.js"></script>
+  <script type="text/babel" src="../components/searchbar.js"></script>
+  <script type="text/babel" src="../components/footer.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('../fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+
+    .font-courier      { font-family: 'Courier New', monospace; }
+    .font-courier-bold { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem; font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem; font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem; font-weight: normal;
+    }
+    .homestuck-command {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold; font-size: 1.25rem; color: #000;
+    }
+    .homestuck-command-dark {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold; font-size: 1.25rem; color: #fff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body, html {
+      width: 100%;
+      min-height: 100vh;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const defaultTheme = {
+  bg: "#626262",
+  contentBg: "#d0d0d0",
+  textColor: "#000000",
+  accentBg: "#a0a0a0",
+  isDark: false,
+};
+
+const SESSIONS = [
+  {
+    label: 'SGRUB Alpha',
+    subtitle: 'Beforan Trolls',
+    href: '../tag/sgrub-alpha.html',
+    color: '#888888',
+  },
+  {
+    label: 'SGRUB Beta',
+    subtitle: 'Alternian Trolls',
+    href: '../tag/sgrub-beta.html',
+    color: '#888888',
+  },
+  {
+    label: 'SBURB Beta',
+    subtitle: 'Four Kids (And A Game They Played Together)',
+    href: '../tag/sburb-beta.html',
+    color: '#888888',
+  },
+  {
+    label: 'SBURB Alpha',
+    subtitle: 'Four Kids (And A Game That Fell Apart)',
+    href: '../tag/sburb-alpha.html',
+    color: '#888888',
+  },
+  {
+    label: 'The Cherubs',
+    subtitle: 'Caliborn, Calliope',
+    href: '../tag/cherubs.html',
+    color: '#888888',
+  },
+];
+
+const HomestuckPage = () => {
+  const handleNavigate = path => { window.location.href = `../index.html#${path}`; };
+
+  return (
+    <div style={{ backgroundColor: defaultTheme.bg, minHeight: '100vh' }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme}/>
+
+      <div className="px-3 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <SearchBar onNavigate={handleNavigate} theme={defaultTheme}/>
+        </div>
+      </div>
+
+      <div className="px-3 sm:px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div style={{
+            backgroundColor: defaultTheme.contentBg,
+            color: defaultTheme.textColor,
+            padding: '24px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+            border: `2px solid ${defaultTheme.accentBg}`,
+          }}>
+            <div className="text-center mb-6">
+              <h1 className="font-typostuck-title mb-2">Homestuck</h1>
+              <p className="font-courier italic" style={{ fontSize: '1.1rem', color: '#4b5563' }}>
+                A webcomic about kids and games and stuff.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              {SESSIONS.map(session => (
+                <div key={session.label}
+                  className="border-l-4 pl-4"
+                  style={{ borderColor: defaultTheme.accentBg }}
+                >
+                  {session.locked ? (
+                    <div className="flex items-baseline gap-3">
+                      <span className="homestuck-command" style={{ color: '#999' }}>
+                        {session.label}
+                      </span>
+                      <span className="font-courier" style={{ color: '#999', fontSize: '0.9rem' }}>
+                        — {session.subtitle}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-baseline gap-3">
+                      <a href={session.href}
+                        className="homestuck-command hover:underline"
+                        style={{ textDecoration: 'none', color: '#000' }}
+                      >
+                        {session.label}
+                      </a>
+                      <span className="font-courier italic"
+                        style={{ color: '#4b5563', fontSize: '0.9rem' }}
+                      >
+                        — {session.subtitle}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <Footer theme={defaultTheme}/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<HomestuckPage/>);
+</script>
+</body>
+</html>

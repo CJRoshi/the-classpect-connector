@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Prospit - The Classpect Connector</title>
 
   <!-- React 18 -->
@@ -13,6 +14,7 @@
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./components/mobile.css">
 
   <!-- Shared Components -->
    <script type="text/babel" src="./components/constants.js"></script>
@@ -154,6 +156,8 @@ const loadData = async () => {
    ========================= */
 const ProspitPage = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
+  const isMobileInit = typeof window !== 'undefined' && window.innerWidth < 640;
+  const [descOpen, setDescOpen] = useState(!isMobileInit);
   
   useEffect(() => {
     loadData().then(success => {
@@ -183,27 +187,38 @@ const ProspitPage = () => {
   
   return (
     <div className="space-y-6">
-      {/* Title with Icon */}
-      <div className="flex items-center justify-between p-4 rounded" style={{backgroundColor: 'rgba(0,0,0,0.4)'}}>
-        <h1 className="font-carima" style={{color: '#ffd700', fontSize: '4rem'}}>PROSPIT</h1>
-        <img 
-          src="./images/special/prospit_bg.png" 
-          alt="Prospit" 
-          style={{height: '100px', width: 'auto'}}
+      {/* Title with Icon — responsive flex */}
+      <div className="flex items-center justify-between p-4 rounded" style={{backgroundColor: 'rgba(0,0,0,0.4)', gap:'12px', flexWrap:'wrap'}}>
+        <h1 className="font-carima" style={{color: '#ffd700', fontSize: 'clamp(2rem, 8vw, 4rem)', lineHeight:1.1}}>PROSPIT</h1>
+        <img
+          src="./images/special/prospit_bg.png"
+          alt="Prospit"
+          style={{height: 'clamp(56px, 16vw, 100px)', width: 'auto', flexShrink:0}}
         />
       </div>
-      
-      {/* Extended Zodiac Description */}
+
+      {/* Extended Zodiac Description — collapsible on mobile */}
       <div className="p-4 rounded" style={{backgroundColor: 'rgba(0,0,0,0.4)'}}>
         <button
-          className="homestuck-command-dark mb-3"
-          style={{color: '#d4af37', textDecoration: 'none', cursor: 'text'}}
+          onClick={() => setDescOpen(o => !o)}
+          style={{
+            display:'flex', alignItems:'center', gap:'8px', cursor:'pointer',
+            background:'none', border:'none', padding:0,
+            marginBottom: descOpen ? '0.75rem' : 0, width:'100%', textAlign:'left'
+          }}
         >
-          {'>'} Read Extended Zodiac Description of Prospit Dreamers.
+          <span className="homestuck-command-dark" style={{color: '#d4af37'}}>
+            {'>'} Read Extended Zodiac Description of Prospit Dreamers.
+          </span>
+          <span style={{fontSize:'0.8rem', color:'#b8943f', fontFamily:'Courier New', marginLeft:'auto', flexShrink:0}}>
+            [{descOpen ? 'hide' : 'show'}]
+          </span>
         </button>
-        <p className="font-courier leading-relaxed" style={{color: '#ffffff'}}>
-          {description}
-        </p>
+        {descOpen && (
+          <p className="font-courier leading-relaxed" style={{color: '#ffffff'}}>
+            {description}
+          </p>
+        )}
       </div>
       
       {/* Canon Examples */}
@@ -242,17 +257,17 @@ const App = () => {
     }}>
       <Header theme={prospitTheme} />
       
-      <div className="px-6 pb-6">
+      <div className="px-3 sm:px-6 pb-6">
         <div className="max-w-4xl mx-auto">
           <SearchBar theme={prospitTheme} />
           
-          <div style={{ 
-            backgroundColor: prospitTheme.contentBg, 
-            color: prospitTheme.textColor, 
-            padding: '24px', 
-            borderRadius: '8px', 
-            boxShadow: '0 4px 6px rgba(0,0,0,0.3)', 
-            border: `2px solid ${prospitTheme.accentBg}` 
+          <div className="content-box-mobile" style={{
+            backgroundColor: prospitTheme.contentBg,
+            color: prospitTheme.textColor,
+            padding: '24px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+            border: `2px solid ${prospitTheme.accentBg}`
           }}>
             <ProspitPage />
           </div>

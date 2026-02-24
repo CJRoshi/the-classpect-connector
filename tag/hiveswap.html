@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hiveswap & Hauntswitch - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="../images/special/CCLogoRegular.png" />
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../components/mobile.css">
+
+  <script type="text/babel" src="../components/constants.js"></script>
+  <script type="text/babel" src="../components/header.js"></script>
+  <script type="text/babel" src="../components/searchbar.js"></script>
+  <script type="text/babel" src="../components/footer.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('../fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+
+    .font-courier      { font-family: 'Courier New', monospace; }
+    .font-courier-bold { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem; font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem; font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem; font-weight: normal;
+    }
+    .homestuck-command {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold; font-size: 1.25rem; color: #000;
+    }
+    .homestuck-command-dark {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold; font-size: 1.25rem; color: #fff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body, html {
+      width: 100%;
+      min-height: 100vh;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const defaultTheme = {
+  bg: "#626262",
+  contentBg: "#d0d0d0",
+  textColor: "#000000",
+  accentBg: "#a0a0a0",
+  isDark: false,
+};
+
+// Characters to exclude from Hiveswap section even if tagged hiveswap
+const HIVESWAP_EXCLUDE = ['MSPA Reader'];
+
+const HiveswapPage = () => {
+  const [hiveswapChars,   setHiveswapChars]   = React.useState([]);
+  const [hauntswitchChars, setHauntswitchChars] = React.useState([]);
+  const [loaded, setLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    fetch('../data/characters.json')
+      .then(r => r.json())
+      .then(data => {
+        const canon = data.canon || {};
+        const allChars = Object.entries(canon);
+
+        const hiveswap = allChars
+          .filter(([name, char]) =>
+            char.tags?.includes('hiveswap') &&
+            char.classpect &&
+            !HIVESWAP_EXCLUDE.includes(name)
+          )
+          .map(([name, char]) => ({ name, color: char.color, classpect: char.classpect }));
+
+        const hauntswitch = allChars
+          .filter(([name, char]) =>
+            char.tags?.includes('hauntswitch') &&
+            char.classpect
+          )
+          .map(([name, char]) => ({ name, color: char.color, classpect: char.classpect }));
+
+        setHiveswapChars(hiveswap);
+        setHauntswitchChars(hauntswitch);
+        setLoaded(true);
+      })
+      .catch(() => setLoaded(true));
+  }, []);
+
+  const handleNavigate = path => { window.location.href = `../index.html#${path}`; };
+
+  return (
+    <div style={{ backgroundColor: defaultTheme.bg, minHeight: '100vh' }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme}/>
+
+      <div className="px-3 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <SearchBar onNavigate={handleNavigate} theme={defaultTheme}/>
+        </div>
+      </div>
+
+      <div className="px-3 sm:px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div style={{
+            backgroundColor: defaultTheme.contentBg,
+            color: defaultTheme.textColor,
+            padding: '24px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+            border: `2px solid ${defaultTheme.accentBg}`,
+          }}>
+
+            {/* ── HIVESWAP ─────────────────────────────── */}
+            <div className="mb-8">
+              <div className="text-center mb-4">
+                <h1 className="font-typostuck-title mb-2">Hiveswap</h1>
+                <p className="font-courier italic" style={{ fontSize: '1.0rem', color: '#4b5563' }}>
+                  From the adventures of Joey Claire and Xefros Tritoh...
+                </p>
+              </div>
+
+              {!loaded ? (
+                <p className="font-courier text-center" style={{ color: '#666' }}>Loading...</p>
+              ) : (
+                <div className="space-y-2">
+                  {hiveswapChars.map(char => {
+                    const [cls, asp] = char.classpect;
+                    const path = `../index.html#/classpect/${cls.toLowerCase()}-of-${asp.toLowerCase()}`;
+                    return (
+                      <div key={char.name}
+                        className="border-l-4 pl-4"
+                        style={{ borderColor: char.color }}
+                      >
+                        <div className="flex items-baseline gap-2" style={{flexWrap:'wrap'}}>
+                          <span className="font-courier-bold"
+                            style={{ color: char.color, fontSize: '1.1rem' }}>
+                            {char.name}:
+                          </span>
+                          <a href={path}
+                            className="font-courier-bold hover:underline"
+                            style={{ color: '#0000ee', textDecoration: 'none' }}>
+                            {cls} of {asp}
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Divider */}
+            <div style={{
+              borderTop: `2px solid ${defaultTheme.accentBg}`,
+              marginBottom: '28px',
+            }}/>
+
+            {/* ── HAUNTSWITCH ──────────────────────────── */}
+            <div>
+              <div className="text-center mb-4">
+                <h2 className="font-typostuck-title mb-2">Hauntswitch</h2>
+                <p className="font-courier italic" style={{ fontSize: '1.0rem', color: '#4b5563' }}>
+                  From the adventures of Jude Harley and Tetrarch Dammek...
+                </p>
+              </div>
+
+              {!loaded ? (
+                <p className="font-courier text-center" style={{ color: '#666' }}>Loading...</p>
+              ) : hauntswitchChars.length === 0 ? (
+                <p className="font-courier italic text-center" style={{ fontSize: '1.0rem', color: '#4b5563' }}>
+                  No classpects have been confirmed yet.
+                </p>
+              ) : (
+                <div className="space-y-2">
+                  {hauntswitchChars.map(char => {
+                    const [cls, asp] = char.classpect;
+                    const path = `../index.html#/classpect/${cls.toLowerCase()}-of-${asp.toLowerCase()}`;
+                    return (
+                      <div key={char.name}
+                        className="border-l-4 pl-4"
+                        style={{ borderColor: char.color }}
+                      >
+                        <div className="flex items-baseline gap-2" style={{flexWrap:'wrap'}}>
+                          <span className="font-courier-bold"
+                            style={{ color: char.color, fontSize: '1.1rem' }}>
+                            {char.name}:
+                          </span>
+                          <a href={path}
+                            className="font-courier-bold hover:underline"
+                            style={{ color: '#0000ee', textDecoration: 'none' }}>
+                            {cls} of {asp}
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+          </div>
+
+          <Footer theme={defaultTheme}/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<HiveswapPage/>);
+</script>
+</body>
+</html>

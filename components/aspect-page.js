@@ -5,6 +5,10 @@
    ========================= */
 
 const AspectPage = ({aspectName, onNavigate, theme}) => {
+  // Collapse the long description on mobile by default
+  const isMobileInit = typeof window !== 'undefined' && window.innerWidth < 640;
+  const [descOpen, setDescOpen] = React.useState(!isMobileInit);
+
   // Access global data
   const aspectsData = window.aspectsData || {};
   const characterData = window.characterData || { canon: {}, nonCanon: {} };
@@ -55,40 +59,55 @@ const AspectPage = ({aspectName, onNavigate, theme}) => {
       {/* Inversions Table */}
       <div className="p-4 rounded" style={{backgroundColor: theme?.isDark ? "#1a1a1a" : "#ffffff"}}>
         <h2 className={theme?.isDark ? "homestuck-command-dark mb-3 text-center" : "homestuck-command mb-3 text-center"}>Inversions</h2>
-        <table className="w-full border-collapse border border-gray-300" style={{backgroundColor: theme?.isDark ? "#1a1a1a" : "#ffffff"}}>
-          <thead>
-            <tr style={{backgroundColor: theme?.isDark ? "#1a1a1a" : "#ffffff"}}>
-              <th style={{border: `1px solid ${theme?.isDark ? "#555555" : "#d1d5db"}`, padding: "0.5rem"}}>Pair</th>
-              <th style={{border: `1px solid ${theme?.isDark ? "#555555" : "#d1d5db"}`, padding: "0.5rem"}}>Quasipair</th>
-              <th style={{border: `1px solid ${theme?.isDark ? "#555555" : "#d1d5db"}`, padding: "0.5rem"}}>Antipair</th>
-              <th style={{border: `1px solid ${theme?.isDark ? "#555555" : "#d1d5db"}`, padding: "0.5rem"}}>Numeric</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style={{backgroundColor: theme?.isDark ? "#1a1a1a" : "#ffffff"}}>
-              <td style={{border: `1px solid ${theme?.isDark ? "#555555" : "#d1d5db"}`, padding: "0.5rem", textAlign: "center"}}>
-                <AspectLink a={inverses[0]} onClick={onNavigate} theme={theme}/>
-              </td>
-              <td style={{border: `1px solid ${theme?.isDark ? "#555555" : "#d1d5db"}`, padding: "0.5rem", textAlign: "center"}}>
-                <AspectLink a={inverses[1]} onClick={onNavigate} theme={theme}/>
-              </td>
-              <td style={{border: `1px solid ${theme?.isDark ? "#555555" : "#d1d5db"}`, padding: "0.5rem", textAlign: "center"}}>
-                <AspectLink a={inverses[2]} onClick={onNavigate} theme={theme}/>
-              </td>
-              <td style={{border: `1px solid ${theme?.isDark ? "#555555" : "#d1d5db"}`, padding: "0.5rem", textAlign: "center"}}>
-                <AspectLink a={inverses[3]} onClick={onNavigate} theme={theme}/>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'8px'}}>
+          {[
+            ['Pair',      inverses[0]],
+            ['Quasipair', inverses[1]],
+            ['Antipair',  inverses[2]],
+            ['Numeric',   inverses[3]],
+          ].map(([label, inv]) => (
+            <div key={label} style={{
+              padding:'8px 12px',
+              border:`1px solid ${theme?.isDark ? "#555555" : "#d1d5db"}`,
+              borderRadius:'4px',
+              background: theme?.isDark ? "rgba(255,255,255,0.04)" : "#f9f9f9"
+            }}>
+              <div style={{
+                color: theme?.isDark ? "#888888" : "#777777",
+                fontSize:'0.7rem', fontFamily:'Courier New',
+                marginBottom:'3px', textTransform:'uppercase', letterSpacing:'0.06em'
+              }}>{label}</div>
+              <AspectLink a={inv} onClick={onNavigate} theme={theme}/>
+            </div>
+          ))}
+        </div>
       </div>
-      
-      {/* Extended Zodiac Description */}
+
+      {/* Extended Zodiac Description — collapsible on mobile */}
       <div className="p-4 rounded" style={{backgroundColor: theme?.isDark ? "#1a1a1a" : "#ffffff"}}>
-        <h2 className={theme?.isDark ? "homestuck-command-dark mb-3" : "homestuck-command mb-3"}>&gt; Read Extended Zodiac Description.</h2>
-        <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#000000", whiteSpace: 'pre-wrap', lineHeight: '1.6'}}>
-          {ezDescription}
-        </p>
+        <button
+          onClick={() => setDescOpen(o => !o)}
+          style={{
+            display:'flex', alignItems:'center', gap:'6px', cursor:'pointer',
+            background:'none', border:'none', padding:0, marginBottom: descOpen ? '0.75rem' : 0,
+            width:'100%', textAlign:'left'
+          }}
+        >
+          <span className={theme?.isDark ? "homestuck-command-dark" : "homestuck-command"}>
+            &gt; Read Extended Zodiac Description.
+          </span>
+          <span style={{
+            fontSize:'0.8rem', color: theme?.isDark ? "#888" : "#666",
+            fontFamily:'Courier New', marginLeft:'auto', flexShrink:0
+          }}>
+            [{descOpen ? 'hide' : 'show'}]
+          </span>
+        </button>
+        {descOpen && (
+          <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#000000", whiteSpace: 'pre-wrap', lineHeight: '1.6'}}>
+            {ezDescription}
+          </p>
+        )}
       </div>
       
       {/* Canon Examples */}

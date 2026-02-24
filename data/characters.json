@@ -2,343 +2,779 @@
   "canon": {
     "June Egbert": {
       "color": "#0715cd",
-      "classpect": ["Heir", "Breath"],
+      "classpect": [
+        "Heir",
+        "Breath"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "hi there!", "color": "#0715cd" }
+        {
+          "text": "hi there!",
+          "color": "#0715cd"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "beyond-canon",
+        "sburb-beta"
       ]
     },
     "Rose Lalonde": {
       "color": "#b536da",
-      "classpect": ["Seer", "Light"],
+      "classpect": [
+        "Seer",
+        "Light"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "Hello. Looking to learn more about me, then?", "color": "#b536da" }
+        {
+          "text": "Hello. Looking to learn more about me, then?",
+          "color": "#b536da"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "beyond-canon",
+        "sburb-beta"
       ]
     },
     "Dave Strider": {
       "color": "#e00707",
-      "classpect": ["Knight", "Time"],
+      "classpect": [
+        "Knight",
+        "Time"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "oh sick yo whats up", "color": "#e00707", "link": "https://www.homestuck.com/005796" }
+        {
+          "text": "oh sick yo whats up",
+          "color": "#e00707",
+          "link": "https://www.homestuck.com/005796"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "beyond-canon",
+        "sburb-beta"
       ]
     },
     "Jade Harley": {
       "color": "#4ac925",
-      "classpect": ["Witch", "Space"],
+      "classpect": [
+        "Witch",
+        "Space"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "hi!!! :D", "color": "#4ac925" }
+        {
+          "text": "hi!!! :D",
+          "color": "#4ac925"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "beyond-canon",
+        "sburb-beta"
       ]
     },
     "Jane Crocker": {
       "color": "#00d5f2",
-      "classpect": ["Maid", "Life"],
+      "classpect": [
+        "Maid",
+        "Life"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "Shucks, you want to learn about me?", "color": "#00d5f2" }
+        {
+          "text": "Shucks, you want to learn about me?",
+          "color": "#00d5f2"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "beyond-canon",
+        "sburb-alpha"
       ]
     },
     "Jake English": {
       "color": "#1f9400",
-      "classpect": ["Page", "Hope"],
+      "classpect": [
+        "Page",
+        "Hope"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "Well christ on a cracker, i didnt think id be getting this much action!", "color": "#1f9400" }
+        {
+          "text": "Well christ on a cracker, i didnt think id be getting this much action!",
+          "color": "#1f9400"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "beyond-canon",
+        "sburb-alpha"
       ]
     },
     "Roxy Lalonde": {
       "color": "#ff6ff2",
-      "classpect": ["Rogue", "Void"],
+      "classpect": [
+        "Rogue",
+        "Void"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "wow u wanna kno abt me??? flattered", "color": "#ff6ff2" }
+        {
+          "text": "wow u wanna kno abt me??? flattered",
+          "color": "#ff6ff2"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "beyond-canon",
+        "sburb-alpha"
       ]
     },
     "Dirk Strider": {
       "color": "#f2a400",
-      "classpect": ["Prince", "Heart"],
+      "classpect": [
+        "Prince",
+        "Heart"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "You've picked the best of the bunch.", "color": "#f2a400" }
+        {
+          "text": "You've picked the best of the bunch.",
+          "color": "#f2a400"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "beyond-canon",
+        "sburb-alpha"
       ]
     },
     "Aradia Megido": {
       "color": "#a10000",
-      "classpect": ["Maid", "Time"],
+      "classpect": [
+        "Maid",
+        "Time"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "hello! 0u0\nno wait that looks stupid", "color": "#a10000" }
+        {
+          "text": "hello! 0u0\nno wait that looks stupid",
+          "color": "#a10000"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-beta",
+        "beyond-canon"
       ]
     },
     "Tavros Nitram": {
       "color": "#a15000",
-      "classpect": ["Page", "Breath"],
+      "classpect": [
+        "Page",
+        "Breath"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "hELLO THERE,,, pERSON WHO WANTS TO KNOW ABOUT ME FOR SOME REASON,,, }:D", "color": "#a15000" }
+        {
+          "text": "hELLO THERE,,, pERSON WHO WANTS TO KNOW ABOUT ME FOR SOME REASON,,, }:D",
+          "color": "#a15000"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-beta",
+        "beyond-canon"
       ]
     },
     "Sollux Captor": {
       "color": "#a1a100",
-      "classpect": ["Mage", "Doom"],
+      "classpect": [
+        "Mage",
+        "Doom"
+      ],
       "lunarsway": "Dual",
       "reaction": [
-        { "text": "w0w, really? fuck 0ff.", "color": "#a1a100" }
+        {
+          "text": "w0w, really? fuck 0ff.",
+          "color": "#a1a100"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-beta",
+        "beyond-canon"
       ]
     },
     "Karkat Vantas": {
       "color": "#626262",
-      "classpect": ["Knight", "Blood"],
+      "classpect": [
+        "Knight",
+        "Blood"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "I DON'T BELIEVE YOU. I CAN'T BE THAT INTERESTING.", "color": "#626262" }
+        {
+          "text": "I DON'T BELIEVE YOU. I CAN'T BE THAT INTERESTING.",
+          "color": "#626262"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-beta",
+        "beyond-canon"
       ]
     },
     "Nepeta Leijon": {
       "color": "#416600",
-      "classpect": ["Rogue", "Heart"],
+      "classpect": [
+        "Rogue",
+        "Heart"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": ":33 < *ac perks up her ears curiously at the sound of her sw33t hero title!*", "color": "#416600" }
+        {
+          "text": ":33 < *ac perks up her ears curiously at the sound of her sw33t hero title!*",
+          "color": "#416600"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-beta",
+        "beyond-canon"
       ]
     },
     "Kanaya Maryam": {
       "color": "#008141",
-      "classpect": ["Sylph", "Space"],
+      "classpect": [
+        "Sylph",
+        "Space"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "I Think Its Quite Obvious Really What Else Is There To Know About Me", "color": "#008141" }
+        {
+          "text": "I Think Its Quite Obvious Really What Else Is There To Know About Me",
+          "color": "#008141"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-beta",
+        "beyond-canon"
       ]
     },
     "Terezi Pyrope": {
       "color": "#008282",
-      "classpect": ["Seer", "Mind"],
+      "classpect": [
+        "Seer",
+        "Mind"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "SUR3 WHY NOT. 1M BOR3D.", "color": "#008282" }
+        {
+          "text": "SUR3 WHY NOT. 1M BOR3D.",
+          "color": "#008282"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-beta",
+        "beyond-canon"
       ]
     },
     "Vriska Serket": {
       "color": "#005682",
-      "classpect": ["Thief", "Light"],
+      "classpect": [
+        "Thief",
+        "Light"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "No dou8les!!!!!!!!", "color": "#005682" }
+        {
+          "text": "No dou8les!!!!!!!!",
+          "color": "#005682"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-beta",
+        "beyond-canon"
       ]
     },
     "Equius Zahhak": {
       "color": "#000056",
-      "classpect": ["Heir", "Void"],
+      "classpect": [
+        "Heir",
+        "Void"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { 
-          "text": "D --> Why are you wasting your time on this f001ishness", 
-          "color": "#000056", 
+        {
+          "text": "D --> Why are you wasting your time on this f001ishness",
+          "color": "#000056",
           "link": "./email-of-equius.html"
         }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-beta"
       ]
     },
     "Gamzee Makara": {
       "color": "#2b0057",
-      "classpect": ["Bard", "Rage"],
+      "classpect": [
+        "Bard",
+        "Rage"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "mOtHa fUcKiN MiRaClEs :o)", "color": "#2b0057" }
+        {
+          "text": "mOtHa fUcKiN MiRaClEs :o)",
+          "color": "#2b0057"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-beta",
+        "beyond-canon"
       ]
     },
     "Eridan Ampora": {
       "color": "#6a006a",
-      "classpect": ["Prince", "Hope"],
+      "classpect": [
+        "Prince",
+        "Hope"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "oh NOWW you care", "color": "#6a006a" }
+        {
+          "text": "oh NOWW you care",
+          "color": "#6a006a"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-beta",
+        "beyond-canon"
       ]
     },
     "Feferi Peixes": {
       "color": "#77003c",
-      "classpect": ["Witch", "Life"],
+      "classpect": [
+        "Witch",
+        "Life"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "I'm so --EXCIT--ED! Glub glub!", "color": "#77003c" }
+        {
+          "text": "I'm so --EXCIT--ED! Glub glub!",
+          "color": "#77003c"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-beta",
+        "beyond-canon"
       ]
     },
     "Damara Megido": {
       "color": "#a10000",
-      "classpect": ["Witch", "Time"],
+      "classpect": [
+        "Witch",
+        "Time"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "こんにちは、変態さん。", "color": "#a10000" }
+        {
+          "text": "こんにちは、変態さん。",
+          "color": "#a10000"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-alpha"
       ]
     },
     "Rufioh Nitram": {
       "color": "#a15000",
-      "classpect": ["Rogue", "Breath"],
+      "classpect": [
+        "Rogue",
+        "Breath"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "hey doll... you wanted to know about me?", "color": "#a15000" }
+        {
+          "text": "hey doll... you wanted to know about me?",
+          "color": "#a15000"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-alpha"
       ]
     },
     "Mituna Captor": {
       "color": "#a1a100",
-      "classpect": ["Heir", "Doom"],
+      "classpect": [
+        "Heir",
+        "Doom"
+      ],
       "lunarsway": "Dual",
       "reaction": [
-        { "text": "5DGJDK5GDFHV8L0K5", "color": "#a1a100" }
+        {
+          "text": "5DGJDK5GDFHV8L0K5",
+          "color": "#a1a100"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-alpha"
       ]
     },
     "Kankri Vantas": {
       "color": "#ff0000",
-      "classpect": ["Seer", "Blood"],
+      "classpect": [
+        "Seer",
+        "Blood"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "Traceback (most recent call last):\n  File \"c:\\\\Users\\\\Kankri\\\\D9cuments\\\\Manifest9s\\\\read_me_display.^cake\", line 612...\nMemoryError", "color": "#ff0000" }
+        {
+          "text": "Traceback (most recent call last):\n  File \"c:\\\\Users\\\\Kankri\\\\D9cuments\\\\Manifest9s\\\\read_me_display.^cake\", line 612...\nMemoryError",
+          "color": "#ff0000"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-alpha"
       ]
     },
     "Meulin Leijon": {
       "color": "#416600",
-      "classpect": ["Mage", "Heart"],
+      "classpect": [
+        "Mage",
+        "Heart"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "\\(=^..^)/ YOU WANT TO KNOW ABOUT ME. THATS GREAT.", "color": "#416600" }
+        {
+          "text": "\\(=^..^)/ YOU WANT TO KNOW ABOUT ME. THATS GREAT.",
+          "color": "#416600"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-alpha"
       ]
     },
     "Porrim Maryam": {
       "color": "#008141",
-      "classpect": ["Maid", "Space"],
+      "classpect": [
+        "Maid",
+        "Space"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "Sure, why no+t.", "color": "#008141" }
+        {
+          "text": "Sure, why no+t.",
+          "color": "#008141"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-alpha"
       ]
     },
     "Latula Pyrope": {
       "color": "#008282",
-      "classpect": ["Knight", "Mind"],
+      "classpect": [
+        "Knight",
+        "Mind"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "you w4nt to know 4bout m3? r4d!", "color": "#008282" }
+        {
+          "text": "you w4nt to know 4bout m3? r4d!",
+          "color": "#008282"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-alpha"
       ]
     },
     "Aranea Serket": {
       "color": "#005682",
-      "classpect": ["Sylph", "Light"],
+      "classpect": [
+        "Sylph",
+        "Light"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "The Sylph is in. ::::)", "color": "#005682" }
+        {
+          "text": "The Sylph is in. ::::)",
+          "color": "#005682"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-alpha"
       ]
     },
     "Horuss Zahhak": {
       "color": "#000056",
-      "classpect": ["Page", "Void"],
+      "classpect": [
+        "Page",
+        "Void"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "8=D NEIGH, you seek me? I am so f*dging e%ited!", "color": "#000056" }
+        {
+          "text": "8=D NEIGH, you seek me? I am so f*dging e%ited!",
+          "color": "#000056"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-alpha"
       ]
     },
     "Kurloz Makara": {
       "color": "#2b0057",
-      "classpect": ["Prince", "Rage"],
+      "classpect": [
+        "Prince",
+        "Rage"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": ":o|", "color": "#2b0057" }
+        {
+          "text": ":o|",
+          "color": "#2b0057"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-alpha"
       ]
     },
     "Cronus Ampora": {
       "color": "#6a006a",
-      "classpect": ["Bard", "Hope"],
+      "classpect": [
+        "Bard",
+        "Hope"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "were not talkin aboat this guy", "color": "#77003c" },
-        { "text": "oh come on, meenah!", "color": "#6a006a" },
-        { "text": "nope youre done", "color": "#77003c" }
+        {
+          "text": "were not talkin aboat this guy",
+          "color": "#77003c"
+        },
+        {
+          "text": "oh come on, meenah!",
+          "color": "#6a006a"
+        },
+        {
+          "text": "nope youre done",
+          "color": "#77003c"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-alpha"
       ]
     },
     "Meenah Peixes": {
       "color": "#77003c",
-      "classpect": ["Thief", "Life"],
+      "classpect": [
+        "Thief",
+        "Life"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "you wanna know aboat me? alright thats cool thats cool", "color": "#77003c" }
+        {
+          "text": "you wanna know aboat me? alright thats cool thats cool",
+          "color": "#77003c"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "sgrub-alpha",
+        "beyond-canon"
       ]
     },
     "Caliborn": {
       "color": "#2ed73a",
-      "classpect": ["Lord", "Time"],
+      "classpect": [
+        "Lord",
+        "Time"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "HA HA HA HA HA HA! YOU CANNOT ESCAPE ME. EVEN ON THE DARK INTER WEBS!", "color": "#2ed73a" }
+        {
+          "text": "HA HA HA HA HA HA! YOU CANNOT ESCAPE ME. EVEN ON THE DARK INTER WEBS!",
+          "color": "#2ed73a"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "beyond-canon",
+        "cherubs"
       ]
     },
     "Calliope": {
       "color": "#929292",
-      "classpect": ["Muse", "Space"],
+      "classpect": [
+        "Muse",
+        "Space"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "i'm not very Used to introdUcing the real me to others. u_u", "color": "#929292" }
+        {
+          "text": "i'm not very Used to introdUcing the real me to others. u_u",
+          "color": "#929292"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "beyond-canon",
+        "cherubs"
       ]
     },
     "Kalian Delfin": {
       "color": "#6a006a",
-      "classpect": ["Bard", "Blood"],
+      "classpect": [
+        "Bard",
+        "Blood"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "omg is this who i think it is??", "color": "#6a006a" }
+        {
+          "text": "omg is this who i think it is??",
+          "color": "#6a006a"
+        }
+      ],
+      "tags": [
+        "hiveswap"
       ]
     },
     "Cridea Jeevik": {
       "color": "#6a006a",
-      "classpect": ["Sylph", "Heart"],
+      "classpect": [
+        "Sylph",
+        "Heart"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "As they say, #SharingIsCaring!", "color": "#6a006a" }
+        {
+          "text": "As they say, #SharingIsCaring!",
+          "color": "#6a006a"
+        }
+      ],
+      "tags": [
+        "hiveswap"
       ]
     },
     "Jerann Mussel": {
       "color": "#6a006a",
-      "classpect": ["Seer", "Space"],
+      "classpect": [
+        "Seer",
+        "Space"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "A Fellow Truth Seeker Then", "color": "#6a006a" }
+        {
+          "text": "A Fellow Truth Seeker Then",
+          "color": "#6a006a"
+        }
+      ],
+      "tags": [
+        "hiveswap"
       ]
     },
     "Mallek Adalov": {
       "color": "#005682",
-      "classpect": ["Rogue", "Time"],
+      "classpect": [
+        "Rogue",
+        "Time"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "hello world; /= this cool;", "color": "#005682" }
+        {
+          "text": "hello world; /= this cool;",
+          "color": "#005682"
+        }
+      ],
+      "tags": [
+        "hiveswap"
       ]
     },
     "Azdaja Knelax": {
       "color": "#a1a100",
-      "classpect": ["Prince", "Mind"],
+      "classpect": [
+        "Prince",
+        "Mind"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "||| Beneath me. Fight someone else. |||", "color": "#a1a100" }
+        {
+          "text": "||| Beneath me. Fight someone else. |||",
+          "color": "#a1a100"
+        }
+      ],
+      "tags": [
+        "hiveswap"
       ]
     },
     "MSPA Reader": {
       "color": "#000000",
-      "classpect": ["Seer", "Void"],
+      "classpect": [
+        "Seer",
+        "Void"
+      ],
       "lunarsway": "Prospit",
       "reaction": [
-        { "text": "Oh sweet, a new page.", "color": "#000000", "link": "https://homestuck.com/problemsleuth/001743" } 
+        {
+          "text": "Oh sweet, a new page.",
+          "color": "#000000",
+          "link": "https://homestuck.com/problemsleuth/001743"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "beyond-canon",
+        "hiveswap"
       ]
     },
     "Ruthie Gold": {
       "color": "#a10000",
-      "classpect": ["Prince", "Time"],
+      "classpect": [
+        "Prince",
+        "Time"
+      ],
       "lunarsway": null,
       "reaction": [
-        { "text": "heeey theeereee whats up", "color": "#a10000" }
+        {
+          "text": "heeey theeereee whats up",
+          "color": "#a10000"
+        }
+      ],
+      "tags": [
+        "beyond-canon",
+        "influencer"
       ]
     }
   },
   "nonCanon": {
     "MUTT OF SLOP": {
       "color": "#3b3131",
-      "classpect": ["Muse", "Time"],
+      "classpect": [
+        "Muse",
+        "Time"
+      ],
       "lunarsway": null,
       "reaction": [
         {
@@ -350,26 +786,55 @@
     },
     "Thorn Derosin": {
       "color": "#1b7539",
-      "classpect": ["Mage", "Time"],
+      "classpect": [
+        "Mage",
+        "Time"
+      ],
       "lunarsway": "Dual",
       "reaction": [
-        { "text": "Mirë se erdhe.", "color": "#1b7539" }
+        {
+          "text": "Mirë se erdhe.",
+          "color": "#1b7539"
+        }
+      ],
+      "tags": [
+        "original-character"
       ]
     },
     "Sweet Bro": {
       "color": "#e5032e",
-      "classpect": ["Page", "Time"],
+      "classpect": [
+        "Page",
+        "Time"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "IT KEEPS HAPPENING", "color": "#e5032e", "link":"http://www.mspaintadventures.com/sweetbroandhellajeff/" }
+        {
+          "text": "IT KEEPS HAPPENING",
+          "color": "#e5032e",
+          "link": "http://www.mspaintadventures.com/sweetbroandhellajeff/"
+        }
+      ],
+      "tags": [
+        "sweetbroandhellajeff"
       ]
     },
     "Hella Jeff": {
       "color": "#023cff",
-      "classpect": ["Bard", "Breath"],
+      "classpect": [
+        "Bard",
+        "Breath"
+      ],
       "lunarsway": "Derse",
       "reaction": [
-        { "text": "I TOLD YOU DOG!", "color": "#023cff", "link":"http://www.mspaintadventures.com/sweetbroandhellajeff/" }
+        {
+          "text": "I TOLD YOU DOG!",
+          "color": "#023cff",
+          "link": "http://www.mspaintadventures.com/sweetbroandhellajeff/"
+        }
+      ],
+      "tags": [
+        "sweetbroandhellajeff"
       ]
     }
   }

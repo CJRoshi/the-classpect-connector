@@ -27,7 +27,7 @@ const Footer = ({ theme }) => {
           marginBottom: '8px',
           textShadow: '0 1px 3px rgba(0,0,0,0.8)'
         }}>
-          <strong>Homestuck</strong> and all related characters and concepts, including the Extended Zodiac, are © Andrew Hussie.
+          <strong>Homestuck</strong> and all related characters and concepts, including the Extended Zodiac, are © Andrew Hussie. <strong>Homestuck: Beyond Canon</strong> and its related content belong to Furthest Ring Studios.
         </p>
         <p className="font-courier" style={{
           color: '#eeeeee',

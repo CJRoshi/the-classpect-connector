@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SBURB Alpha - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="../images/special/CCLogoRegular.png" />
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../components/mobile.css">
+
+  <!-- Shared Components -->
+  <script type="text/babel" src="../components/constants.js"></script>
+  <script type="text/babel" src="../components/header.js"></script>
+  <script type="text/babel" src="../components/searchbar.js"></script>
+  <script type="text/babel" src="../components/footer.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('../fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body, html {
+      width: 100%;
+      min-height: 100vh;
+      font-family: 'Courier New', monospace;
+    }
+    
+    /* Font classes */
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem;
+      font-weight: normal;
+    }
+    
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem;
+      font-weight: normal;
+    }
+    
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem;
+      font-weight: normal;
+    }
+    
+    .font-courier {
+      font-family: 'Courier New', monospace;
+    }
+    
+    .font-courier-bold {
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+/* Default theme */
+const defaultTheme = { 
+  bg: "#626262",
+  contentBg: "#d0d0d0",
+  textColor: "#000000",
+  accentBg: "#a0a0a0",
+  isDark: false
+};
+
+/* Character data */
+const alphaKids = [
+  {
+    name: "Jane Crocker",
+    color: "#00d5f2",
+    classpect: ["Maid", "Life"]
+  },
+  {
+    name: "Jake English",
+    color: "#1f9400",
+    classpect: ["Page", "Hope"]
+  },
+  {
+    name: "Roxy Lalonde",
+    color: "#ff6ff2",
+    classpect: ["Rogue", "Void"]
+  },
+  {
+    name: "Dirk Strider",
+    color: "#f2a400",
+    classpect: ["Prince", "Heart"]
+  }
+];
+
+const SBURBAlphaPage = () => {
+  const handleNavigate = (path) => {
+    window.location.href = `../index.html#${path}`;
+  };
+  
+  return (
+    <div style={{ 
+      backgroundColor: defaultTheme.bg, 
+      minHeight: '100vh'
+    }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme} />
+      
+      <div className="px-3 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <SearchBar onNavigate={handleNavigate} theme={defaultTheme} />
+        </div>
+      </div>
+      
+      <div className="px-3 sm:px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div style={{ 
+            backgroundColor: defaultTheme.contentBg, 
+            color: defaultTheme.textColor, 
+            padding: '24px', 
+            borderRadius: '8px', 
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)', 
+            border: `2px solid ${defaultTheme.accentBg}` 
+          }}>
+            {/* Title */}
+            <div className="text-center mb-6">
+              <h1 className="font-typostuck-title mb-2">SBURB Alpha</h1>
+              <p className="font-courier italic" style={{fontSize: '1.1rem', color: '#4b5563'}}>
+                Four Kids (And A Game That Fell Apart)
+              </p>
+            </div>
+            
+            {/* Characters */}
+            <div className="space-y-6">
+              {alphaKids.map((kid) => {
+                const [className, aspectName] = kid.classpect;
+                const path = `../index.html#/classpect/${className.toLowerCase()}-of-${aspectName.toLowerCase()}`;
+                
+                // Map names to logo files
+                const logoMap = {
+                  "Jane Crocker": "JaneLogo.png",
+                  "Jake English": "JakeLogo.png",
+                  "Roxy Lalonde": "RoxyLogo.png",
+                  "Dirk Strider": "DirkLogo.png"
+                };
+                
+                return (
+                  <div key={kid.name} className="border-l-4 pl-4" style={{borderColor: kid.color}}>
+                    <div className="flex items-baseline gap-2" style={{flexWrap:'wrap'}}>
+                      <img 
+                        src={`../images/tags/${logoMap[kid.name]}`}
+                        alt={`${kid.name} logo`}
+                        style={{height: '24px', width: 'auto', display: 'inline-block', verticalAlign: 'middle', marginRight: '4px'}}
+                      />
+                      <span className="font-courier-bold" style={{color: kid.color, fontSize: '1.2rem'}}>
+                        {kid.name}:
+                      </span>
+                      <a
+                        href={path}
+                        className="font-courier-bold hover:underline"
+                        style={{color: '#0000ee', textDecoration: 'none'}}
+                      >
+                        {className} of {aspectName}
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          
+          <Footer theme={defaultTheme} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<SBURBAlphaPage />);
+</script>
+</body>
+</html>

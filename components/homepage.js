@@ -35,7 +35,7 @@ const Homepage = ({ onNavigate, theme }) => {
       </div>
 
       {/* Classes and Aspects Grid */}
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-2 gap-4 md:gap-8">
         {/* Classes */}
         <div>
           <h2 className="font-verdana mb-4" style={{fontSize: "1.5rem"}}>
@@ -72,7 +72,7 @@ const Homepage = ({ onNavigate, theme }) => {
         <h2 className="font-typostuck mb-4 text-center" style={{fontSize: "1.5rem"}}>
           {'>'} Lunar Sway
         </h2>
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <div className="text-center">
             <a
               href="./prospit.html"

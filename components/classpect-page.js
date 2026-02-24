@@ -1,7 +1,7 @@
 /* =========================
    CLASSPECT PAGE COMPONENT
    Individual classpect page with full analysis, inversions, rotations, etc.
-   Requires: constants.js, utility-functions.js, links.js, section.js, rotation-graph.js
+   Requires: constants.js, utility-functions.js, links.js, section.js, rotation-graph.js, tags.js
    ========================= */
 
 const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
@@ -28,44 +28,56 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
   } = analysis;
 
   const isCanon = (canonCharacters && canonCharacters.length > 0);
+  
+  // Collect all tags from characters with this classpect
+  const allTags = new Set();
+  
+  // Add auto-computed tags
+  if (isBalanced) allTags.add('balanced');
+  if (isSymmetric) allTags.add('symmetric');
+  if (isCanon) allTags.add('canon');
+  
+  // Add manual tags from all characters
+  if (canonCharacters) {
+    canonCharacters.forEach(char => {
+      if (char.tags && Array.isArray(char.tags)) {
+        char.tags.forEach(tag => allTags.add(tag));
+      }
+    });
+  }
+  
+  // Convert to array (TagsDisplay will handle sorting)
+  const tags = Array.from(allTags);
+  
+  // Handler for tag clicks
+  const handleTagClick = (route) => {
+    if (route) {
+      window.location.href = route + '.html';
+    }
+  };
 
   return (
     <div className="space-y-6">
-      {/* Header Section */}
-      <div className="flex justify-between items-start gap-6">
-        {/* Left: Title */}
-        <div>
+      {/* Header Section — stacks vertically on mobile, side-by-side on md+ */}
+      <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 md:gap-6">
+        {/* Title block */}
+        <div style={{minWidth: 0}}>
           <h1 className="mb-2" style={{display: 'flex', gap: '0.5rem', flexWrap: 'wrap'}}>
             <ClassLink c={className} onClick={onNavigate} theme={theme} isTitle={true}/>
             <span className="font-typostuck-title">of</span>
             <AspectLink a={aspectName} onClick={onNavigate} theme={theme} isTitle={true}/>
           </h1>
 
-          <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#4b5563"}}>
+          <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#4b5563", wordBreak: 'break-word'}}>
             [{className} ({getClassValue(className)>=0?"+":""}{getClassValue(className)}) + {aspectName} ({getAspectValue(aspectName)>=0?"+":""}{getAspectValue(aspectName)}) = {originalTotal>=0?"+":""}{originalTotal}]
           </p>
 
-          <div className="flex gap-2 mt-2">
-            {isBalanced && (
-              <span className="px-2 py-1 bg-green-100 text-green-800 text-sm rounded">
-                Balanced
-              </span>
-            )}
-            {isSymmetric && (
-              <span className="px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded">
-                Symmetric
-              </span>
-            )}
-            {isCanon && (
-              <a href="./canon.html" onClick={(e) => { e.preventDefault(); window.location.href = "./canon.html"; }} className="px-2 py-1 bg-purple-100 text-purple-800 text-sm rounded hover:bg-purple-200 cursor-pointer" style={{textDecoration: "none", display: "inline-block"}}>
-                Appears in Canon
-              </a>
-            )}
-          </div>
+          {/* Tags Display */}
+          <TagsDisplay tags={tags} onTagClick={handleTagClick} />
         </div>
 
-        {/* Right: Reactions */}
-        <div className="flex flex-col gap-4 max-w-md">
+        {/* Reactions — full width on mobile, max-w-md on desktop */}
+        <div className="flex flex-col gap-4 w-full md:w-auto md:max-w-md">
           {/* Canon reactions */}
           {canonCharacters && canonCharacters.map((ch) => (
             <div
@@ -227,8 +239,8 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
       {/* Boring Results Table */}
       <div>
         <h2 className={theme?.isDark ? "homestuck-command-dark mb-3" : "homestuck-command mb-3"}>Boring Results Table</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-sm" style={{border: `1px solid ${theme?.isDark ? "#555555" : "#d1d5db"}`}}>
+        <div className="overflow-x-auto table-scroll-mobile" style={{WebkitOverflowScrolling: 'touch'}}>
+          <table className="border-collapse text-sm boring-table" style={{border: `1px solid ${theme?.isDark ? "#555555" : "#d1d5db"}`, minWidth: '100%'}}>
             <thead>
               <tr style={{backgroundColor: theme?.isDark ? "#2a2a2a" : "#f3f4f6"}}>
                 <th style={{border: `1px solid ${theme?.isDark ? "#555555" : "#d1d5db"}`, padding: "0.5rem"}}>Class Type</th>

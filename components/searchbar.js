@@ -57,7 +57,7 @@ const SearchBar = ({ onNavigate, theme }) => {
       });
     });
     
-    // Add Prospit/Derse/Canon (external HTML files)
+    // Add special pages (external HTML files)
     pages.push({
       type: 'special',
       display: 'Prospit',
@@ -77,6 +77,78 @@ const SearchBar = ({ onNavigate, theme }) => {
       display: 'Canon Characters',
       path: './canon.html',
       searchTerms: ['canon', 'characters', 'canon characters'],
+      isExternal: true
+    });
+    
+    // Add tag pages
+    pages.push({
+      type: 'tag',
+      display: 'Cherubs',
+      path: './tag/cherubs.html',
+      searchTerms: ['cherubs', 'earth c', 'earthc', 'earth-c', 'caliborn', 'calliope'],
+      isExternal: true
+    });
+    pages.push({
+      type: 'tag',
+      display: 'SBURB Beta',
+      path: './tag/sburb-beta.html',
+      searchTerms: ['sburb beta', 'sburbbeta', 'sburb-beta', 'beta kids', 'betakids', 'beta session'],
+      isExternal: true
+    });
+    pages.push({
+      type: 'tag',
+      display: 'SBURB Alpha',
+      path: './tag/sburb-alpha.html',
+      searchTerms: ['sburb alpha', 'sburbalpha', 'sburb-alpha', 'alpha kids', 'alphakids', 'alpha session'],
+      isExternal: true
+    });
+    pages.push({
+      type: 'tag',
+      display: 'SGRUB Beta',
+      path: './tag/sgrub-beta.html',
+      searchTerms: ['sgrub beta', 'sgrubbeta', 'sgrub-beta', 'beta trolls', 'betatrolls', 'alternian trolls'],
+      isExternal: true
+    });
+    pages.push({
+      type: 'tag',
+      display: 'SGRUB Alpha',
+      path: './tag/sgrub-alpha.html',
+      searchTerms: ['sgrub alpha', 'sgrubalpha', 'sgrub-alpha', 'alpha trolls', 'alphatrolls', 'beforan trolls', 'dancestors'],
+      isExternal: true
+    });
+    pages.push({
+      type: 'tag',
+      display: 'Homestuck',
+      path: './tag/homestuck.html',
+      searchTerms: ['homestuck', 'hs'],
+      isExternal: true
+    });
+    pages.push({
+      type: 'tag',
+      display: 'Beyond Canon',
+      path: './tag/beyond-canon.html',
+      searchTerms: ['beyond canon', 'beyondcanon', 'beyond-canon', 'epilogues', 'meat', 'candy'],
+      isExternal: true
+    });
+    pages.push({
+      type: 'tag',
+      display: 'Hiveswap',
+      path: './tag/hiveswap.html',
+      searchTerms: ['hiveswap', 'hauntswitch'],
+      isExternal: true
+    });
+    pages.push({
+      type: 'special',
+      display: 'Balanced Classpects',
+      path: './balanced.html',
+      searchTerms: ['balanced', 'balance'],
+      isExternal: true
+    });
+    pages.push({
+      type: 'special',
+      display: 'Symmetric Classpects',
+      path: './symmetric.html',
+      searchTerms: ['symmetric', 'symmetry'],
       isExternal: true
     });
     
@@ -144,14 +216,30 @@ const SearchBar = ({ onNavigate, theme }) => {
     {
       searchTerms: ['son of god', 'sonofgod', 'seer of any', 'seerofany', 'seer of all', 'seerofall', 'christ of jesus', 'christofjesus', 'jesus of christ', 'jesusofchrist', 'lord of lords', 'lordoflords'],
       url: "https://youtu.be/GTh5J0HsIAg?si=gpAQLAj0UMtSq-md" // Several euphemisms for "Jesus" redirecting to that video of Morshu reading the whole Bible
+    },
+    {
+      searchTerms: ['mybcmetas'],
+      url: './tag/predictions.html'
+    },
+    {
+      searchTerms: ['myocdonotsteal', 'stera', 'stera2', 'sterahalf', 'loredump', 'counterquest', 'cqc'],
+      url: './tag/oc-session.html'
     }
   ];
 
-  // Detect if we're on an external page
+  // Detect if we're on an external page or in a subdirectory
   const isExternalPage = window.location.pathname.includes('prospit.html') || 
                          window.location.pathname.includes('derse.html') ||
                          window.location.pathname.includes('canon.html') ||
-                         window.location.pathname.includes('about.html');
+                         window.location.pathname.includes('about.html') ||
+                         window.location.pathname.includes('balanced.html') ||
+                         window.location.pathname.includes('symmetric.html') ||
+                         window.location.pathname.includes('predictions.html') ||
+                         window.location.pathname.includes('oc-session.html') ||
+                         window.location.pathname.includes('/tag/');
+                         
+  const isInSubdirectory = window.location.pathname.includes('/tag/');
+  const pathPrefix = isInSubdirectory ? '../' : './';
 
   // Handle search input change
   const handleSearchChange = (e) => {
@@ -180,7 +268,7 @@ const SearchBar = ({ onNavigate, theme }) => {
     
     if (searchText.trim().length === 0) {
       if (isExternalPage) {
-        window.location.href = './index.html';
+        window.location.href = pathPrefix + 'index.html';
       } else {
         onNavigate('/');
       }
@@ -195,7 +283,11 @@ const SearchBar = ({ onNavigate, theme }) => {
     );
     
     if (secretMatch) {
-      const url = typeof secretMatch.url === 'function' ? secretMatch.url() : secretMatch.url;
+      let url = typeof secretMatch.url === 'function' ? secretMatch.url() : secretMatch.url;
+      // Fix relative paths when in a subdirectory
+      if (isInSubdirectory && url.startsWith('./')) {
+        url = '../' + url.slice(2);
+      }
       window.location.href = url;
       setSearchText('');
       setShowSuggestions(false);
@@ -209,9 +301,9 @@ const SearchBar = ({ onNavigate, theme }) => {
     
     if (exactMatch) {
       if (exactMatch.isExternal) {
-        window.location.href = exactMatch.path;
+        window.location.href = isInSubdirectory ? '../' + exactMatch.path.replace('./', '') : exactMatch.path;
       } else if (isExternalPage) {
-        window.location.href = `./index.html#${exactMatch.path}`;
+        window.location.href = `${pathPrefix}index.html#${exactMatch.path}`;
       } else {
         onNavigate(exactMatch.path);
       }
@@ -220,9 +312,9 @@ const SearchBar = ({ onNavigate, theme }) => {
     } else if (suggestions.length > 0) {
       // Navigate to first suggestion
       if (suggestions[0].isExternal) {
-        window.location.href = suggestions[0].path;
+        window.location.href = isInSubdirectory ? '../' + suggestions[0].path.replace('./', '') : suggestions[0].path;
       } else if (isExternalPage) {
-        window.location.href = `./index.html#${suggestions[0].path}`;
+        window.location.href = `${pathPrefix}index.html#${suggestions[0].path}`;
       } else {
         onNavigate(suggestions[0].path);
       }
@@ -231,7 +323,7 @@ const SearchBar = ({ onNavigate, theme }) => {
     } else {
       // Invalid search, go to homepage
       if (isExternalPage) {
-        window.location.href = './index.html';
+        window.location.href = pathPrefix + 'index.html';
       } else {
         onNavigate('/');
       }
@@ -243,9 +335,9 @@ const SearchBar = ({ onNavigate, theme }) => {
   // Handle clicking a suggestion
   const handleSuggestionClick = (page) => {
     if (page.isExternal) {
-      window.location.href = page.path;
+      window.location.href = isInSubdirectory ? '../' + page.path.replace('./', '') : page.path;
     } else if (isExternalPage) {
-      window.location.href = `./index.html#${page.path}`;
+      window.location.href = `${pathPrefix}index.html#${page.path}`;
     } else {
       onNavigate(page.path);
     }
@@ -260,9 +352,9 @@ const SearchBar = ({ onNavigate, theme }) => {
     const random = randomOptions[Math.floor(Math.random() * randomOptions.length)];
     
     if (random.isExternal) {
-      window.location.href = random.path;
+      window.location.href = isInSubdirectory ? '../' + random.path.replace('./', '') : random.path;
     } else if (isExternalPage) {
-      window.location.href = `./index.html#${random.path}`;
+      window.location.href = `${pathPrefix}index.html#${random.path}`;
     } else {
       onNavigate(random.path);
     }
@@ -306,9 +398,9 @@ const SearchBar = ({ onNavigate, theme }) => {
               type="text"
               value={searchText}
               onChange={handleSearchChange}
-              placeholder="Search classpects, classes, or aspects..."
+              placeholder={window.innerWidth < 640 ? "Search classpects..." : "Search classpects, classes, or aspects..."}
               className="flex-1 px-2 py-2 font-courier bg-transparent outline-none"
-              style={{color: theme?.textColor || '#000'}}
+              style={{color: theme?.textColor || '#000', fontSize: '1rem'}}
             />
             
             {/* Random button */}

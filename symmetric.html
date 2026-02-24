@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Symmetry - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="./images/special/CCLogoRegular.png" />
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./components/mobile.css">
+
+  <script type="text/babel" src="./components/constants.js"></script>
+  <script type="text/babel" src="./components/header.js"></script>
+  <script type="text/babel" src="./components/searchbar.js"></script>
+  <script type="text/babel" src="./components/footer.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('./fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+
+    .font-courier      { font-family: 'Courier New', monospace; }
+    .font-courier-bold { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem; font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem; font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem; font-weight: normal;
+    }
+    .homestuck-command {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold; font-size: 1.25rem; color: #000;
+    }
+    .homestuck-command-dark {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold; font-size: 1.25rem; color: #fff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { width: 100%; min-height: 100vh; font-family: 'Courier New', monospace; }
+
+    .aspect-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin: 20px 0;
+    }
+
+    .aspect-btn {
+      position: relative;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.18s;
+      aspect-ratio: 1;
+      background: #1a1a1a;
+    }
+    .aspect-btn:hover { transform: scale(1.07); z-index: 2; }
+
+    .aspect-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── SYMMETRY EFFECT ─────────────────────────────── */
+    /* Two corner triangles + one thin full diagonal slash */
+    .cut-overlay {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .aspect-btn:hover .cut-overlay { opacity: 1; }
+
+    /* Top-left corner triangle */
+    .cut-tl {
+      position: absolute; inset: 0;
+      clip-path: polygon(0 0, 28% 0, 0 28%);
+      mix-blend-mode: difference;
+      background: white;
+    }
+    /* Bottom-right corner triangle */
+    .cut-br {
+      position: absolute; inset: 0;
+      clip-path: polygon(72% 100%, 100% 100%, 100% 72%);
+      mix-blend-mode: difference;
+      background: white;
+    }
+    /* Thin diagonal slash — full corner to corner, ~6% wide */
+    .cut-slash {
+      position: absolute; inset: 0;
+      clip-path: polygon(
+        47% 0%,  53% 0%,
+        100% 47%, 100% 53%,
+        53% 100%, 47% 100%,
+        0% 53%,  0% 47%
+      );
+      mix-blend-mode: difference;
+      background: white;
+    }
+
+    /* ── HOVER OVERLAY ───────────────────────────────── */
+    .hover-overlay {
+      position: absolute; inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.25s;
+      pointer-events: none;
+      z-index: 11;
+      background: rgba(0,0,0,0.42);
+      padding: 4px;
+      text-align: center;
+    }
+    .aspect-btn:hover .hover-overlay { opacity: 1; }
+
+    .hover-class {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: clamp(0.7rem, 1.8vw, 1.1rem);
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(0,0,0,1), 0 1px 4px rgba(0,0,0,1);
+      line-height: 1.1;
+    }
+    .hover-char {
+      font-family: 'Courier New', monospace;
+      font-size: clamp(0.45rem, 1vw, 0.6rem);
+      color: rgba(220,220,220,0.9);
+      margin-top: 3px;
+      text-shadow: 0 0 6px rgba(0,0,0,1);
+    }
+
+    /* Character image fades in behind overlay */
+    .char-img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      opacity: 0;
+      transition: opacity 0.25s;
+      z-index: 9;
+    }
+    .aspect-btn:hover .char-img { opacity: 1; }
+    .char-img.kankri { object-fit: contain; background: white; }
+
+    /* Aspect name — always visible at bottom */
+    .aspect-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.60);
+      color: rgba(255,255,255,0.70);
+      font-family: 'Courier New', monospace;
+      font-size: 0.55rem;
+      text-align: center;
+      padding: 2px;
+      z-index: 12;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    .aspect-btn:hover .aspect-label { color: rgba(255,255,255,0.0); background: rgba(0,0,0,0.0); }
+
+    /* ── MOBILE: 3-col grid, overlays always visible ─── */
+    @media (max-width: 639px) {
+      .aspect-grid { grid-template-columns: repeat(3, 1fr); }
+      /* Always show class overlay and symmetry cuts on touch screens */
+      .hover-overlay { opacity: 1 !important; }
+      .cut-overlay   { opacity: 1 !important; }
+      /* Hide redundant text label since overlay is visible */
+      .aspect-label  { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const defaultTheme = {
+  bg: "#626262", contentBg: "#d0d0d0",
+  textColor: "#000000", accentBg: "#a0a0a0", isDark: false,
+};
+
+const SYMMETRIC = [
+  { aspect: 'Hope',   cls: 'Witch'  },
+  { aspect: 'Light',  cls: 'Prince' },
+  { aspect: 'Life',   cls: 'Thief',  char: { name: 'Meenah Peixes', img: './images/special/char_meenah.png' } },
+  { aspect: 'Mind',   cls: 'Knight', char: { name: 'Latula Pyrope',  img: './images/special/char_latula.png' } },
+  { aspect: 'Breath', cls: 'Mage'   },
+  { aspect: 'Rage',   cls: 'Sylph'  },
+  { aspect: 'Time',   cls: 'Maid',   char: { name: 'Aradia Megido',  img: './images/special/char_aradia.png' } },
+  { aspect: 'Blood',  cls: 'Seer',   char: { name: 'Kankri Vantas',  img: './images/special/char_kankri.png', kankri: true } },
+  { aspect: 'Heart',  cls: 'Page'   },
+  { aspect: 'Doom',   cls: 'Rogue'  },
+  { aspect: 'Void',   cls: 'Bard'   },
+  { aspect: 'Space',  cls: 'Heir'   },
+];
+
+const AspectButton = ({ entry, onNavigate }) => {
+  const { aspect, cls, char } = entry;
+  const path = `/classpect/${cls.toLowerCase()}-of-${aspect.toLowerCase()}`;
+
+  return (
+    <div
+      className="aspect-btn"
+      onClick={() => onNavigate(path)}
+      title={`${cls} of ${aspect}`}
+    >
+      <img
+        src={`./images/aspects/with-bg/${aspect.toLowerCase()}bg.png`}
+        className="aspect-img"
+        alt={aspect}
+      />
+
+      {/* Symmetry cuts — shown when no char, hidden by char image otherwise */}
+      <div className="cut-overlay">
+        <div className="cut-tl"/>
+        <div className="cut-br"/>
+        <div className="cut-slash"/>
+      </div>
+
+      {/* Character image fades in over the cut effect */}
+      {char && (
+        <img
+          src={char.img}
+          className={`char-img${char.kankri ? ' kankri' : ''}`}
+          alt={char.name}
+        />
+      )}
+
+      {/* Class name + optional character name */}
+      <div className="hover-overlay">
+        <div className="hover-class">{cls}</div>
+        {char && <div className="hover-char">{char.name}</div>}
+      </div>
+
+      <div className="aspect-label">{aspect}</div>
+    </div>
+  );
+};
+
+const SymmetryPage = () => {
+  const handleNavigate = path => { window.location.href = `./index.html#${path}`; };
+
+  return (
+    <div style={{ backgroundColor: defaultTheme.bg, minHeight: '100vh' }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme}/>
+      <div className="px-3 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <SearchBar onNavigate={handleNavigate} theme={defaultTheme}/>
+        </div>
+      </div>
+
+      <div className="px-3 sm:px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div style={{
+            backgroundColor: defaultTheme.contentBg,
+            color: defaultTheme.textColor,
+            padding: '24px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+            border: `2px solid ${defaultTheme.accentBg}`,
+          }}>
+            <div className="text-center mb-4">
+              <h1 className="font-typostuck-title mb-3">Symmetry</h1>
+              <p className="font-courier" style={{ fontSize: '0.95rem', color: '#374151', maxWidth: '600px', margin: '0 auto', lineHeight: '1.7' }}>
+                A classpect is <strong>Symmetric</strong> when its Class value and Aspect value are equal.
+                These classpects might well be termed "extreme": the implications of the Class and Aspect involved
+                compound on top of each other, which, although potentially quite strong, might imply an unstable personality
+                or otherwise tricky teammate. This is not always the case, of course; if one with a symmetric classpect stays steady,
+                they may prove to be the strongest member of their team.
+              </p>
+            </div>
+
+            <div className="aspect-grid">
+              {SYMMETRIC.map(entry => (
+                <AspectButton key={entry.aspect} entry={entry} onNavigate={handleNavigate}/>
+              ))}
+            </div>
+          </div>
+          <Footer theme={defaultTheme}/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<SymmetryPage/>);
+</script>
+</body>
+</html>

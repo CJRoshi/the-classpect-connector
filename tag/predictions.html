@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Predictions - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="../images/special/CCLogoRegular.png" />
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../components/mobile.css">
+
+  <script type="text/babel" src="../components/constants.js"></script>
+  <script type="text/babel" src="../components/header.js"></script>
+  <script type="text/babel" src="../components/searchbar.js"></script>
+  <script type="text/babel" src="../components/footer.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('../fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+
+    .font-courier      { font-family: 'Courier New', monospace; }
+    .font-courier-bold { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem; font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem; font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem; font-weight: normal;
+    }
+    .homestuck-command {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold; font-size: 1.25rem; color: #000;
+    }
+    .homestuck-command-dark {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold; font-size: 1.25rem; color: #fff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { width: 100%; min-height: 100vh; font-family: 'Courier New', monospace; }
+
+    .symbol-img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      flex-shrink: 0;
+      opacity: 0.85;
+    }
+
+    .handle {
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      opacity: 0.6;
+      font-style: italic;
+    }
+
+    .section-divider {
+      border: none;
+      border-top: 2px solid #a0a0a0;
+      margin: 20px 0;
+    }
+
+    .prediction-note {
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      color: #6b7280;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    /* ── MOBILE ──────────────────────────────────────────── */
+    @media (max-width: 639px) {
+      .symbol-img { width: 22px; height: 22px; }
+      .font-typostuck-header { font-size: 1.35rem; }
+      .gov-name-hint { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const defaultTheme = {
+  bg: "#626262", contentBg: "#d0d0d0",
+  textColor: "#000000", accentBg: "#a0a0a0", isDark: false,
+};
+
+// ── DATA ──────────────────────────────────────────────────
+
+const OMEGA_KIDS = [
+  {
+    name: 'Vrissy',
+    fullName: 'Vriska Maryam-Lalonde',
+    handle: 'adamantGriftress',
+    color: '#005682',
+    classpect: ['Thief', 'Mind'],
+    symbol: '../images/special/symbols/scorpio.webp',
+  },
+  {
+    name: 'Tavvy',
+    fullName: 'Tavros Crocker',
+    handle: 'glutinousGymnast',
+    color: '#2b0057',
+    classpect: ['Heir', 'Rage'],
+    symbol: null,
+  },
+  {
+    name: 'Harry',
+    fullName: 'Harry Anderson Egbert',
+    handle: 'thespiansGlamor',
+    color: '#0671cd',
+    classpect: ['Page', 'Space'],
+    symbol: null,
+  },
+  {
+    name: 'Yiffy',
+    fullName: 'Yiffany Longstocking Lalonde-Harley',
+    handle: null,
+    color: '#d00009',
+    classpect: ['Bard', 'Blood'],
+    symbol: null,
+  },
+];
+
+const DELTA_KIDS = [
+  {
+    name: "Ly'lac",
+    handle: 'gavageCunctation',
+    fullTitle: "of the Final Applause",
+    color: '#8e5594',
+    classpect: ['Witch', 'Doom'],
+    symbol: '../images/special/symbols/lylacsymbol.webp',
+    note: null,
+  },
+  {
+    name: 'Dagger',
+    handle: 'cloisteredConnoisewer',
+    color: '#018e71',
+    classpect: ['Seer', 'Heart'],
+    symbol: '../images/special/symbols/daggersymbol.webp',
+    note: null,
+  },
+  {
+    name: 'auguryAside',
+    handle: 'auguryAside',
+    color: '#801108',
+    classpect: ['Sylph', 'Time'],
+    symbol: '../images/special/symbols/aasymbol.webp',
+    note: null,
+  },
+  {
+    name: 'Swiss Elysi',
+    handle: 'agamemnonsTheory',
+    fullGovName: "SWISS ELYSI, WARD OF THE EIGHTH REGION (01ST DISTRICT), COHORT CAPTAIN OF HONEYFALL GYMNASIKKOU'S CLASS OF 4005",
+    color: '#9aa4b0',
+    classpect: ['Mage', 'Life'],
+    symbol: '../images/special/symbols/swisssymbol.webp',
+  },
+  {
+    name: 'tinnitusChakra',
+    handle: 'tinnitusChakra',
+    color: '#701dff',
+    classpect: ['Maid', 'Void'],
+    symbol: '../images/special/symbols/tcsymbol.webp',
+    note: null,
+  },
+  {
+    name: 'championsTirade',
+    handle: 'championsTirade',
+    color: '#81ce42',
+    classpect: ['Knight', 'Hope'],
+    symbol: '../images/special/symbols/ctsymbol.webp',
+    note: null,
+  },
+];
+
+const CharRow = ({ char }) => {
+  const [cls, asp] = char.classpect;
+  const path = `../index.html#/classpect/${cls.toLowerCase()}-of-${asp.toLowerCase()}`;
+
+  return (
+    <div className="border-l-4 pl-4 py-1" style={{ borderColor: char.color }}>
+      <div className="flex items-start gap-2">
+
+        {/* Symbol pinned to top of name block */}
+        {char.symbol && (
+          <img src={char.symbol} className="symbol-img" alt=""
+            style={{ filter: `drop-shadow(0 0 3px ${char.color}44)`, marginTop: '2px', flexShrink: 0 }}
+          />
+        )}
+
+        {/* Name block — all metadata + classpect link in one vertical stack */}
+        <div>
+          <div>
+            <span className="font-courier-bold" style={{ color: char.color, fontSize: 'clamp(0.9rem, 3.5vw, 1.1rem)' }}>
+              {char.name}
+            </span>
+            {char.fullTitle && (
+              <span className="font-courier" style={{ color: char.color, fontSize: '0.85rem', opacity: 0.75 }}>
+                {' '}{char.fullTitle}
+              </span>
+            )}
+          </div>
+          {char.fullName && (
+            <div className="handle" style={{ opacity: 0.55 }}>{char.fullName}</div>
+          )}
+          {char.handle && char.handle !== char.name && (
+            <div className="handle">{char.handle}</div>
+          )}
+          {char.fullGovName && (
+            <span
+              title={char.fullGovName}
+              className="handle gov-name-hint"
+              style={{ opacity: 0.45, cursor: 'help', userSelect: 'none' }}
+            >
+              (hover for full title)
+            </span>
+          )}
+          <div style={{ marginTop: '3px' }}>
+            <a href={path}
+              className="font-courier-bold hover:underline"
+              style={{ color: '#0000ee', textDecoration: 'none' }}>
+              {cls} of {asp}
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+// ── PAGE ──────────────────────────────────────────────────
+const PredictionsPage = () => {
+  const handleNavigate = path => { window.location.href = `../index.html#${path}`; };
+
+  return (
+    <div style={{ backgroundColor: defaultTheme.bg, minHeight: '100vh' }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme}/>
+
+      <div className="px-3 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <SearchBar onNavigate={handleNavigate} theme={defaultTheme}/>
+        </div>
+      </div>
+
+      <div className="px-3 sm:px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="content-box-mobile" style={{
+            backgroundColor: defaultTheme.contentBg,
+            color: defaultTheme.textColor,
+            padding: '24px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+            border: `2px solid ${defaultTheme.accentBg}`,
+          }}>
+            <div className="text-center mb-6">
+              <h1 className="font-typostuck-title mb-2">Beyond Canon Predictions</h1>
+              <p className="font-courier italic" style={{ fontSize: '0.95rem', color: '#4b5563' }}>
+                Beyond Canon classpect predictions for the Deltritus session.
+                <br/>
+                <span style={{ fontSize: '0.8rem' }}>Speculative. Subject to being catastrophically wrong.</span>
+              </p>
+            </div>
+
+            {/* Omega Kids */}
+            <h2 className="font-typostuck-header mb-3">Omega Kids</h2>
+            <p className="font-courier italic mb-3" style={{ fontSize: '0.82rem', color: '#6b7280' }}>
+              Children of the original cast, freshly ripped from Candy by a certain sp8der.
+            </p>
+            <div className="space-y-2 mb-6">
+              {OMEGA_KIDS.map(char => <CharRow key={char.name} char={char}/>)}
+            </div>
+
+            <hr className="section-divider"/>
+
+            {/* Delta Kids */}
+            <h2 className="font-typostuck-header mb-3">Delta Kids</h2>
+            <p className="font-courier italic mb-3" style={{ fontSize: '0.82rem', color: '#6b7280' }}>
+              The players already on Deltritus; Rose and Dirk's passive-aggressive offspring/proteges.
+            </p>
+            <div className="space-y-2">
+              {DELTA_KIDS.map(char => <CharRow key={char.name} char={char}/>)}
+            </div>
+
+          </div>
+          <Footer theme={defaultTheme}/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<PredictionsPage/>);
+</script>
+</body>
+</html>
