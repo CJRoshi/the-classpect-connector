@@ -11,8 +11,7 @@ const Header = ({ onNavigate, theme }) => {
     e.preventDefault();
     setMenuOpen(false);
     // Detect if we're in a subdirectory
-    const isInSubdirectory = window.location.pathname.includes('/tag/') ||
-                             window.location.pathname.split('/').filter(p => p).length > 1;
+    const isInSubdirectory = window.location.pathname.includes('/tag/');
 
     // If we're on an external page or in a subdirectory, go to index.html
     if (window.location.pathname.includes('.html') &&
@@ -30,16 +29,10 @@ const Header = ({ onNavigate, theme }) => {
     }
   };
 
-  // Detect if we're in subdirectory for relative paths
-  const isInSubdirectory = window.location.pathname.includes('/tag/') ||
-                           window.location.pathname.split('/').filter(p => p).length > 1;
-  const pathPrefix = isInSubdirectory ? '../' : './';
-
   // Choose logo based on theme and current location
   const getLogo = () => {
     // Detect if we're in a subdirectory (like /tag/)
-    const isInSubdirectory = window.location.pathname.includes('/tag/') ||
-                             window.location.pathname.split('/').filter(p => p).length > 1;
+    const isInSubdirectory = window.location.pathname.includes('/tag/');
     const pathPrefix = isInSubdirectory ? '../' : './';
 
     // Use theme logoPath if provided (for custom logos on specific pages)
@@ -77,6 +70,10 @@ const Header = ({ onNavigate, theme }) => {
       return pathPrefix + 'images/special/CCLogoDark.png';
     }
   };
+
+  // Detect if we're in subdirectory for relative paths
+  const isInSubdirectory = window.location.pathname.includes('/tag/');
+  const pathPrefix = isInSubdirectory ? '../' : './';
 
   // Shared styles
   const navLinkStyle = {
