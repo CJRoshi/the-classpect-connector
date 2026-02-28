@@ -27,7 +27,6 @@ The "Fresh Coat" Update (2/24/2026):
 - Hotfix 1 -- Site Logo Fix
 - Hotfix 2 -- Tag Routing Fix
 
-
 ### Past Updates
 
 Initial Release
