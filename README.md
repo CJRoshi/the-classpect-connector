@@ -8,6 +8,11 @@ Inspired by *Homestuck* by Andrew Hussie.
 
 ## Most Recent Update
 
+Lock The Taskbar (2/28/2026):
+
+- Changed some secret reactions to be unlockable
+- Made Kankri Buggier
+
 The "Fresh Coat" Update (2/24/2026):
 
 - Added more clickable tags to help sort classpects
@@ -21,6 +26,7 @@ The "Fresh Coat" Update (2/24/2026):
 
 - Hotfix 1 -- Site Logo Fix
 - Hotfix 2 -- Tag Routing Fix
+
 
 ### Past Updates
 

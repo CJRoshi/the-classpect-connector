@@ -27,28 +27,55 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
     table
   } = analysis;
 
-  const isCanon = (canonCharacters && canonCharacters.length > 0);
-  
+  // ── Unlock system ──────────────────────────────────────────────────────────
+  // Read which conditions have been met from localStorage (once, at render time).
+  const [unlockedSet] = React.useState(() => {
+    try {
+      return new Set(JSON.parse(localStorage.getItem('cc_unlocks') || '[]'));
+    } catch { return new Set(); }
+  });
+
+  // Build the effective render lists:
+  // - Characters with a regular reaction always appear.
+  // - Characters with an unlockable reaction appear (using that reaction) only
+  //   when their condition is met — indistinguishable from a normal card.
+  // - Characters with ONLY an unlockable reaction are invisible until unlocked.
+  const buildList = (chars) => {
+    const result = [];
+    chars.forEach(ch => {
+      if (ch.reaction && ch.reaction.length > 0) result.push(ch);
+      if (ch.unlockable && unlockedSet.has(ch.unlockable.condition)) {
+        result.push({ ...ch, reaction: ch.unlockable.reaction });
+      }
+    });
+    return result;
+  };
+
+  const visibleCanon    = buildList(canonCharacters);
+  const visibleNonCanon = buildList(nonCanonCharacters);
+  // ───────────────────────────────────────────────────────────────────────────
+
+  // "canon" tag: only count characters that have a visible regular reaction
+  const isCanon = canonCharacters.some(ch => ch.reaction && ch.reaction.length > 0);
+
   // Collect all tags from characters with this classpect
   const allTags = new Set();
-  
+
   // Add auto-computed tags
   if (isBalanced) allTags.add('balanced');
   if (isSymmetric) allTags.add('symmetric');
   if (isCanon) allTags.add('canon');
-  
-  // Add manual tags from all characters
-  if (canonCharacters) {
-    canonCharacters.forEach(char => {
-      if (char.tags && Array.isArray(char.tags)) {
-        char.tags.forEach(tag => allTags.add(tag));
-      }
-    });
-  }
-  
+
+  // Add manual tags from all characters (including unlockable-only ones)
+  [...canonCharacters, ...nonCanonCharacters].forEach(char => {
+    if (char.tags && Array.isArray(char.tags)) {
+      char.tags.forEach(tag => allTags.add(tag));
+    }
+  });
+
   // Convert to array (TagsDisplay will handle sorting)
   const tags = Array.from(allTags);
-  
+
   // Handler for tag clicks
   const handleTagClick = (route) => {
     if (route) {
@@ -83,7 +110,7 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
         {/* Reactions — full width on mobile, max-w-md on desktop */}
         <div className="flex flex-col gap-4 w-full md:w-auto md:max-w-md">
           {/* Canon reactions */}
-          {canonCharacters && canonCharacters.map((ch) => (
+          {visibleCanon && visibleCanon.map((ch) => (
             <div
               key={ch.name}
               style={{backgroundColor: "#eeeeee", borderLeft: "4px solid #f59e0b", padding: "0.75rem", fontSize: "0.875rem", fontFamily: "Courier New"}}
@@ -119,13 +146,13 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
           ))}
 
           {/* Non-canon reactions */}
-          {nonCanonCharacters && nonCanonCharacters.length > 0 && (
+          {visibleNonCanon && visibleNonCanon.length > 0 && (
             <>
               <div className="text-xs uppercase tracking-wide text-gray-500">
                 Non-Canon Reactions
               </div>
 
-              {nonCanonCharacters.map((ch) => (
+              {visibleNonCanon.map((ch) => (
                 <div
                   key={ch.name}
                   className="bg-yellow-50 border-l-4 border-gray-400 p-3 text-sm"
@@ -162,6 +189,7 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
               ))}
             </>
           )}
+
         </div>
       </div>
 

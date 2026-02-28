@@ -174,8 +174,9 @@ const ProspitPage = () => {
   }
   
   // Get all canon Prospit dreamers (including Dual dreamers)
+  // Exclude unlockable-only characters (no regular reaction) to avoid duplicates
   const prospitDreamers = Object.entries(characterData.canon)
-    .filter(([_, data]) => data.lunarsway === "Prospit" || data.lunarsway === "Dual")
+    .filter(([_, data]) => (data.lunarsway === "Prospit" || data.lunarsway === "Dual") && data.reaction && data.reaction.length > 0)
     .map(([name, data]) => ({
       name,
       classpect: data.classpect,

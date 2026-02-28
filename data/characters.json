@@ -644,6 +644,28 @@
         "cherubs"
       ]
     },
+    "Alt!Calliope": {
+      "color": "#ff0000",
+      "classpect": [
+        "Muse",
+        "Space"
+      ],
+      "lunarsway": "Prospit",
+      "unlockable": {
+        "condition": "visited_cherubs",
+        "reaction": [
+          {
+            "text": "i don't want to.",
+            "color": "#ff0000"
+          }
+        ]
+      },
+      "tags": [
+        "homestuck",
+        "beyond-canon",
+        "cherubs"
+      ]
+    },
     "Kalian Delfin": {
       "color": "#6a006a",
       "classpect": [
@@ -784,6 +806,46 @@
         }
       ]
     },
+    "Dawn Westwood": {
+      "color": "#999999",
+      "classpect": [
+        "Sylph",
+        "Heart"
+      ],
+      "lunarsway": "Prospit",
+      "unlockable": {
+        "condition": "visited_oc_session",
+        "reaction": [
+          {
+            "text": "[warmly] How do you do?",
+            "color": "#999999"
+          }
+        ]
+      },
+      "tags": [
+        "original-character"
+      ]
+    },
+    "Jace Ferreiro": {
+      "color": "#1B39E2",
+      "classpect": [
+        "Heir",
+        "Blood"
+      ],
+      "lunarsway": "Derse",
+      "unlockable": {
+        "condition": "visited_oc_session",
+        "reaction": [
+          {
+            "text": "<haha>---<cool.> sup.",
+            "color": "#1B39E2"
+          }
+        ]
+      },
+      "tags": [
+        "original-character"
+      ]
+    },
     "Thorn Derosin": {
       "color": "#1b7539",
       "classpect": [
@@ -791,12 +853,195 @@
         "Time"
       ],
       "lunarsway": "Dual",
-      "reaction": [
-        {
-          "text": "Mirë se erdhe.",
-          "color": "#1b7539"
-        }
+      "unlockable": {
+        "condition": "visited_oc_session",
+        "reaction": [
+          {
+            "text": "Mirë se erdhe.",
+            "color": "#1b7539"
+          }
+        ]
+      },
+      "tags": [
+        "original-character"
+      ]
+    },
+    "Nunki Aerwynn": {
+      "color": "#A24875",
+      "classpect": [
+        "Maid",
+        "Space"
       ],
+      "lunarsway": "Derse",
+      "unlockable": {
+        "condition": "visited_oc_session",
+        "reaction": [
+          {
+            "text": "oh em geeezzzzzz hi!! ö",
+            "color": "#A24875"
+          }
+        ]
+      },
+      "tags": [
+        "original-character"
+      ]
+    },
+    "Aonara Kruxit": {
+      "color": "#A2752A",
+      "classpect": [
+        "Thief",
+        "Doom"
+      ],
+      "lunarsway": "Derse",
+      "unlockable": {
+        "condition": "visited_oc_session",
+        "reaction": [
+          {
+            "text": "৹8৹i! Wh°⁸° g°⁸°es there?",
+            "color": "#A2752A"
+          }
+        ]
+      },
+      "tags": [
+        "original-character"
+      ]
+    },
+    "Vérité Agtier": {
+      "color": "#2A6648",
+      "classpect": [
+        "Knight",
+        "Breath"
+      ],
+      "lunarsway": "Prospit",
+      "unlockable": {
+        "condition": "visited_oc_session",
+        "reaction": [
+          {
+            "text": "bonnjouuur :p",
+            "color": "#2A6648"
+          }
+        ]
+      },
+      "tags": [
+        "original-character"
+      ]
+    },
+    "Hugo Méridien": {
+      "color": "#00F3CC",
+      "classpect": [
+        "Witch",
+        "Mind"
+      ],
+      "lunarsway": "Prospit",
+      "unlockable": {
+        "condition": "visited_oc_session",
+        "reaction": [
+          {
+            "text": "|-/-|mm. In|npressi\\|/e.",
+            "color": "#00F3CC"
+          }
+        ]
+      },
+      "tags": [
+        "original-character"
+      ]
+    },
+    "Mags Octavian": {
+      "color": "#005784",
+      "classpect": [
+        "Bard",
+        "Light"
+      ],
+      "lunarsway": "Prospit",
+      "unlockable": {
+        "condition": "visited_oc_session",
+        "reaction": [
+          {
+            "text": "Hey there, 8uddy. ;)",
+            "color": "#005784"
+          }
+        ]
+      },
+      "tags": [
+        "original-character"
+      ]
+    },
+    "River Aquinas": {
+      "color": "#F30000",
+      "classpect": [
+        "Rogue",
+        "Hope"
+      ],
+      "lunarsway": "Prospit",
+      "unlockable": {
+        "condition": "visited_oc_session",
+        "reaction": [
+          {
+            "text": "hello... we are alike, then...",
+            "color": "#F30000"
+          }
+        ]
+      },
+      "tags": [
+        "original-character"
+      ]
+    },
+    "Demir Aequals": {
+      "color": "#00A10C",
+      "classpect": [
+        "Seer",
+        "Void"
+      ],
+      "lunarsway": "Derse",
+      "unlockable": {
+        "condition": "visited_oc_session",
+        "reaction": [
+          {
+            "text": "Θ_Θ hi. stop snooping.",
+            "color": "#00A10C"
+          }
+        ]
+      },
+      "tags": [
+        "original-character"
+      ]
+    },
+    "Amurex Vissen": {
+      "color": "#750039",
+      "classpect": [
+        "Page",
+        "Life"
+      ],
+      "lunarsway": "Derse",
+      "unlockable": {
+        "condition": "visited_oc_session",
+        "reaction": [
+          {
+            "text": "haha yeah i had a feelinn youd be snnoopinn",
+            "color": "#750039"
+          }
+        ]
+      },
+      "tags": [
+        "original-character"
+      ]
+    },
+    "Imoita Kruxit": {
+      "color": "#A2752A",
+      "classpect": [
+        "Prince",
+        "Rage"
+      ],
+      "lunarsway": "Derse",
+      "unlockable": {
+        "condition": "visited_oc_session",
+        "reaction": [
+          {
+            "text": "Dω ⚵ haʌe tω?",
+            "color": "#A2752A"
+          }
+        ]
+      },
       "tags": [
         "original-character"
       ]

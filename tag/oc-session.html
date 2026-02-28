@@ -315,6 +315,21 @@ const SessionPage = () => {
   const [muted, setMuted]         = React.useState(false);
   const handleNavigate = path => { window.location.href = `../index.html#${path}`; };
 
+  // Unlock trigger — mark visited_oc_session in localStorage on first visit
+  React.useEffect(() => {
+    try {
+      const existing = JSON.parse(localStorage.getItem('cc_unlocks') || '[]');
+      if (!existing.includes('visited_oc_session')) {
+        const updated = [...existing, 'visited_oc_session'];
+        localStorage.setItem('cc_unlocks', JSON.stringify(updated));
+        // Play item-get sound to signal the unlock
+        const a = new Audio('../snd/ItemGetNoVoice.mp3');
+        a.volume = 0.75;
+        a.play().catch(() => {});
+      }
+    } catch {}
+  }, []);
+
   const playSound = (name) => {
     if (muted) return;
     const a = new Audio(`../snd/${name}.wav`);

@@ -130,11 +130,13 @@ const TAG_METADATA = {
     route: null
   },
   
-  // Non-canon special tags (no routes)
+  // Non-canon special tags
   'original-character': {
-    label: 'Original Character',
+    label: 'CounterQuest',
     color: '#757575',
-    route: '/tag/oc-session'
+    route: '/tag/oc-session',
+    // Route is only active once the OC session page has been visited
+    unlockCondition: 'visited_oc_session'
   },
   'sweetbroandhellajeff': {
     label: 'Sweet Bro and Hella Jeff',
@@ -196,13 +198,25 @@ const TagBadge = ({ tag, onClick }) => {
     route: null
   };
   
+  // If this tag has an unlock condition, hide it entirely until met
+  const conditionMet = !metadata.unlockCondition || (() => {
+    try {
+      return JSON.parse(localStorage.getItem('cc_unlocks') || '[]')
+        .includes(metadata.unlockCondition);
+    } catch { return false; }
+  })();
+
+  if (!conditionMet) return null;
+
+  const effectiveRoute = metadata.route;
+
   const handleClick = () => {
-    if (metadata.route && onClick) {
-      onClick(metadata.route);
+    if (effectiveRoute && onClick) {
+      onClick(effectiveRoute);
     }
   };
-  
-  const isClickable = metadata.route !== null;
+
+  const isClickable = effectiveRoute !== null;
   
   // Determine colors (with hover swap support)
   const bgColor = (isHovered && metadata.hoverColor) ? metadata.hoverColor : metadata.color;

@@ -112,23 +112,33 @@
     }
     
     .symbols-container {
-      position: relative;
+      position: absolute;
+      inset: 0;
       z-index: 10;
-      display: flex;
-      gap: 500px;
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
     }
-    
+
+    /* Each symbol is anchored by its own center at a fixed offset from the
+       container center — guarantees symmetry regardless of image widths. */
     .symbol-wrapper {
-      position: relative;
+      position: absolute;
+      top: 50%;
+      left: 50%;
       cursor: pointer;
       transition: transform 0.3s ease;
     }
-    
-    .symbol-wrapper:hover {
-      transform: scale(1.05);
+
+    .symbol-wrapper:first-child {
+      transform: translate(calc(-50% - 240px), -50%);
+    }
+    .symbol-wrapper:first-child:hover {
+      transform: translate(calc(-50% - 240px), -50%) scale(1.05);
+    }
+
+    .symbol-wrapper:last-child {
+      transform: translate(calc(-50% + 240px), -50%);
+    }
+    .symbol-wrapper:last-child:hover {
+      transform: translate(calc(-50% + 240px), -50%) scale(1.05);
     }
     
     .symbol-image {
@@ -162,19 +172,21 @@
     
     /* Tablet */
     @media (max-width: 1200px) {
-      .symbols-container {
-        gap: 400px;
-      }
-      
+      .symbol-wrapper:first-child      { transform: translate(calc(-50% - 190px), -50%); }
+      .symbol-wrapper:first-child:hover{ transform: translate(calc(-50% - 190px), -50%) scale(1.05); }
+      .symbol-wrapper:last-child       { transform: translate(calc(-50% + 190px), -50%); }
+      .symbol-wrapper:last-child:hover { transform: translate(calc(-50% + 190px), -50%) scale(1.05); }
+
       .background-layer {
         max-height: 70vh;
       }
     }
-    
+
     @media (max-width: 1024px) {
-      .symbols-container {
-        gap: 350px;
-      }
+      .symbol-wrapper:first-child      { transform: translate(calc(-50% - 160px), -50%); }
+      .symbol-wrapper:first-child:hover{ transform: translate(calc(-50% - 160px), -50%) scale(1.05); }
+      .symbol-wrapper:last-child       { transform: translate(calc(-50% + 160px), -50%); }
+      .symbol-wrapper:last-child:hover { transform: translate(calc(-50% + 160px), -50%) scale(1.05); }
     }
     
     /* Mobile - vertical layout */
@@ -285,7 +297,21 @@ const darkTheme = {
 
 const EarthCPage = () => {
   const [hoveredSide, setHoveredSide] = useState(null);
-  
+
+  // Unlock trigger — mark visited_cherubs in localStorage on first visit
+  React.useEffect(() => {
+    try {
+      const existing = JSON.parse(localStorage.getItem('cc_unlocks') || '[]');
+      if (!existing.includes('visited_cherubs')) {
+        const updated = [...existing, 'visited_cherubs'];
+        localStorage.setItem('cc_unlocks', JSON.stringify(updated));
+        const a = new Audio('../snd/ItemGetNoVoice.mp3');
+        a.volume = 0.75;
+        a.play().catch(() => {});
+      }
+    } catch {}
+  }, []);
+
   const handleNavigate = (path) => {
     window.location.href = `../index.html#${path}`;
   };

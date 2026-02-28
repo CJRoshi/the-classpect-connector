@@ -158,8 +158,9 @@ const DersePage = () => {
   }
   
   // Get all canon Derse dreamers (including Dual dreamers)
+  // Exclude unlockable-only characters (no regular reaction) to avoid duplicates
   const derseDreamers = Object.entries(characterData.canon)
-    .filter(([_, data]) => data.lunarsway === "Derse" || data.lunarsway === "Dual")
+    .filter(([_, data]) => (data.lunarsway === "Derse" || data.lunarsway === "Dual") && data.reaction && data.reaction.length > 0)
     .map(([name, data]) => ({
       name,
       classpect: data.classpect,

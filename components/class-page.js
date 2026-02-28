@@ -15,9 +15,10 @@ const ClassPage = ({className, onNavigate, theme}) => {
   // Get all classpects with this class
   const allClasspects = Object.keys(aspectsNumeric).map(a => [className, a]);
   
-  // Get canon examples
+  // Get canon examples — exclude unlockable-only characters (no regular reaction)
+  // so they don't appear as duplicates before being discovered on classpect pages
   const canonExamples = Object.entries(characterData.canon)
-  .filter(([_, data]) => data.classpect[0] === className)
+  .filter(([_, data]) => data.classpect[0] === className && data.reaction && data.reaction.length > 0)
   .map(([name, data]) => ({
     name,
     classpect: data.classpect
