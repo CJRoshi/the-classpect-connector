@@ -977,7 +977,7 @@
         "condition": "visited_oc_session",
         "reaction": [
           {
-            "text": "hello... we are alike, then...",
+            "text": "hello... are you like me...?",
             "color": "#F30000"
           }
         ]
@@ -997,7 +997,7 @@
         "condition": "visited_oc_session",
         "reaction": [
           {
-            "text": "Θ_Θ hi. stop snooping.",
+            "text": "Θ_Θ hi. if y∵u'r∴ l∵∵king f∵r m∴ you'r∴ in th∴ right place ig. ign∵r∴ th∴ ∵th∴r guy.",
             "color": "#00A10C"
           }
         ]
@@ -1017,7 +1017,7 @@
         "condition": "visited_oc_session",
         "reaction": [
           {
-            "text": "haha yeah i had a feelinn youd be snnoopinn",
+            "text": "haha yeah im practically irresistible, whats up",
             "color": "#750039"
           }
         ]
