@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>The Classpect Connector</title>
+  <script>
+    // GitHub Pages SPA redirect trick
+    // When someone navigates to a clean URL like /classpect/knight-of-time,
+    // GitHub Pages serves this 404.html. We detect the route and redirect
+    // to the hash-based version so the router can handle it.
+    (function () {
+      var path = window.location.pathname;
+
+      // Match known route patterns within the path
+      var routeMatch = path.match(
+        /\/(classpect\/[^/?#]+-of-[^/?#]+|class\/[^/?#]+|aspect\/[^/?#]+|balanced|symmetric|canon|prospit|derse|about|faq|theory|credits)/
+      );
+
+      if (routeMatch) {
+        // Strip everything before the route to find the app base URL
+        var base = path.slice(0, path.indexOf(routeMatch[0]));
+        var redirectUrl =
+          window.location.origin +
+          base +
+          '/index.html#/' +
+          routeMatch[1] +
+          window.location.search;
+        window.location.replace(redirectUrl);
+      } else {
+        // Unknown path — just go to the app root
+        var appRoot = path.replace(/\/[^/]*$/, '/') || '/';
+        window.location.replace(window.location.origin + appRoot + 'index.html');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <p style="font-family: 'Courier New', monospace; text-align: center; margin-top: 4rem; color: #626262;">
+    Redirecting&hellip;
+  </p>
+</body>
+</html>

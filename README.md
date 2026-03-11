@@ -8,6 +8,10 @@ Inspired by *Homestuck* by Andrew Hussie.
 
 ## Most Recent Update
 
+SEO Suffering (3/12/2026):
+
+- Added a bunch of changes to make the site indexable and searchable
+
 Lock The Taskbar (2/28/2026):
 
 - Changed some secret reactions to be unlockable

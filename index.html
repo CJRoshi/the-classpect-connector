@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Classpect Connector</title>
+  <meta name="description" id="meta-description" content="A fan-made reference tool for exploring every Homestuck classpect combination, with numeric values, rotation graphs, and character listings." />
+  <meta property="og:title" id="og-title" content="The Classpect Connector" />
+  <meta property="og:description" id="og-description" content="A fan-made reference tool for exploring every Homestuck classpect combination, with numeric values, rotation graphs, and character listings." />
+  <meta property="og:type" content="website" />
   <link rel="icon" type="image/png" href="./images/special/CCLogoRegular.png" />
 
   <!-- React 18 -->
@@ -563,7 +567,46 @@ const App = () => {
       window.removeEventListener('hashchange', handleHashChange);
     };
   }, []);
-  
+
+  // Update document title and meta description on route change
+  useEffect(() => {
+    const siteName = 'The Classpect Connector';
+    let title = siteName;
+    let description = 'A fan-made reference tool for exploring every Homestuck classpect combination, with numeric values, rotation graphs, and character listings.';
+
+    if (path.startsWith('/classpect/')) {
+      const [c, a] = path.replace('/classpect/', '').split('-of-');
+      const cn = Object.keys(classesNumeric).find(x => x.toLowerCase() === c);
+      const an = Object.keys(aspectsNumeric).find(x => x.toLowerCase() === a);
+      if (cn && an) {
+        title = `${cn} of ${an} — ${siteName}`;
+        description = `Data on the ${cn} of ${an} classpect: numeric value, rotation graph, and character reactions.`;
+      }
+    } else if (path.startsWith('/class/')) {
+      const c = path.replace('/class/', '');
+      const cn = Object.keys(classesNumeric).find(x => x.toLowerCase() === c);
+      if (cn) {
+        title = `The ${cn} Class — ${siteName}`;
+        description = `All ${cn} info and canon character listings for the ${cn} class.`;
+      }
+    } else if (path.startsWith('/aspect/')) {
+      const a = path.replace('/aspect/', '');
+      const an = Object.keys(aspectsNumeric).find(x => x.toLowerCase() === a);
+      if (an) {
+        title = `The ${an} Aspect — ${siteName}`;
+        description = `All ${an} info and canon character listings for the ${an} aspect.`;
+      }
+    }
+
+    document.title = title;
+    const metaDesc = document.getElementById('meta-description');
+    if (metaDesc) metaDesc.setAttribute('content', description);
+    const ogTitle = document.getElementById('og-title');
+    if (ogTitle) ogTitle.setAttribute('content', title);
+    const ogDesc = document.getElementById('og-description');
+    if (ogDesc) ogDesc.setAttribute('content', description);
+  }, [path]);
+
   // Determine theme based on current path
   const getTheme = () => {
     if (path.startsWith("/aspect/")) {
