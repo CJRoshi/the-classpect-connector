@@ -34,9 +34,9 @@ const ClassPage = ({className, onNavigate, theme}) => {
         <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#4b5563"}}>Numeric Value: {value>=0?"+":""}{value}</p>
       </div>
       
-      {/* Inversions Table */}
+      {/* Relations Table */}
       <div className="p-4 rounded" style={{backgroundColor: theme?.isDark ? "#1a1a1a" : "#ffffff"}}>
-        <h2 className={theme?.isDark ? "homestuck-command-dark mb-3 text-center" : "homestuck-command mb-3 text-center"}>Inversions</h2>
+        <h2 className={theme?.isDark ? "homestuck-command-dark mb-3 text-center" : "homestuck-command mb-3 text-center"}>Relations</h2>
         <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'8px'}}>
           {[
             ['Pair',      inverses[0]],

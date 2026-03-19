@@ -202,9 +202,9 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
         theme={theme}
       />
 
-      {/* Pairwise Inverses */}
+      {/* Pairwise Related */}
       <Section 
-        title="Pairwise Inverses" 
+        title="Pairwise Related" 
         entries={pairwiseInverses} 
         onNavigate={onNavigate}
         theme={theme}
