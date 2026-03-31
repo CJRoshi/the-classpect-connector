@@ -144,8 +144,10 @@ const DELTA_KIDS = [
     note: null,
   },
   {
-    name: 'Dagger',
+    name: "Del'fi",
     handle: 'cloisteredConnoisewer',
+    fullTitle: "Who Aches to Be",
+    hoverDetailName: "Dagger Tartarus, The Forgotten Hostage",
     color: '#018e71',
     classpect: ['Seer', 'Heart'],
     symbol: '../images/special/symbols/daggersymbol.webp',
@@ -162,7 +164,7 @@ const DELTA_KIDS = [
   {
     name: 'Swiss Elysi',
     handle: 'agamemnonsTheory',
-    fullGovName: "SWISS ELYSI, WARD OF THE EIGHTH REGION (01ST DISTRICT), COHORT CAPTAIN OF HONEYFALL GYMNASIKKOU'S CLASS OF 4005",
+    hoverDetailName: "SWISS ELYSI, WARD OF THE EIGHTH REGION (01ST DISTRICT), COHORT CAPTAIN OF HONEYFALL GYMNASIKKOU'S CLASS OF 4005",
     color: '#9aa4b0',
     classpect: ['Page', 'Blood'],
     symbol: '../images/special/symbols/swisssymbol.webp',
@@ -218,13 +220,13 @@ const CharRow = ({ char }) => {
           {char.handle && char.handle !== char.name && (
             <div className="handle">{char.handle}</div>
           )}
-          {char.fullGovName && (
+          {char.hoverDetailName && (
             <span
-              title={char.fullGovName}
+              title={char.hoverDetailName}
               className="handle gov-name-hint"
               style={{ opacity: 0.45, cursor: 'help', userSelect: 'none' }}
             >
-              (hover for full title)
+              (hover for more details)
             </span>
           )}
           <div style={{ marginTop: '3px' }}>
