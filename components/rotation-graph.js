@@ -22,7 +22,7 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
   const y = aspectsNumeric[aspectName];
 
   const scale = 30;
-  const centerX = 250;
+  const centerX = 280;
   const centerY = 200;
 
   const toSvgX = (val) => centerX + val * scale;
@@ -353,7 +353,7 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
                   {!imgFailed ? (
                     <image
                       href={`./images/aspects/no-bg/${asp.toLowerCase()}.webp`}
-                      x={toSvgX(7) + 10}
+                      x={toSvgX(-7) - 34}
                       y={toSvgY(aspValue) - 12}
                       width="24"
                       height="24"
@@ -368,7 +368,7 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
                     />
                   ) : (
                     <text
-                      x={toSvgX(7) + 22}
+                      x={toSvgX(-7) - 22}
                       y={toSvgY(aspValue) + 4}
                       textAnchor="middle"
                       fontSize="9"
