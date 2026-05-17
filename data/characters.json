@@ -788,6 +788,23 @@
         "beyond-canon",
         "influencer"
       ]
+    },
+    "Xefros Tritoh": {
+      "color": "#a10000",
+      "classpect": [
+        "Page",
+        "Rage"
+      ],
+      "lunarsway": "Derse",
+      "reaction": [
+        {
+          "text": "oh this is very Xciting X:)",
+          "color": "#a10000"
+        }
+      ],
+      "tags": [
+        "hiveswap"
+      ]
     }
   },
   "nonCanon": {
