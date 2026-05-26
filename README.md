@@ -8,6 +8,17 @@ Inspired by *Homestuck* by Andrew Hussie.
 
 ## Most Recent Update
 
+Scryer Sepulchre (5/26/2026):
+
+- Added Rungs page, Rungs tags
+- Added Leadership to Classpect Pages
+- Improved Graph QOL
+- New Theory for the Session Scryer
+- New FAQ/Glossary entries for the Session Scryer
+- More things in the header
+- Touchups to many tag pages
+- Made Kankri Buggier
+
 SEO Suffering (3/12/2026):
 
 - Added a bunch of changes to make the site indexable and searchable
@@ -17,15 +28,6 @@ Lock The Taskbar (2/28/2026):
 - Changed some secret reactions to be unlockable
 - Made Kankri Buggier
 
-The "Fresh Coat" Update (2/24/2026):
-
-- Added more clickable tags to help sort classpects
-- (Each of these tags has its own index page)
-- Massive overhauls of most pages to accomodate mobile users
-- Lots of secrets and goodies
-- One [S] page
-- Made Kankri Buggier
-
 ### Hotfixes
 
 - Hotfix 1 -- Site Logo Fix
@@ -33,7 +35,8 @@ The "Fresh Coat" Update (2/24/2026):
 
 ### Past Updates
 
-Initial Release
+- Initial Release
+- The "Fresh Coat" Upd8
 
 ## What It Does
 
@@ -63,6 +66,7 @@ You can also browse:
 ├── prospit.html                # Prospit dreamers
 ├── derse.html                  # Derse dreamers
 ├── theory.html                 # Extended theory notes
+├── rungs.html                  # Rungs notes and views
 ├── faq.html                    # FAQ
 ├── credits.html                # Credits
 │

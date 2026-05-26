@@ -126,6 +126,41 @@ const TheoryPage = () => {
           </a>
         </div>
       </div>
+
+      {/* Secondary quick-nav for ADDENDUM 1. Same .nav-box treatment as
+          the primary nav so the two boxes read as a matched pair stacked
+          above the body. Distinct heading + amber-yellow link tint helps
+          the user tell at a glance which nav routes into which half of
+          the page. */}
+      <div className="nav-box">
+        <h3 className="font-verdana mb-3 text-center">Addendum 1: Analyzing Sessions</h3>
+        <div className="grid md:grid-cols-2 gap-2 font-courier text-sm">
+          <a href="#addendum1-intro" className="underline" style={{color: '#0000ee'}}>
+            {'>'} Background/Introduction
+          </a>
+          <a href="#addendum1-part1" className="underline" style={{color: '#0000ee'}}>
+            {'>'} Part 1: Balance and Representative Classpect
+          </a>
+          <a href="#addendum1-part2" className="underline" style={{color: '#0000ee'}}>
+            {'>'} Part 2: Weight and Discord
+          </a>
+          <a href="#addendum1-part3" className="underline" style={{color: '#0000ee'}}>
+            {'>'} Part 3: Game Quality, Chaos, and Regularity
+          </a>
+          <a href="#addendum1-part4" className="underline" style={{color: '#0000ee'}}>
+            {'>'} Part 4: Rungs
+          </a>
+          <a href="#addendum1-part5" className="underline" style={{color: '#0000ee'}}>
+            {'>'} Part 5: Leadership
+          </a>
+          <a href="#addendum1-part6" className="underline" style={{color: '#0000ee'}}>
+            {'>'} Part 6: Further Omens (Siblings and Shadows Part II)
+          </a>
+          <a href="#addendum1-part7" className="underline" style={{color: '#0000ee'}}>
+            {'>'} Part 7: Conclusion
+          </a>
+        </div>
+      </div>
       
       <div className="font-courier space-y-6" style={{lineHeight: '1.6'}}>
         <p>
@@ -699,8 +734,474 @@ const TheoryPage = () => {
           </p>
           
           <p className="mb-4">
-            And finally, I want to give special thanks to YOU, the reader. This was a lot of theory, and I'm glad you 
+            And finally, I want to give special thanks to YOU, the reader. This was a lot of theory, and I'm glad you
             read all of it.
+          </p>
+        </div>
+
+        {/* ============================================================
+            ADDENDUM 1: Analyzing Sessions
+            Author: Nino, May 2026
+            Mirrors the main theory's structural pattern:
+              - chapter-break <hr/> + small h1 acting as the "you are
+                entering a new chapter" marker
+              - Background/Intro h2 sub-section
+              - mid-body splash h1 ("ADDENDUM 1: Analyzing Sessions"
+                in font-typostuck-title) — same dramatic-reveal beat
+                the main theory uses with "Classpecting: Graphs,
+                Rotations, and Groups"
+              - Parts 1-7, h2 each, with figures from
+                ./images/figures/ (example_1.png, Rung13.png)
+            ============================================================ */}
+
+        <hr className="my-12 border-t-2 border-gray-700"/>
+
+        <h1 id="addendum1-intro" className="font-typostuck-title text-center mb-2">
+          ADDENDUM 1: Analyzing Sessions
+        </h1>
+        <p className="text-center text-sm mb-6">(For users of <a href="https://cjroshi.github.io/the-session-scryer/" target="_blank" rel="noopener noreferrer" className="underline" style={{color: '#0000ee'}}>The Session Scryer</a>.)</p>
+
+        {/* Background / Intro */}
+        <div className="pt-6">
+          <h2 className="font-typostuck-header mb-4">Background/Introduction</h2>
+
+          <p className="mb-4">
+            Shortly after the release of this site, I wanted to start exploring the theory a little more.
+            Considering that the Connector is already focused on connections between classpects (I mean, it's
+            in the name), the natural extension of its theory would be to the group dynamics of a whole
+            session. It became clear relatively early on that the rotations/reflections graph from the
+            Connector would serve as an interesting visual and mathematical space to explore these
+            connections. As a result, most of the new theory here is really just interpretive of the
+            mathematical space that was created with the Connector, alongside new addenda to its original
+            theories.
+          </p>
+
+          <p className="mb-4">I landed on a set of core statistics that would be important to a session:</p>
+
+          <ul className="list-disc ml-8 mb-4 space-y-1">
+            <li>Its active-passive <em>Balance</em>, which represents exactly what it claims to represent</li>
+            <li>Its Avatar or <em>Representative Classpect</em>, which could be used by a classpector to compare the story of a session to that of an individual</li>
+            <li>The Weight or <em>Essentiality</em>, a measure of how important each member is to the over-all result of the session</li>
+            <li>The <em>Discord</em>, a measure of how well the group works together</li>
+            <li>Its <em>Game Quality</em>, formed by two separate measurements of <em>Chaos &amp; Order</em> relating to the <i>shape</i> formed by your team on the graph, and how space-consuming (Chaos) and regular (Order) it is</li>
+            <li>Its <em>Representative Rung</em>, a symbolic anchor based on the Rungs of each individual member</li>
+            <li>The players which are <em>Oddest Out</em> and <em>Closest-Knit</em></li>
+            <li>A ranking of every player by their <em>Leadership</em> score, as well as a classification of their leadership type</li>
+          </ul>
+
+          <p className="mb-4">
+            While none of these alone are an exact answer to "How Would This Session Go?", an author who
+            enjoys interpreting these little statistics might be able to form a story from them, taken
+            altogether. With that out of the way, let's get to the main title of this Addendum:
+          </p>
+
+          <h1 className="font-typostuck-title text-center my-8">
+            ADDENDUM 1: Analyzing Sessions
+          </h1>
+        </div>
+
+        {/* Part 1: Balance and Representative Classpect */}
+        <div id="addendum1-part1" className="pt-6">
+          <h2 className="font-typostuck-header mb-4">Part 1: Balance and Representative Classpect</h2>
+
+          <p className="mb-4">
+            Balance is the simplest and most intuitive statistic here. In fact, Bell and I both tried doing
+            session sums even before the release of the Connector, simply as a numerical exercise and out of
+            a desire to see where the theory could be taken. Its operating premise is as follows:
+          </p>
+
+          <ol className="list-decimal ml-8 mb-4 space-y-1">
+            <li>Take the sum of all Class values</li>
+            <li>Take the sum of all Aspect values</li>
+            <li>Add these to get the Session Sum</li>
+            <li>See how unusual this sum value is</li>
+          </ol>
+
+          <p className="mb-4">
+            What do I mean by "unusual"? I mean this in a statistics sense. For a lot of the session
+            statistics here, I actually ran Monte Carlo simulations on millions of randomly-generated
+            sessions in order to find a proper mean value and standard deviation. Now, no matter what the
+            number of players is for this statistic, there is symmetry about zero, so the mean is going to
+            be exactly that, zero&mdash; but the sigma value is dependent both on the number of players and
+            whether or not you allow sessions to repeat classes, aspects, or both. This creates four
+            "rules": A, where both are repeated (uncapped); B, where classes may be duplicated, but not
+            aspects (max 12); C, where aspects may be duplicated, but not classes (max 14); and D, the rule
+            for a "canonical session" where neither classes nor aspects are repeated (max 12). It would be
+            a little boring to reveal what numerical borders trigger different reaction text here&mdash; and,
+            moreover, it is very easy to find this out yourself by punching in single sessions&mdash; so I
+            won't do that here.
+          </p>
+
+          <p className="mb-4">
+            In terms of interpretation, Balance is pretty obviously a metric about the overall disposition
+            of your team, how it solves problems, and how it interacts with the broader narrative. The
+            general idea, (although you, the reader, may certainly add to it) is that a passive session
+            leans more towards letting the events of the game happen as they will, while an active one
+            tends to be more involved in the authoring of those events, MAKING IT HAPPEN if you will.
+          </p>
+
+          <p className="mb-4">
+            The Representative Classpect is also a relatively simple statistic. In operative terms it is
+            simply a centroid&mdash; that is, the mean class and mean aspect of the session, rounded to nearest
+            grid point. In the event that either (or both) of these are close to 0, the point gets rounded
+            to (0, 0), which is hereafter referred to as "Nexus" (because "Origin" is boring).
+          </p>
+
+          <p className="mb-4">
+            My lens of interpretation for this statistic is based on the fact that as stories have
+            narratives, the characters within have arcs. Essentially, the avatar of a session might
+            represent <i>its narrative</i> in microcosm, doubly so if this classpect is also a member of
+            that session. It could certainly be expanded, but this is serviceable. If the avatar is Nexus, I
+            treat it as an inconclusive result&mdash; there are many potential paths which lie ahead.
+          </p>
+        </div>
+
+        {/* Part 2: Weight and Discord */}
+        <div id="addendum1-part2" className="pt-6">
+          <h2 className="font-typostuck-header mb-4">Part 2: Weight and Discord</h2>
+
+          <p className="mb-4">
+            Both of these statistics have to do with mean distances, but of different sorts, which is why I
+            am bundling them together.
+          </p>
+
+          <p className="mb-4">Weight, also known as Essentiality, operates as follows:</p>
+
+          <ol className="list-decimal ml-8 mb-4 space-y-1">
+            <li>Find the centroid</li>
+            <li>Take every member's Euclidean distance to the centroid</li>
+            <li>Average this out</li>
+            <li>See how unusual this value is</li>
+          </ol>
+
+          <p className="mb-4">
+            If you understood how Balance worked above, this is much the same, and Monte Carlo Methods
+            (MCMs) were used to simulate and find appropriate means and standard deviations for this
+            statistic as well.
+          </p>
+
+          <p className="mb-4">
+            I interpret this statistic as "How essential is each member to the overall result of the
+            session?" If this statistic lies on the low end, you might have one or two members who are
+            dominating the story being told. If it's on the high end, everyone is roughly the same in
+            terms of over-all importance&mdash; and they're all important.
+          </p>
+
+          <p className="mb-4">Discord, also known as Conflict, operates as follows:</p>
+
+          <ol className="list-decimal ml-8 mb-4 space-y-1">
+            <li>
+              For each member:
+              <ol className="ml-6 mt-1 space-y-1" style={{listStyleType: 'lower-alpha'}}>
+                <li>Take the distances to every other player, except those which were already measured</li>
+                <li>Add these distances to a list</li>
+              </ol>
+            </li>
+            <li>Average this out</li>
+            <li>See how unusual this value is</li>
+          </ol>
+
+          <p className="mb-4">Yet again, MCMs were used here.</p>
+
+          <p className="mb-4">
+            This statistic has the straightforward interpretation of "How well is my team going to work
+            together"? Low conflict means that everyone is working together well&mdash; high conflict means
+            all-out war and a lot of nasty drama. Simple enough.
+          </p>
+        </div>
+
+        {/* Part 3: Game Quality, Chaos, and Regularity (plus Shapes) */}
+        <div id="addendum1-part3" className="pt-6">
+          <h2 className="font-typostuck-header mb-4">Part 3: Game Quality, Chaos, and Regularity (plus Shapes)</h2>
+
+          <p className="mb-4">
+            Game quality is a combination of two other, smaller measurements, both based on the polygon
+            the Scryer will draw using your session's members on the grid. How does it draw this? That's a
+            great question. The method I used was a greedy convex-hull-with-insertion. In simple terms,
+            this just means that I am trying to take as much of the convex hull produced by your session
+            naturally as I can, and then I insert other lines such that there are no self-intersections and
+            that the overall perimeter remains minimized. It's a fairly effective way of connecting points,
+            and so far it's been able to handle even an "all classpects" session, no trouble (although it
+            is quite jagged!)
+          </p>
+
+          <p className="mb-4">For the sake of argument, let's take a look at this contrived four-player session:</p>
+
+          <div className="text-center my-6">
+            <img src="./images/figures/example_1.png" alt="Example session: four-player rhombus" style={{maxHeight: '400px', margin: '0 auto'}} />
+          </div>
+
+          <p className="mb-4">It has a simple rhomboid shape which doesn't take up very much of the graph.</p>
+
+          <p className="mb-4">
+            Chaos is based on the space taken up by the graph&mdash; the more space taken, the more chaotic
+            and eventful the session is, in my interpretation. This session takes up a very small area, and
+            so it's "uneventful" in its Chaos band. Similarly, the rhombus is a very regular shape. It
+            scores 98% on regularity, landing in the "organized" Regularity/Order band. This gives a Game
+            Quality of Tailored&mdash; nothing unexpected happens, and everything is being kept in check&mdash;
+            the experience is tailored to you.
+          </p>
+
+          <p className="mb-4">
+            Chaos and Order/Regularity are both banded by fours (on the quartiles), so there are 16
+            possible responses here.
+          </p>
+
+          <p className="mb-4">There are also a few small quirks I want to lay out/address here.</p>
+
+          <ol className="list-decimal ml-8 mb-4 space-y-2">
+            <li>If the Representative classpect is also a member of a session, it gets dropped for the sake of shape-drawing.</li>
+            <li>
+              If there are two members, Chaos is definitionally minimized, and Regularity is calculated
+              using a dot product (from the origin) for the two members&mdash; the farther from zero, the
+              more regular it is (we actually use the magnitude of the cosine of the angle between these
+              vectors as the score). A Thief of Heart and Page of Doom, for example, are perpendicular&mdash;
+              so they have both 0 Chaos and 0 Regularity, but a session of a Maid of Blood and Seer of
+              Doom, being parallel, will have 0 Chaos and 1 Regularity.
+            </li>
+            <li>
+              If there's only one member, Chaos is definitionally maximized, and Regularity is based on
+              percent of maximum distance from Nexus&mdash; Classpects which are further away have "more
+              control", is kind of the idea. They're better able to make the session regular despite the
+              fact that solo sessions are apparently qute chaotic.
+            </li>
+          </ol>
+        </div>
+
+        {/* Part 4: Rungs */}
+        <div id="addendum1-part4" className="pt-6">
+          <h2 className="font-typostuck-header mb-4">Part 4: Rungs</h2>
+
+          <p className="mb-4">
+            Rungs are actually a cleaning-up and refinement of an idea Fazzie had on FRAF shortly after the
+            release of the Connector. The idea there was to name each circle that could be formed by
+            rotation and reflection, but some members are part of multiple circles, so the naming just
+            became a convoluted mess. Rungs make this simpler by only performing a grouping by radius
+            (r&sup2; = c&sup2; + a&sup2;). There are 26 unique rungs, so the question of grouping them was
+            actually convoluted at first... that was, until I was working on the above, specifically the
+            Chaos stats, which are banded in groups of 25%. What I noticed is that the thresholds of area
+            coverage are roughly linear&mdash; Rungs 1-5 cover under a quarter of the total area of the
+            graph, 6-10 under a half, 11-15 under three quarters, and 16-20 under full, with everything
+            else covering beyond that amount and forming the Furthest Rungs. We named them Rungs as an
+            allusion both to the Echeladder and to "Rings", like the Queen's Rings in Homestuck.
+          </p>
+
+          <p className="mb-4">
+            Here's an example:{' '}
+            <a href="./rungs.html#rung-13" className="underline" style={{color: '#0000ee'}}>
+              Rung 13, The Forge
+            </a>.
+          </p>
+
+          <div className="text-center my-6">
+            <img src="./images/figures/Rung13.png" alt="Rung 13: The Forge" style={{maxHeight: '400px', margin: '0 auto'}} />
+          </div>
+
+          <p className="mb-4">
+            The Bands are named Skaian, Gated, Landed, Veiled, and Furthest&mdash; mimicking the structure
+            of the Incipisphere&mdash; while the individual rungs are based on things emblematic of their
+            members, and which could be found in that part of the Medium.{' '}
+            <a href="./rungs.html" className="underline" style={{color: '#0000ee'}}>
+              Check out the Rungs page now
+            </a>{' '}
+            to familiarize yourself with them. These rungs now show up as a tag for every single Classpect.
+          </p>
+
+          <p className="mb-4">
+            This was all conceived of, and then put into practice immediately as the Representative Rung
+            statistic.
+          </p>
+
+          <p className="mb-4">We calculate this as follows:</p>
+
+          <ol className="list-decimal ml-8 mb-4 space-y-1">
+            <li>Go through all the members, and see which layer the largest number of them lie inside AKA find the modal band</li>
+            <li>Take the average rung of members inside this band</li>
+            <li>Add one if there are more members in layers further than this one than there are closer, and subtract one rung if the reverse is true. Do nothing if there's an even spread outside this band</li>
+          </ol>
+
+          <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
+            <strong>1a)</strong> If two bands are tied, the median band is used. Then calculation proceeds
+            as normal using the median value as a baseline, and rounding halves <i>down</i> as needed.
+          </p>
+
+          <p className="mb-4">We draw this rung on the graph, as well as the band it lies within, for your convenience.</p>
+
+          <p className="mb-4">
+            Interpretation is up to you&mdash; these objects are all symbolic in some way, so if you find
+            that your session is represented by e.g. The Forge, consider what it might mean for how
+            creative your members are, just as an example.
+          </p>
+        </div>
+
+        {/* Part 5: Leadership */}
+        <div id="addendum1-part5" className="pt-6">
+          <h2 className="font-typostuck-header mb-4">Part 5: Leadership</h2>
+
+          <p className="mb-4">
+            Leadership was something I wanted to address more or less immediately with the Scryer. This is
+            perhaps a gauche take, but considering how leadership is in the very language of Blood and
+            Breath as Aspects, I wanted to prioritize the impact of the Aspect over the class&mdash;
+            especially because known Prince of Heart Dirk Strider explicitly tries not to claim the mantle
+            of leadership himself, while Karkat, a Knight of Blood, is practically obsessed with it in
+            early Hivebent. The Aspect seems to hold more sway than the Class, here, so it counts for
+            double.
+          </p>
+
+          {/* Table 1: Leadership Tables — two side-by-side tables, Classes (7 rows) and Aspects (6 rows). */}
+          <div className="my-6">
+            <p className="text-center font-courier-bold mb-3">Table 1: Leadership Tables</p>
+            <div className="grid md:grid-cols-2 gap-6">
+              <table className="w-full font-courier text-sm border-collapse">
+                <thead>
+                  <tr><th colSpan={2} className="pb-2 text-center border-b-2 border-gray-700">CLASSES</th></tr>
+                  <tr>
+                    <th className="py-1 text-center border-b border-gray-500">Implicit (+)</th>
+                    <th className="py-1 text-center border-b border-gray-500">Explicit (&minus;)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td className="py-1 text-center">+7 Muse</td><td className="py-1 text-center">&minus;7 Lord</td></tr>
+                  <tr><td className="py-1 text-center">+6 Heir</td><td className="py-1 text-center">&minus;6 Prince</td></tr>
+                  <tr><td className="py-1 text-center">+5 Rogue</td><td className="py-1 text-center">&minus;5 Thief</td></tr>
+                  <tr><td className="py-1 text-center">+4 Mage</td><td className="py-1 text-center">&minus;4 Sylph</td></tr>
+                  <tr><td className="py-1 text-center">+3 Maid</td><td className="py-1 text-center">&minus;3 Seer</td></tr>
+                  <tr><td className="py-1 text-center">+2 Page</td><td className="py-1 text-center">&minus;2 Knight</td></tr>
+                  <tr><td className="py-1 text-center">+1 Bard</td><td className="py-1 text-center">&minus;1 Witch</td></tr>
+                </tbody>
+              </table>
+              <table className="w-full font-courier text-sm border-collapse">
+                <thead>
+                  <tr><th colSpan={2} className="pb-2 text-center border-b-2 border-gray-700">ASPECTS</th></tr>
+                  <tr>
+                    <th className="py-1 text-center border-b border-gray-500">Implicit (+)</th>
+                    <th className="py-1 text-center border-b border-gray-500">Explicit (&minus;)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td className="py-1 text-center">+6 Breath</td><td className="py-1 text-center">&minus;6 Blood</td></tr>
+                  <tr><td className="py-1 text-center">+5 Void</td><td className="py-1 text-center">&minus;5 Life</td></tr>
+                  <tr><td className="py-1 text-center">+4 Space</td><td className="py-1 text-center">&minus;4 Rage</td></tr>
+                  <tr><td className="py-1 text-center">+3 Hope</td><td className="py-1 text-center">&minus;3 Time</td></tr>
+                  <tr><td className="py-1 text-center">+2 Doom</td><td className="py-1 text-center">&minus;2 Light</td></tr>
+                  <tr><td className="py-1 text-center">+1 Heart</td><td className="py-1 text-center">&minus;1 Mind</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <p className="mb-4">
+            To calculate a leadership value, add the Class value plus 2x the Aspect value. The over-all
+            sign of the result determines whether you are an Explicit (&minus;) or Implicit (+) leader, but
+            the <i>magnitude</i> is what is used in the rankings.
+          </p>
+
+          <p className="mb-4">
+            The above table is probably a little controversial. I would like to point out some stuff about
+            it that came up during its creation in <span className="discord-channel">#classpecting</span>.
+          </p>
+
+          <p className="mb-4">
+            I tried to rely on symmetry and diagonals where it made sense, placing certain Aspects/Classes
+            in some spots and letting it go from there.
+          </p>
+
+          <p className="mb-4">
+            Lord &rarr; Prince &rarr; Thief seems like the most natural beginning for the Explicit
+            leadership side of things, given how all of these roles, if not definitionally involving
+            leadership (Lord, Prince) have characters that take charge (Thief). Sylph is a class which
+            relies on managing other people, so it seemed like a natural next candidate&mdash; Seers are
+            very similar. Knight is diagonally across from its antipair, Rogue&mdash; as is Page with
+            Thief&mdash; and although it seems weird to put the defense classes at low spots on leadership,
+            I don't mind this. Mythologically speaking, Knights are often bound to a higher authority or
+            code. Witch is diagonally across from Heir and has the lowest explicit leadership&mdash;
+            fittingly, Witches are often considered (in myth) as rebels who live outside society and beat
+            to their own drum. Bards, with the lowest implicit leadership score, are similar, as their role
+            implies <i>criticizing</i> leaders more than being one. You can fill in the blanks on the rest,
+            but we did discuss all of these things, especially the fact that the Knowledge classes actually
+            flip sides for leadership only. (It comes down to the fact that Mages are often ignored and
+            definitionally aren't good at explicit leadership and barking orders, while Seers are actually
+            used for that exact purpose at the start of Act 6.)
+          </p>
+
+          <p className="mb-4">
+            The Aspects and their ties to implicit/explicit leadership are more intuitive. Breath and Blood
+            are obviously the strongest of each category for obvious reasons. Life is explicitly tied to
+            leadership (especially forced leadership) throughout Homestuck, so it's right behind Blood; and
+            Void is right behind Breath in terms of implicit leadership, as a parallel, as this not only
+            explains Roxy, but also, shockingly, <i>Equius as well</i>, as the leader of the Blue team.
+            Heart and Mind being the lowest-ranked is because these Aspects focus a lot on the individual,
+            not so much the team&mdash; and are poorly suited to leadership except in the most dire
+            circumstances.
+          </p>
+        </div>
+
+        {/* Part 6: Further Omens (Siblings and Shadows Part II) */}
+        <div id="addendum1-part6" className="pt-6">
+          <h2 className="font-typostuck-header mb-4">Part 6: Further Omens (Siblings and Shadows Part II)</h2>
+
+          <p className="mb-4">
+            The last two stats on the Scryer are for which member is closest-knit with everyone else, and
+            which member is the oddest-one-out in the group.
+          </p>
+
+          <p className="mb-4">For Closest-Knit, the operating principle is:</p>
+
+          <ol className="list-decimal ml-8 mb-4 space-y-1">
+            <li>Check to see if any grouping of members are siblings</li>
+            <li>If there are multiple groups, first pick the largest one by number of members, then the one whose members lie closest (on average) to other members or are "closest-knit" with each other</li>
+            <li>If there are no such groups, pick the single member who lies closest to other members on average</li>
+          </ol>
+
+          <p className="mb-4">And similarly, for Oddest-One-Out:</p>
+
+          <ol className="list-decimal ml-8 mb-4 space-y-1">
+            <li>Check to see if any members have shadows in the session</li>
+            <li>If so, pick the member who has the most shadows</li>
+            <li>If there is a tie, pick the member who has the most shadows and lies farthest from other members on average</li>
+            <li>If there are no such groups, pick the single member who lies the farthest from other members on average</li>
+          </ol>
+
+          <p className="mb-4">
+            With all that said, this explains every single stat, so, let's jump to the end:
+          </p>
+        </div>
+
+        {/* Part 7: Conclusion */}
+        <div id="addendum1-part7" className="pt-6">
+          <h2 className="font-typostuck-header mb-4">Part 7: Conclusion</h2>
+
+          <p className="mb-4">
+            Now that you have an understanding (I hope) of how the Scryer works, it's time for you to try
+            it out. But not before I answer some questions here (and on the FAQ page).
+          </p>
+
+          <p className="mb-4"><strong>"Is this canon?"</strong></p>
+          <p className="mb-4">
+            You asked me this last time, answer is still no. Feel free to expand on this theory, though!
+          </p>
+
+          <p className="mb-4"><strong>"[X] does not match my headcanon!"</strong></p>
+          <p className="mb-4">
+            This is not a question, but also, I never said this tool was gonna be 100% accurate. I'm a
+            wizard, not a mind-reader. That said, you're the author of your own fanworks&mdash; feel free
+            to ignore the Scryer! Even my own fiction ignores significant parts of the Scryer, because
+            <i> themes and such</i> transcend classpecting, which is ultimately a narrow thematic and
+            character-writing tool. My hope is that the Scryer is something which <i>inspires</i> authors
+            to think about character dynamics within their works&mdash; not to give them all the answers.
+            It should be like a starting point.
+          </p>
+
+          <p className="mb-4">
+            I want to give my thanks to Fazzie, for inspiring and later helping name the Rungs, as well as
+            the <span className="discord-channel">#classpecting</span> chat for supporting my dev process
+            with feedback and theory contributions/discussions. You guys rock.
+          </p>
+
+          <p className="mb-4">
+            And, yet again, I want to give my special thanks to you, the reader. I cannot BELIEVE you put
+            yourself through reading my inane, Kankri-esque rambling again, but by gum you did it and you
+            should be right proud of that.
           </p>
         </div>
       </div>

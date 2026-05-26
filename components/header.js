@@ -94,11 +94,25 @@ const Header = ({ onNavigate, theme }) => {
     borderRadius: '4px',
   };
 
+  /* Scryer pill — mirrors frafStyle's distinct-pill treatment so the user
+     sees "this is a related off-site tool" at a glance. Cueball-blue
+     (#6dd1f4) accent matches the Scryer's own branding so the two
+     identities read as a family. */
+  const scryStyle = {
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    color: '#6dd1f4',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    fontSize: '1rem',
+    borderRadius: '4px',
+  };
+
   const navLinks = [
     { label: 'Home', href: '#/', isHome: true },
     { label: 'About', href: pathPrefix + 'about.html' },
     { label: 'FAQ', href: pathPrefix + 'faq.html' },
     { label: 'Theory', href: pathPrefix + 'theory.html' },
+    { label: 'Rungs', href: pathPrefix + 'rungs.html' },
     { label: 'Credits', href: pathPrefix + 'credits.html' },
   ];
 
@@ -156,6 +170,18 @@ const Header = ({ onNavigate, theme }) => {
               {link.label}
             </a>
           ))}
+          {/* Scryer link — sister tool, opens in a new tab via the
+              cueball-blue pill so the Connector user is steered to the
+              session-level companion without losing their place here. */}
+          <a
+            href="https://cjroshi.github.io/the-session-scryer/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-typostuck px-3 py-2 rounded hover:opacity-80"
+            style={scryStyle}
+          >
+            Scryer
+          </a>
           <a
             href="https://www.fruityrumpus.com/forums/t/classpecting-with-graphs-rotations-and-groups"
             target="_blank"
@@ -231,6 +257,23 @@ const Header = ({ onNavigate, theme }) => {
                 {link.label}
               </a>
             ))}
+            <a
+              href="https://cjroshi.github.io/the-session-scryer/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMenuOpen(false)}
+              className="font-typostuck rounded hover:opacity-80"
+              style={{
+                ...scryStyle,
+                display: 'flex',
+                alignItems: 'center',
+                minHeight: '44px',
+                padding: '0 16px',
+                fontSize: '1.1rem',
+              }}
+            >
+              Scryer ↗
+            </a>
             <a
               href="https://www.fruityrumpus.com/forums/t/classpecting-with-graphs-rotations-and-groups"
               target="_blank"

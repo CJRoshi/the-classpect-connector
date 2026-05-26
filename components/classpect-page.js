@@ -66,6 +66,14 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
   if (isSymmetric) allTags.add('symmetric');
   if (isCanon) allTags.add('canon');
 
+  // Auto-computed rung tag — every classpect on the integer lattice
+  // sits on a rung (1..26). Tag color = band swatch; clicking opens
+  // ./rungs.html#rung-N (handled via TagBadge's `href` field).
+  const rungInfo = (typeof rungForClasspect === 'function')
+    ? rungForClasspect(className, aspectName)
+    : null;
+  if (rungInfo) allTags.add(`rung-${rungInfo.rung}`);
+
   // Add manual tags from all characters (including unlockable-only ones)
   [...canonCharacters, ...nonCanonCharacters].forEach(char => {
     if (char.tags && Array.isArray(char.tags)) {
@@ -75,6 +83,13 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
 
   // Convert to array (TagsDisplay will handle sorting)
   const tags = Array.from(allTags);
+
+  // Raw leadership score (G.4): class_lead + 2·aspect_lead. Sits
+  // alongside the sum value at the top of the page as a sibling stat
+  // line. `leadershipFor` lives in constants.js.
+  const leadership = (typeof leadershipFor === 'function')
+    ? leadershipFor(className, aspectName)
+    : null;
 
   // Handler for tag clicks
   const handleTagClick = (route) => {
@@ -102,6 +117,20 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
           <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#4b5563", wordBreak: 'break-word'}}>
             [{className} ({getClassValue(className)>=0?"+":""}{getClassValue(className)}) + {aspectName} ({getAspectValue(aspectName)>=0?"+":""}{getAspectValue(aspectName)}) = {originalTotal>=0?"+":""}{originalTotal}]
           </p>
+
+          {/* Raw leadership score — mirrors the sum-value line above
+              with the same bracket convention. Implicit if positive,
+              Explicit if negative, Balanced at zero. Sits here so
+              quick numeric readers see both stats together at the top
+              of the page. */}
+          {leadership !== null && (
+            <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#4b5563", wordBreak: 'break-word'}}>
+              [Leadership = {CLASS_LEAD[className]>=0?"+":""}{CLASS_LEAD[className]} + 2·({ASPECT_LEAD[aspectName]>=0?"+":""}{ASPECT_LEAD[aspectName]}) = {leadership>=0?"+":""}{leadership}{' '}
+              <span style={{opacity: 0.75}}>
+                ({leadership > 0 ? 'Implicit' : leadership < 0 ? 'Explicit' : 'Balanced'})
+              </span>]
+            </p>
+          )}
 
           {/* Tags Display */}
           <TagsDisplay tags={tags} onTagClick={handleTagClick} />

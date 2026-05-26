@@ -8,27 +8,29 @@ const TAG_PRIORITY = {
   // Tier 1: Mathematical properties
   'balanced': 1,
   'symmetric': 2,
-  
+
   // Tier 2: Canon status
   'canon': 3,
-  
+
   // Tier 3: Session groups (in chronological order)
   'sburb-beta': 4,
   'sburb-alpha': 5,
   'sgrub-beta': 6,
   'sgrub-alpha': 7,
   'cherubs': 8,
-  
+
   // Tier 4: Main sources
   'homestuck': 9,
   'beyond-canon': 10,
   'hiveswap': 11,
   'hauntswitch': 12,
   'pesterquest': 13,
-  
+
   // Tier 5: Non-canon special tags
   'original-character': 100,
   'sweetbroandhellajeff': 101
+  // Rung tags ('rung-1' … 'rung-26') are auto-generated below and
+  // append at the lowest priority via the default fallback (999).
 };
 
 // Sort tags by priority
@@ -145,6 +147,29 @@ const TAG_METADATA = {
   }
 };
 
+/* =========================
+   AUTO-GENERATED RUNG TAGS
+   Every classpect lives on a rung (1..26) and rungs cluster into 5
+   bands. Each `rung-N` tag uses its band's swatch color and links to
+   ./rungs.html#rung-N so the Rungs page can scroll + pre-select the
+   matching rung. Requires `BANDS` from constants.js.
+   `href` (vs `route`) is consumed by TagBadge below — `route` would
+   funnel through the .html-suffixing click handler on classpect-page
+   which can't carry the #rung-N hash; `href` is taken verbatim.
+   ========================= */
+if (typeof BANDS !== 'undefined') {
+  BANDS.forEach(band => {
+    for (let n = band.start; n <= band.end; n++) {
+      TAG_METADATA[`rung-${n}`] = {
+        label: `Rung #${n}`,
+        color: band.color,
+        textColor: band.textColor,
+        href: `./rungs.html#rung-${n}`
+      };
+    }
+  });
+}
+
 // Compute whether a classpect is balanced
 const isBalanced = (classValue, aspectValue) => {
   return classValue + aspectValue === 0;
@@ -209,14 +234,23 @@ const TagBadge = ({ tag, onClick }) => {
   if (!conditionMet) return null;
 
   const effectiveRoute = metadata.route;
+  // Rung tags (and any future tag that needs to carry a URL hash or
+  // an absolute path) supply `href` directly — it's used verbatim
+  // because the route → '.' + route + '.html' transform in the
+  // page-level click handler can't carry a # fragment.
+  const effectiveHref  = metadata.href;
 
   const handleClick = () => {
+    if (effectiveHref) {
+      window.location.href = effectiveHref;
+      return;
+    }
     if (effectiveRoute && onClick) {
       onClick(effectiveRoute);
     }
   };
 
-  const isClickable = effectiveRoute !== null;
+  const isClickable = !!effectiveHref || effectiveRoute !== null;
   
   // Determine colors (with hover swap support)
   const bgColor = (isHovered && metadata.hoverColor) ? metadata.hoverColor : metadata.color;

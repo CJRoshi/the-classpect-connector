@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rungs - The Classpect Connector</title>
+  <link rel="icon" type="image/png" href="./images/special/CCLogoRegular.png" />
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./components/mobile.css">
+
+  <!-- Shared Components -->
+  <script type="text/babel" src="./components/constants.js"></script>
+  <script type="text/babel" src="./components/header.js"></script>
+  <script type="text/babel" src="./components/searchbar.js"></script>
+  <script type="text/babel" src="./components/footer.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('./fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+
+    .font-courier      { font-family: 'Courier New', monospace; }
+    .font-courier-bold { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem; font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem; font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem; font-weight: normal;
+    }
+    .font-typostuck-subheader {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem; font-weight: normal;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { width: 100%; min-height: 100vh; font-family: 'Courier New', monospace; }
+
+    /* Band section: header pill styled with the band's color so the
+       reader can match band ↔ rung at a glance. */
+    .band-section {
+      margin-top: 32px;
+    }
+    .band-section:first-of-type { margin-top: 16px; }
+    .band-header {
+      display: inline-block;
+      padding: 8px 18px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.5rem;
+      font-weight: normal;
+      letter-spacing: 1px;
+    }
+    .band-range {
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-left: 8px;
+    }
+    .band-intro {
+      margin-bottom: 14px;
+      color: #2a2a2a;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Rung block: small numbered card, clickable to focus the graph. */
+    .rung-block {
+      padding: 12px 16px;
+      margin: 8px 0;
+      border-left: 4px solid;
+      background: #f5f5f5;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+    }
+    .rung-block:hover {
+      background: #ecf0f8;
+      transform: translateX(2px);
+    }
+    .rung-block.is-active {
+      background: #e6efff;
+      box-shadow: 0 0 0 2px #4a90e2;
+    }
+    .rung-block-title {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .rung-number {
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      color: #6a5a48;
+      font-size: 0.85rem;
+      min-width: 3.5em;
+    }
+    .rung-name {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.15rem;
+    }
+    .rung-r2 {
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      color: #6a5a48;
+      opacity: 0.8;
+    }
+    .rung-description {
+      margin-top: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: #4a4030;
+      line-height: 1.55;
+      font-style: italic;
+      /* Placeholder text styling — the [TO FILL] tag stands out so you
+         can grep + replace later. */
+    }
+    .rung-description.is-placeholder {
+      color: #8a7a60;
+      opacity: 0.85;
+    }
+
+    /* Graph card — sticky-ish at the bottom so the user can keep it
+       visible while clicking through rungs. */
+    .rungs-graph-card {
+      margin-top: 36px;
+      padding: 20px;
+      background: #f8f8f8;
+      border: 2px solid #a0a0a0;
+      border-radius: 8px;
+    }
+    .rungs-graph-card .graph-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+    .rungs-graph-card .graph-subtitle {
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      color: #4a4030;
+      margin-bottom: 12px;
+    }
+    .rungs-graph-card .involved-list {
+      margin-top: 14px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+    .rungs-graph-card .involved-list .label {
+      color: #6a5a48;
+      margin-right: 6px;
+    }
+    .rungs-graph-card .involved-link {
+      color: #0000ee;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+    .rungs-graph-card .involved-link:hover {
+      color: #1a6a8a;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useMemo, useRef } = React;
+
+/* =========================
+   DEFAULT THEME (light)
+   ========================= */
+const defaultTheme = {
+  bg: "#626262",
+  contentBg: "#d0d0d0",
+  textColor: "#000000",
+  accentBg: "#a0a0a0",
+  isDark: false
+};
+
+const BAND_DESCRIPTIONS = {
+  // ----- Skaian (Rungs #1–#5) -----
+  'Skaian': <>This is the set of rungs which <b><em>lie closest</em></b> to Skaia. The Battlefield and Prospit are represented here. Rungs in this band often deal heavily with planning and teamwork.</>,
+
+  // ----- Gated (Rungs #6–#10) -----
+  'Gated':  <>This is the set of rungs representing things which <b><em>lie between</em></b> Skaia and the Lands. Things like the Victory Door and end-game landmarks like a Grist Rig or the Denizen's Lair are here. Rungs in this band deal seem to deal with big conflicts and key events.</>,
+
+  // ----- Landed (Rungs #11–#15) -----
+  'Landed': <>This is the set of rungs representing <b><em>the lands</em></b> of the players. Common landmarks for all Lands are here. Rungs in this band deal a lot with community and creation.</>,
+
+  // ----- Veiled (Rungs #16–#20) -----
+  'Veiled': <>This is the set of rungs representing things in <b><em>The Veil</em></b>, such as the important landmarks in the meteors as well as Derse itself. Rungs in this band deal a lot with action and putting things in motion.</>,
+
+  // ----- Furthest Rungs (Rungs #21–#26) -----
+  // Beyond the Incipisphere — Furthest Ring and beyond.
+  'Furthest Rungs': <>These rungs represent stuff that lies <b><em>beyond the incipisphere</em></b>, and sometimes Beyond Canon as well. Rungs in this band deal a lot with commentary, criticism, and narratives.</>,
+};
+
+const RUNG_DESCRIPTIONS = {
+  // ════════ SKAIAN BAND (#1–#5) ════════
+  1:  <><b>Aradia is here.</b> Named for the core of the Battlefield, where the Genesis Tadpole goes.</>,                                               // Core of Creation                   (r²=2)
+  2:  <>Named simply for the Battlefield itself, specifically its surface, where the war is fought.</>,                                                 // The Battlefield                    (r²=5)
+  3:  <><b>Kankri is here.</b> Named for the complex Möbius Net which forms around The Battlefield with higher numbers of prototypes.</>,               // The Net                            (r²=8)
+  4:  <><b>Dave is here.</b> Named for the main body of Prospit.</>,                                                                                    // Hallowed Halls                     (r²=10)
+  5:  <><b>Karkat, Terezi, and Tavros are here.</b> Named for the core of Prospit's moon.</>,                                                           // Center of Brilliance               (r²=13)
+
+  // ════════ GATED BAND (#6–#10) ════════
+  6:  <><b>Jane is here.</b> Named for the Victory Platform/Lilypad/Victory Door.</>,                                                                   // Door To Destiny                    (r²=17)
+  7:  <><b>Latula is here.</b> Named for the Grist Rigs used to perform the Ultimate Alchemy, placed atop fully-built houses.</>,                       // The Grist Rig                      (r²=18)
+  8:  <><b>Sollux and Rufioh are here.</b> Named for the Denizens as emblematic of late-game challenge and the source of conflict on Lands.</>,         // Denizen's Lair                     (r²=20)
+  9:  <><b>Nepeta is here</b>. Named for the warships used by the carapacians as they move towards The Battlefield.</>,                                 // The Battleships                    (r²=25)
+  10: <><b>Gamzee, Kurloz, and Aranea are here.</b> Named for the God-Tier timepiece which determines death, and how such deaths can be cheated.</>,    // The Clock                          (r²=26)
+
+  // ════════ LANDED BAND (#11–#15) ════════
+  11: <><b>Rose is here.</b> Named for the Quest Bed/Quest Cocoon, used to ascend to the God Tiers in an act of self-sacrifice.</>,                     // The Quest Bed                      (r²=29)
+  12: <><b>Meenah is here.</b> Named for Consort villages, and the general concept of leadership and community they evoke.</>,                          // The Village                        (r²=32)
+  13: <><b>Dirk and Horuss are here.</b> Named for The Forge, its role in the Ultimate Alchemy, and the ingenuity of this rung's residents.</>,         // The Forge                          (r²=34)
+  14: <><b>Kanaya, Damara, and Porrim are here.</b> Named for two game elements of competing aims, both very important to loss and victory.</>,         // The Tadpole/The Scratch Construct  (r²=37)
+  15: <><b>June is here.</b> Named for the homes of the players and what these represent to them.</>,                                                   // The Home                           (r²=40)
+
+  // ════════ VEILED BAND (#16–#20) ════════
+  16: <><b>Vriska and Roxy are here.</b> Named for the main element of The Veil-- the meteors used in The Reckoning, and the danger they represent.</>, // The Meteors                        (r²=41)
+  17: <><b>Jake is here.</b> Named for the Frog Temple, which contains the code for the game and lies in the Veil initially.</>,                        // The Temple                         (r²=45)
+  18: <><b><em>HE IS ALREADY HERE.</em></b> Named for the Ectobiology Lab used to solve a riddle and set the game into motion, for better or worse.</>, // Ectobiology Lab                    (r²=50)
+  19: <><b>Feferi and Mituna are here.</b> Named for the main body of Derse.</>,                                                                        // Darkened Streets                   (r²=52)
+  20: <>Named simply for the core of Derse's moon.</>,                                                                                                  // Core of Darkness                   (r²=53)
+
+  // ════════ FURTHEST RUNGS BAND (#21–#26) ════════
+  21: <>Named for The Fanontinuum, of Beyond Canon fame, which deals with fandom perception of characters.</>,                                          // The Fanontinuum                    (r²=58)
+  22: <><b>Eridan, Equius, and Cronus are here.</b> Named for the Secrets page, as well as the obscurity of/created by Homestuck's cast.</> ,           // The Secrets                        (r²=61)
+  23: <>Named for The Horrorterrors, known inhabitants of the Furthest Ring.</>,                                                                        // The Horrorterrors                  (r²=65)
+  24: <><b>Jade is here.</b> Named for the Green Sun, which acted as a narrative center, and a Plot Point which did similar for a time.</>,             // The Point/The Green Sun            (r²=72)
+  25: <>Named for both the Adventure Map and the literal map of the Furthest Ring created by drawing the attention of a monster to varied places.</>,   // The Map                            (r²=74)
+  26: <><b>Calliope is here.</b> Named for an obscure stage in the Furthest Ring on which important events were shown to an audience.</>,               // The Stage                          (r²=85)
+};
+
+/* =========================
+   PRECOMPUTED: classpects by rung
+   For each rung 1..26, list every (className, aspectName) pair whose
+   c² + a² matches the rung's r². Computed once at module load.
+   ========================= */
+const CLASSPECTS_BY_RUNG = (() => {
+  const out = {};
+  for (let i = 1; i <= 26; i++) out[i] = [];
+  const classNames = Object.keys(classesNumeric);   // 14 names
+  const aspectNames = Object.keys(aspectsNumeric);  // 12 names
+  classNames.forEach(cn => {
+    aspectNames.forEach(an => {
+      const c = classesNumeric[cn];
+      const a = aspectsNumeric[an];
+      const r2 = c * c + a * a;
+      const rung = RUNG_BY_R2[r2];
+      if (rung) {
+        out[rung].push({ className: cn, aspectName: an, c, a });
+      }
+    });
+  });
+  return out;
+})();
+
+/* =========================
+   RUNGS GRAPH (simplified rotation-graph)
+   Pure SVG lattice + a single rung circle + highlighted classpect
+   dots for the active rung. No rotations, no reflections, no
+   underlays — that's a separate trickle-back. Click a classpect
+   marker to navigate to its page.
+   ========================= */
+const RungsGraph = ({ activeRung, onNavigate }) => {
+  const scale = 30;
+  const centerX = 280;
+  const centerY = 200;
+  const toSvgX = v => centerX + v * scale;
+  const toSvgY = v => centerY - v * scale;
+
+  const r2 = activeRung ? RUNG_R2_ORDER[activeRung - 1] : null;
+  const r  = r2 != null ? Math.sqrt(r2) : null;
+  const band = activeRung ? bandForRung(activeRung) : null;
+  const ringColor = band ? band.color : '#888';
+  const involved = activeRung ? CLASSPECTS_BY_RUNG[activeRung] : [];
+
+  // Aspect Y-axis labels mirror the main rotation-graph convention.
+  const aspectOrder = ["Space", "Void", "Doom", "Heart", "Blood", "Time",
+                       "Rage", "Breath", "Mind", "Life", "Light", "Hope"];
+  const aspectAbbrev = {
+    "Space": "SPC", "Void": "VD",  "Doom": "DM",  "Heart": "HRT",
+    "Blood": "BLD", "Time": "TME", "Rage": "RGE", "Breath": "BTH",
+    "Mind":  "MND", "Life": "LFE", "Light": "LGT", "Hope": "HPE"
+  };
+  const classAbbrev = {
+    "Lord": "Ld", "Witch": "Wi", "Prince": "Pc", "Thief": "Tf",
+    "Knight": "Nt", "Mage": "Mg", "Sylph": "Sy",
+    "Maid": "Md", "Seer": "Sr", "Page": "Pg",
+    "Rogue": "Rg", "Bard": "Bd", "Heir": "Hr", "Muse": "Ms"
+  };
+  const [failedAspectImages, setFailedAspectImages] = useState(() => new Set());
+
+  return (
+    <svg viewBox="0 0 550 430"
+         style={{ backgroundColor: '#e8e8e8', display: 'block', margin: '0 auto',
+                  width: '100%', maxWidth: '550px', height: 'auto',
+                  border: '1px solid #c0c0c0' }}>
+      {/* Light-theme grid lines */}
+      {[-7,-6,-5,-4,-3,-2,-1,1,2,3,4,5,6,7].map(v => (
+        <line key={`v${v}`} x1={toSvgX(v)} y1={toSvgY(-6)}
+              x2={toSvgX(v)} y2={toSvgY(6)} stroke="#d0d0d0" strokeWidth="1"/>
+      ))}
+      {[-6,-5,-4,-3,-2,-1,1,2,3,4,5,6].map(v => (
+        <line key={`h${v}`} x1={toSvgX(-7)} y1={toSvgY(v)}
+              x2={toSvgX(7)}  y2={toSvgY(v)} stroke="#d0d0d0" strokeWidth="1"/>
+      ))}
+      {/* Axes */}
+      <line x1={toSvgX(-7)} y1={toSvgY(0)} x2={toSvgX(7)} y2={toSvgY(0)}
+            stroke="#666" strokeWidth="2"/>
+      <line x1={toSvgX(0)} y1={toSvgY(-6)} x2={toSvgX(0)} y2={toSvgY(6)}
+            stroke="#666" strokeWidth="2"/>
+
+      {/* Y labels — aspect icons w/ text fallback (mirrors rotation-graph.js) */}
+      {aspectOrder.map(asp => {
+        const aspValue = aspectsNumeric[asp];
+        const needsOutline = (asp === 'Space' || asp === 'Hope' || asp === 'Light');
+        const imgFailed = failedAspectImages.has(asp);
+        return (
+          <g key={`y-label-${asp}`}>
+            {!imgFailed ? (
+              <image href={`./images/aspects/no-bg/${asp.toLowerCase()}.webp`}
+                     x={toSvgX(-7) - 34}
+                     y={toSvgY(aspValue) - 12}
+                     width="24" height="24"
+                     style={{
+                       filter: needsOutline
+                         ? 'drop-shadow(0 0 2px rgba(0,0,0,0.8))'
+                         : 'none'
+                     }}
+                     onError={() => setFailedAspectImages(prev => new Set([...prev, asp]))}/>
+            ) : (
+              <text x={toSvgX(-7) - 22} y={toSvgY(aspValue) + 4}
+                    textAnchor="middle" fontSize="9" fontFamily="Courier New"
+                    fontWeight="bold" fill="#333">{aspectAbbrev[asp]}</text>
+            )}
+          </g>
+        );
+      })}
+
+      {/* X labels */}
+      {Object.entries(classesNumeric).map(([cls, val]) => (
+        <text key={`x-label-${cls}`}
+              x={toSvgX(val)}
+              y={toSvgY(-6) + 25}
+              textAnchor="middle"
+              fontSize="11"
+              fontFamily="Courier New"
+              fontWeight="bold"
+              fill="#333">
+          {classAbbrev[cls]}
+        </text>
+      ))}
+
+      {/* Rung circle — soft fill + bolder stroke in the band color.
+          Drawn before the markers so the markers sit on top. */}
+      {r != null && (
+        <g>
+          <circle cx={toSvgX(0)} cy={toSvgY(0)} r={r * scale}
+                  fill={ringColor} fillOpacity="0.12"
+                  stroke={ringColor} strokeWidth="2.5" strokeDasharray="5 3"/>
+          {/* Tiny rung number label at top of circle */}
+          <text x={toSvgX(0)} y={toSvgY(0) - r * scale - 6}
+                textAnchor="middle" fontSize="10" fontFamily="Courier New"
+                fontWeight="bold" fill={ringColor}>
+            #{activeRung}
+          </text>
+        </g>
+      )}
+
+      {/* Highlighted classpect markers */}
+      {involved.map((p, i) => (
+        <g key={`mark-${i}`} style={{ cursor: 'pointer' }}
+           onClick={() => onNavigate(`/classpect/${p.className.toLowerCase()}-of-${p.aspectName.toLowerCase()}`)}>
+          <circle cx={toSvgX(p.c)} cy={toSvgY(p.a)} r="9"
+                  fill={aspectColors[p.aspectName] || '#444'}
+                  stroke="#000" strokeWidth="1.5"/>
+          <title>{`${p.className} of ${p.aspectName}`}</title>
+        </g>
+      ))}
+    </svg>
+  );
+};
+
+/* =========================
+   RUNGS PAGE
+   ========================= */
+const RungsPage = () => {
+  const handleNavigate = path => { window.location.href = `./index.html#${path}`; };
+
+  const [activeRung, setActiveRung] = useState(null);
+  const rungRefs = useRef({});      // rung-N → DOM node, for scroll-into-view
+  const graphRef = useRef(null);    // bottom graph block, for scroll target
+
+  // Read the hash on mount AND on hash change so the page can be
+  // deep-linked (e.g. ./rungs.html#rung-7 from a classpect tag).
+  // Behavior: pre-select that rung + scroll to graph.
+  useEffect(() => {
+    const applyHash = () => {
+      const m = (window.location.hash || '').match(/^#rung-(\d+)$/);
+      if (!m) return;
+      const n = parseInt(m[1], 10);
+      if (n >= 1 && n <= 26) {
+        setActiveRung(n);
+        // Defer scroll so the active-rung re-render finishes first.
+        setTimeout(() => {
+          const node = rungRefs.current[n];
+          if (node) node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 50);
+      }
+    };
+    applyHash();
+    window.addEventListener('hashchange', applyHash);
+    return () => window.removeEventListener('hashchange', applyHash);
+  }, []);
+
+  const selectRung = (n) => {
+    setActiveRung(n);
+    // Update the hash without a full navigation so the URL is shareable.
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, '', `#rung-${n}`);
+    }
+    // Scroll graph into view so the user sees the result.
+    setTimeout(() => {
+      if (graphRef.current) {
+        graphRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 50);
+  };
+
+  return (
+    <div style={{ backgroundColor: defaultTheme.bg, minHeight: '100vh' }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme}/>
+      <div className="px-3 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <SearchBar onNavigate={handleNavigate} theme={defaultTheme}/>
+        </div>
+      </div>
+
+      <div className="px-3 sm:px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div style={{
+            backgroundColor: defaultTheme.contentBg,
+            color: defaultTheme.textColor,
+            padding: '24px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+            border: `2px solid ${defaultTheme.accentBg}`,
+          }}>
+
+            <div className="text-center mb-4">
+              <h1 className="font-typostuck-title mb-3">The Rungs</h1>
+              <p className="font-courier" style={{
+                fontSize: '0.95rem', color: '#374151',
+                maxWidth: '640px', margin: '0 auto', lineHeight: '1.7'
+              }}>
+                Every classpect on the grid sits on one of <strong>26 concentric rungs</strong>,
+                grouped by <code>r² = c² + a²</code>. The rungs cluster into <strong>5 bands</strong> of roughly equivalent area that
+                mirror the structure of the Incipisphere — Skaian at the core, Furthest Rungs out past
+                the edge of the Veil. Click any rung below to see its members on the graph at the bottom.
+              </p>
+            </div>
+
+            {/* ──────────────────────────────────────────────────────────────
+                Bands & rungs.
+                Each rung block has:
+                  · number (Rung #N)
+                  · name (authored)
+                  · r² value
+                  · description placeholder you can find-and-replace later
+
+                Search for "[DESCRIPTION TO FILL" to find every blank.
+                ────────────────────────────────────────────────────────────── */}
+
+            {BANDS.map(band => {
+              const bandIntro = BAND_DESCRIPTIONS[band.name];
+              return (
+              <div className="band-section" key={band.name}>
+                <div className="band-header" style={{
+                  backgroundColor: band.color,
+                  color: band.textColor
+                }}>
+                  {band.name}
+                  <span className="band-range">
+                    (Rungs #{band.start}–#{band.end})
+                  </span>
+                </div>
+
+                {/* Band intro: pulled from BAND_DESCRIPTIONS at the
+                    top of this file. null → renders the placeholder
+                    template; string/JSX → renders that content. */}
+                {bandIntro != null ? (
+                  <p className="band-intro">{bandIntro}</p>
+                ) : (
+                  <p className="band-intro" style={{ color: '#8a7a60', fontStyle: 'italic' }}>
+                    [BAND INTRO for <strong>{band.name}</strong> — set
+                    BAND_DESCRIPTIONS["{band.name}"] in this file's
+                    edit-zone to fill it in.]
+                  </p>
+                )}
+
+                {Array.from({ length: band.end - band.start + 1 }, (_, i) => {
+                  const n = band.start + i;
+                  const name = RUNG_NAMES[n - 1];
+                  const r2 = RUNG_R2_ORDER[n - 1];
+                  const members = CLASSPECTS_BY_RUNG[n];
+                  const isActive = activeRung === n;
+                  const desc = RUNG_DESCRIPTIONS[n];
+                  return (
+                    <div key={n}
+                         id={`rung-${n}`}
+                         ref={el => { rungRefs.current[n] = el; }}
+                         className={`rung-block${isActive ? ' is-active' : ''}`}
+                         style={{ borderLeftColor: band.color }}
+                         onClick={() => selectRung(n)}>
+                      <div className="rung-block-title">
+                        <span className="rung-number">Rung #{n}</span>
+                        <span className="rung-name">{name}</span>
+                        <span className="rung-r2">
+                          (r²={r2}, {members.length} classpect{members.length === 1 ? '' : 's'})
+                        </span>
+                      </div>
+                      {/* Per-rung description, pulled from
+                          RUNG_DESCRIPTIONS[n] at the top of this file.
+                          null → renders the styled placeholder so
+                          unfilled rungs stand out at a glance. */}
+                      {desc != null ? (
+                        <p className="rung-description">{desc}</p>
+                      ) : (
+                        <p className="rung-description is-placeholder">
+                          [DESCRIPTION for Rung #{n} — set RUNG_DESCRIPTIONS[{n}]
+                          in this file's edit-zone to fill it in.]
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              );
+            })}
+
+            {/* ──────────────────────────────────────────────────────────────
+                Bottom graph — focused on the currently-selected rung.
+                Clicking a marker navigates to that classpect's page.
+                ────────────────────────────────────────────────────────────── */}
+            <div className="rungs-graph-card" ref={graphRef}>
+              <div className="graph-title">Rung Graph</div>
+              <div className="graph-subtitle">
+                {activeRung
+                  ? <>Currently highlighting <strong>Rung #{activeRung} — {RUNG_NAMES[activeRung-1]}</strong>
+                      {' '}({bandForRung(activeRung).name} band, r²={RUNG_R2_ORDER[activeRung-1]}).
+                      {' '}Click a marker to open that classpect's page.</>
+                  : <>Select a rung above to highlight its members on the lattice.</>
+                }
+              </div>
+
+              <RungsGraph activeRung={activeRung} onNavigate={handleNavigate}/>
+
+              {activeRung && (
+                <div className="involved-list">
+                  <span className="label">On this rung:</span>
+                  {CLASSPECTS_BY_RUNG[activeRung].map((p, i) => (
+                    <span key={i}>
+                      <span className="involved-link"
+                            onClick={() => handleNavigate(`/classpect/${p.className.toLowerCase()}-of-${p.aspectName.toLowerCase()}`)}>
+                        {p.className} of {p.aspectName}
+                      </span>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+          </div>
+          <Footer theme={defaultTheme}/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<RungsPage/>);
+</script>
+</body>
+</html>

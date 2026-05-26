@@ -276,7 +276,95 @@ const FAQPage = () => {
             Sure! Let me have a readthrough of it, and if I like it, I'll throw the link on there.
           </p>
         </div>
-        
+
+        {/* Q11a — Session Scryer: code format */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; How are codes generated?
+          </h2>
+          <p>
+            Codes are generated such that every member is 3 nibbles, and they're sorted by Class, then
+            Aspect, and then Lunar Sway, ascending. Nibble 1 is Class, ranging from 1 (Lord) to 14 or E
+            (Muse), reserving 0x0 and 0xF. Nibble 2 is Aspect, ranging from 1 (Hope) to 12 or C (Space),
+            reserving all other possible values. Nibble 3 is the lunar sway, which is 0 for
+            Dual/Both/Unassigned, 1 for Prospit, and 2 for Derse.
+          </p>
+        </div>
+
+        {/* Q11b — Session Scryer: text entry format */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; How do I enter my session in text?
+          </h2>
+          <p>
+            It is pretty flexible! The general order is [count] [moon] [class] [aspect], but all that
+            really matters is that the count is at the start and is a counting number, like 1, or 108.
+            Plenty of abbreviations also.
+          </p>
+        </div>
+
+        {/* Q11c — Session Scryer: graph interactions */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; Can you explain the graph?
+          </h2>
+          <p>
+            It's the same graph as the Connector... Only thing is like, try clicking session members, you
+            can get more info about them. You can also inspect their Classpect Connector pages this way,
+            too.
+          </p>
+        </div>
+
+        {/* Q11d — Session Scryer: leadership rationale */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; How were leadership values assigned?
+          </h2>
+          <p>
+            Again, read{' '}
+            <a href="./theory.html#addendum1-part5" className="underline" style={{color: '#0000ee'}}>theory</a>.
+            We made a few baseline assumptions there, although the general rule tends towards "Actives lead
+            explicitly; Passives lead implicitly" except for the knowledge classes. For Aspects, the
+            explanation is even easier.
+          </p>
+        </div>
+
+        {/* Q11e — Session Scryer: rung naming */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; How were the Rungs named?
+          </h2>
+          <p>
+            Read the{' '}
+            <a href="./rungs.html" className="underline" style={{color: '#0000ee'}}>Rungs</a>{' '}
+            page, they're all described there.
+          </p>
+        </div>
+
+        {/* Q11f — Session Scryer: Eridan rib */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; Why do you hate Eridan?
+          </h2>
+          <p>
+            I literally don't, he just gets shafted in the leadership department by my own math. I'm
+            sorry,{' '}
+            <a href="./index.html#/classpect/prince-of-hope" className="underline" style={{color: '#0000ee'}}>
+              Eridan
+            </a>.
+          </p>
+        </div>
+
+        {/* Q11g — Session Scryer: Cronus rib */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; Why do you hate Cronus?
+          </h2>
+          <p>
+            sob.
+          </p>
+        </div>
+
         {/* Q12 */}
         <div>
           <h2 className="homestuck-command mb-2">
@@ -465,8 +553,78 @@ const FAQPage = () => {
           
           <div>
             <h3 className="font-courier-bold text-lg mb-1">Balance:</h3>
-            <p>
+            <p className="mb-2">
               When Class Value + Aspect Value = 0, i.e. you lie on the line A = -C.
+            </p>
+            <p>
+              Also the name of a Scryer statistic describing the overall active-passive balance of a
+              session, which can roughly represent the way its members interact with a narrative.
+            </p>
+          </div>
+
+          {/* ---- Session Scryer additions ----
+              The remainder of the glossary covers terms that originate
+              from the Session Scryer (Addendum 1 on the theory page).
+              Ordered roughly to follow the Scryer's own orb layout:
+              Avatar (centroid) → Nexus (centroid origin) → Game Quality
+              (shape) → Weight (essentiality) → Discord (conflict) →
+              Rung / Representative Rung (radial banding). */}
+
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Avatar:</h3>
+            <p>
+              A classpect representing a session, calculated by finding the centroid. The narrative role
+              of this classpect could be used to describe that of the whole session. Synonymous with
+              Representative Classpect.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Nexus:</h3>
+            <p>
+              A catch-all term for the point (0, 0). If this is the representative classpect for a
+              session, then its narrative could take any number of paths.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Game Quality:</h3>
+            <p>
+              A combined measurement of Chaos (area covered) and Regularity of the shape formed by your
+              members, which represents how eventful and controlled your game is.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Weight:</h3>
+            <p>
+              A measure of how important each member of a session is to winning the game. Synonymous with
+              Essentiality.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Discord:</h3>
+            <p>
+              A measure of how much conflict might exist between members of a session. Synonymous with
+              Conflict.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Rung:</h3>
+            <p>
+              One of 26 concentric circles containing 4 or 8 classpects each, each associated with a
+              landmark related to the game. See the{' '}
+              <a href="./rungs.html" className="underline" style={{color: '#0000ee'}}>Rungs</a>{' '}
+              page for the full list.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-courier-bold text-lg mb-1">Representative Rung:</h3>
+            <p>
+              A Rung representing a session, symbolically.
             </p>
           </div>
         </div>

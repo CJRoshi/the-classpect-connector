@@ -345,7 +345,16 @@ const EarthCPage = () => {
           <SearchBar onNavigate={handleNavigate} theme={darkTheme} />
         </div>
       </div>
-      
+
+      {/* Cross-link to the sister tool — small centered line, deep-linking
+          to the Cherubs session on the Scryer. The page has no traditional
+          title block (the interactive Caliborn/Calliope symbols below are
+          the visual identity), so this sits between SearchBar and the
+          symbol layout. Cueball-blue (#6dd1f4) reads on the dark page bg. */}
+      <div className="font-courier" style={{textAlign: 'center', marginTop: '8px', marginBottom: '8px', fontSize: '0.75rem', color: '#aaaaaa'}}>
+        (also: <a href="https://cjroshi.github.io/the-session-scryer/scry.html#172EC1" target="_blank" rel="noopener noreferrer" style={{color: '#6dd1f4', textDecoration: 'underline'}}>view this session on the Session Scryer</a>)
+      </div>
+
       {/* ── DESKTOP layout (hover-interactive) ─────────── */}
       <div className="desktop-cherub">
         <div className="cherub-container">

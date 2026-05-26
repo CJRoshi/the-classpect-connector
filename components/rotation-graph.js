@@ -16,6 +16,31 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
   const [graphCollapsed, setGraphCollapsed] = useState(isMobile);
   const [exportStatus, setExportStatus] = useState(null); // null | 'saving' | 'saved' | 'copying' | 'copied' | 'error'
 
+  /* Underlay overlay state — mutually exclusive ('none' | 'value' |
+     'leadership'). Renders a diverging colormap wash under the grid
+     lines so the reader can see at a glance where each classpect
+     falls on the sum-value or leadership scale. Picks Vanimo on dark
+     theme, PuY on light theme. Disabled by default (no visual noise
+     unless asked for). */
+  const [tintMode, setTintMode] = useState('none');
+  const colormap = (theme?.isDark ? vanimoColor : puyColor);
+  const tintFn = useMemo(() => {
+    if (tintMode === 'value') {
+      // Sum value normalized by max magnitude 13 (Lord/Hope or Muse/Space).
+      return (cv, av) => colormap((cv + av) / 13);
+    }
+    if (tintMode === 'leadership') {
+      // Leadership normalized by max magnitude 19 (Muse/Breath or Lord/Blood).
+      return (cv, av) => {
+        const c = CLASS_LEAD_BY_VAL[cv];
+        const a = ASPECT_LEAD_BY_VAL[av];
+        if (c === undefined || a === undefined) return null;
+        return colormap((c + 2 * a) / 19);
+      };
+    }
+    return null;
+  }, [tintMode, theme?.isDark]);
+
   const svgRef = useRef(null);
 
   const x = classesNumeric[className];
@@ -62,13 +87,21 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
 
   // ── Image export helpers ──────────────────────────────────────────────────
 
-  /** Build the filename from current state */
+  /** Build the filename from current state.
+      Trickle-back: when an underlay is active, append a tag so saved
+      PNGs remember which wash was visible (otherwise two exports of
+      the same classpect with/without an underlay would collide on
+      disk). Theme also baked in since PuY vs Vanimo changes the look
+      meaningfully. */
   const getFilename = (ext) => {
     const c = className.toLowerCase().replace(/\s+/g, '-');
     const a = aspectName.toLowerCase().replace(/\s+/g, '-');
     const rots = showRotations ? 'yes' : 'no';
     const refl = showReflection ? 'yes' : 'no';
-    return `${c}_of_${a}_showrots_${rots}_showreflxn_${refl}.${ext}`;
+    const tintTag = tintMode === 'none'
+      ? ''
+      : `_underlay_${tintMode}_${theme?.isDark ? 'vanimo' : 'puy'}`;
+    return `${c}_of_${a}_showrots_${rots}_showreflxn_${refl}${tintTag}.${ext}`;
   };
 
   /**
@@ -227,6 +260,43 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
           />
           <span className="text-sm">Show Reflection</span>
         </label>
+        {/* Underlay toggles — mutually exclusive (only one wash at a
+            time). Off by default; the wash sits behind the grid lines
+            so it doesn't fight the rotation overlays. Vanimo on dark
+            theme, PuY on light theme. */}
+        <span className="text-xs uppercase tracking-wider opacity-60"
+              style={{fontFamily: 'Verdana, sans-serif'}}>
+          Underlay:
+        </span>
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={tintMode === 'value'}
+            onChange={() => setTintMode(tintMode === 'value' ? 'none' : 'value')}
+          />
+          <span className="text-sm">Sum value</span>
+        </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={tintMode === 'leadership'}
+            onChange={() => setTintMode(tintMode === 'leadership' ? 'none' : 'leadership')}
+          />
+          <span className="text-sm">Leadership</span>
+        </label>
+        {/* Tiny gradient legend so the colormap reads at a glance.
+            Purple = negative, yellow = positive, near-neutral center. */}
+        <span className="flex items-center gap-1" style={{opacity: tintMode === 'none' ? 0.4 : 1}}>
+          <span className="text-xs" style={{color: theme?.isDark ? '#888' : '#666'}}>−</span>
+          <span style={{
+            display: 'inline-block', width: '52px', height: '8px',
+            border: `1px solid ${theme?.isDark ? '#555' : '#999'}`,
+            background: theme?.isDark
+              ? 'linear-gradient(to right, #14025a 0%, #782c92 25%, #160a1e 50%, #dcb464 75%, #faf06e 100%)'
+              : 'linear-gradient(to right, #661482 0%, #b87acc 25%, #fafafa 50%, #f0dc78 75%, #e6bc1e 100%)'
+          }}/>
+          <span className="text-xs" style={{color: theme?.isDark ? '#888' : '#666'}}>+</span>
+        </span>
 
         {/* Export buttons */}
         <div className="flex gap-2 items-center ml-auto flex-wrap">
@@ -310,6 +380,44 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
               maxWidth: '550px',
               height: 'auto',
             }}>
+            {/* Trickle-back: cell-tint underlay (Sum value / Leadership).
+                Each integer cell gets an oversized rect (1.35× cell
+                width) so neighbours overlap and the Gaussian blur
+                paints a continuous diverging gradient. Renders BEFORE
+                the grid lines + axes so the wash sits underneath.
+                Includes the 0 axes for visual continuity even though
+                no classpect lives there. */}
+            {tintFn && (
+              <defs>
+                <clipPath id="rg-grid-clip">
+                  <rect x={toSvgX(-7)} y={toSvgY(6)}
+                        width={14 * scale} height={12 * scale}/>
+                </clipPath>
+                <filter id="rg-tint-blur" x="-25%" y="-25%" width="150%" height="150%">
+                  <feGaussianBlur stdDeviation="11"/>
+                </filter>
+              </defs>
+            )}
+            {tintFn && (
+              <g clipPath="url(#rg-grid-clip)" opacity="0.30" pointerEvents="none">
+                <g filter="url(#rg-tint-blur)">
+                  {[-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7].flatMap(cv =>
+                    [-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6].map(av => {
+                      const color = tintFn(cv, av);
+                      if (!color) return null;
+                      const half = scale * 0.675;
+                      return (
+                        <rect key={`rg-tint-${cv}-${av}`}
+                              x={toSvgX(cv) - half}
+                              y={toSvgY(av) - half}
+                              width={half * 2} height={half * 2}
+                              fill={color} stroke="none"/>
+                      );
+                    })
+                  )}
+                </g>
+              </g>
+            )}
             {/* Vertical grid lines */}
             {[-7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7].map(val => (
               <line

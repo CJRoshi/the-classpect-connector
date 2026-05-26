@@ -151,7 +151,39 @@ const SearchBar = ({ onNavigate, theme }) => {
       searchTerms: ['symmetric', 'symmetry', 'extreme'],
       isExternal: true
     });
-    
+    pages.push({
+      type: 'special',
+      display: 'The Rungs',
+      path: './rungs.html',
+      searchTerms: [
+        'rungs', 'rung', 'bands', 'band', 'incipisphere',
+        'skaian', 'gated', 'landed', 'veiled', 'furthest',
+        'furthest ring', 'furthest rings', 'furthest rung', 'furthest rungs',
+        'rep rung', 'representative rung', 'r squared', 'r2'
+      ],
+      isExternal: true
+    });
+    // Per-rung deep links — typing "rung 7" jumps straight to that
+    // rung's section on the Rungs page (which auto-scrolls + selects
+    // it on hash change via the page's useEffect).
+    if (typeof RUNG_NAMES !== 'undefined') {
+      for (let n = 1; n <= 26; n++) {
+        const name = RUNG_NAMES[n - 1];
+        pages.push({
+          type: 'rung',
+          display: `Rung #${n} — ${name}`,
+          path: `./rungs.html#rung-${n}`,
+          searchTerms: [
+            `rung ${n}`, `rung#${n}`, `rung-${n}`, `rung#${n}`,
+            `#${n}`, name.toLowerCase(),
+            // Drop "the " prefix so "battlefield" matches Rung #2.
+            name.toLowerCase().replace(/^the\s+/, '')
+          ],
+          isExternal: true
+        });
+      }
+    }
+
     return pages;
   };
 
@@ -347,8 +379,11 @@ const SearchBar = ({ onNavigate, theme }) => {
 
   // Handle random page
   const handleRandom = () => {
-    // Random from classes, aspects, classpects, prospit, derse
-    const randomOptions = [...allPages];
+    // Random from classes, aspects, classpects, prospit, derse —
+    // per-rung deep-links (type: 'rung') are filtered out because
+    // there are 26 of them and they pace-break when you hit Random
+    // looking for a new classpect or tag page.
+    const randomOptions = allPages.filter(p => p.type !== 'rung');
     const random = randomOptions[Math.floor(Math.random() * randomOptions.length)];
     
     if (random.isExternal) {
