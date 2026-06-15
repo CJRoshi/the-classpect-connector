@@ -789,6 +789,60 @@
         "influencer"
       ]
     },
+    "Imode Kurita": {
+      "color": "#bdb49c",
+      "classpect": [
+        "Witch",
+        "Light"
+      ],
+      "lunarsway": null,
+      "reaction": [
+        {
+          "text": "Yeah ✋ the 🧙‍♀️ of 🔆. 👋",
+          "color": "#bdb49c"
+        }
+      ],
+      "tags": [
+        "beyond-canon",
+        "influencer"
+      ]
+    },
+    "Silas P. Beauregarde": {
+      "color": "#71d666",
+      "classpect": [
+        "Mage",
+        "Life"
+      ],
+      "lunarsway": null,
+      "reaction": [
+        {
+          "text": "Well, I'll be! Hi there!",
+          "color": "#71d666"
+        }
+      ],
+      "tags": [
+        "beyond-canon",
+        "influencer"
+      ]
+    },
+    "Avril Thorpe": {
+      "color": "#ffc600",
+      "classpect": [
+        "Rogue",
+        "Space"
+      ],
+      "lunarsway": null,
+      "reaction": [
+        {
+          "text": "oh shit whats up #twinsies ",
+          "color": "#ffc600"
+        }
+      ],
+      "tags": [
+        "beyond-canon",
+        "influencer"
+      ]
+    },
     "Xefros Tritoh": {
       "color": "#a10000",
       "classpect": [
