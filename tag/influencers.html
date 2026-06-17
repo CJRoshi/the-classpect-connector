@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Homestuck - The Classpect Connector</title>
+  <title>The Influencers - The Classpect Connector</title>
   <link rel="icon" type="image/png" href="../images/special/CCLogoRegular.png" />
 
   <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
@@ -37,14 +37,6 @@
       font-family: 'Typostuck', 'Courier New', monospace;
       font-size: 1.75rem; font-weight: normal;
     }
-    .homestuck-command {
-      font-family: Verdana, Arial, sans-serif;
-      font-weight: bold; font-size: 1.25rem; color: #000;
-    }
-    .homestuck-command-dark {
-      font-family: Verdana, Arial, sans-serif;
-      font-weight: bold; font-size: 1.25rem; color: #fff;
-    }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -68,40 +60,25 @@ const defaultTheme = {
   isDark: false,
 };
 
-const SESSIONS = [
-  {
-    label: 'SGRUB Alpha',
-    subtitle: 'Beforan Trolls',
-    href: '../tag/sgrub-alpha.html',
-    color: '#888888',
-  },
-  {
-    label: 'SGRUB Beta',
-    subtitle: 'Alternian Trolls',
-    href: '../tag/sgrub-beta.html',
-    color: '#888888',
-  },
-  {
-    label: 'SBURB Beta',
-    subtitle: 'Four Kids (And A Game They Played Together)',
-    href: '../tag/sburb-beta.html',
-    color: '#888888',
-  },
-  {
-    label: 'SBURB Alpha',
-    subtitle: 'Four Kids (And A Game That Fell Apart)',
-    href: '../tag/sburb-alpha.html',
-    color: '#888888',
-  },
-  {
-    label: 'The Cherubs',
-    subtitle: 'Caliborn, Calliope',
-    href: '../tag/cherubs.html',
-    color: '#888888',
-  },
-];
+const InfluencersPage = () => {
+  const [chars, setChars] = React.useState([]);
+  const [loaded, setLoaded] = React.useState(false);
 
-const HomestuckPage = () => {
+  React.useEffect(() => {
+    fetch('../data/characters.json')
+      .then(r => r.json())
+      .then(data => {
+        const canon = data.canon || {};
+        const allChars = Object.entries(canon);
+        const influencers = allChars
+          .filter(([, char]) => char.tags?.includes('influencer') && char.classpect)
+          .map(([name, char]) => ({ name, color: char.color, classpect: char.classpect }));
+        setChars(influencers);
+        setLoaded(true);
+      })
+      .catch(() => setLoaded(true));
+  }, []);
+
   const handleNavigate = path => { window.location.href = `../index.html#${path}`; };
 
   return (
@@ -125,45 +102,49 @@ const HomestuckPage = () => {
             border: `2px solid ${defaultTheme.accentBg}`,
           }}>
             <div className="text-center mb-6">
-              <h1 className="font-typostuck-title mb-2">Homestuck</h1>
-              <p className="font-courier italic" style={{ fontSize: '1.1rem', color: '#4b5563' }}>
-                A webcomic about kids and games and stuff.
+              <h1 className="font-typostuck-title mb-2">The Influencers</h1>
+              <p style={{
+                fontSize: '1.15rem',
+                color: '#4b5563',
+                fontFamily: 'Garamond, "EB Garamond", "Times New Roman", serif',
+                fontWeight: 'bold',
+              }}>
+                There are other stories to be told... What must this mean for them? For us?
               </p>
             </div>
 
-            <div className="space-y-3">
-              {SESSIONS.map(session => (
-                <div key={session.label}
-                  className="border-l-4 pl-4"
-                  style={{ borderColor: defaultTheme.accentBg }}
-                >
-                  {session.locked ? (
-                    <div className="flex items-baseline gap-3">
-                      <span className="homestuck-command" style={{ color: '#999' }}>
-                        {session.label}
-                      </span>
-                      <span className="font-courier" style={{ color: '#999', fontSize: '0.9rem' }}>
-                        — {session.subtitle}
-                      </span>
+            {!loaded ? (
+              <p className="font-courier text-center" style={{ color: '#666' }}>Loading...</p>
+            ) : chars.length === 0 ? (
+              <p className="font-courier italic text-center" style={{ fontSize: '1.0rem', color: '#4b5563' }}>
+                No influencer classpects have been confirmed yet.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {chars.map(char => {
+                  const [cls, asp] = char.classpect;
+                  const path = `../index.html#/classpect/${cls.toLowerCase()}-of-${asp.toLowerCase()}`;
+                  return (
+                    <div key={char.name}
+                      className="border-l-4 pl-4"
+                      style={{ borderColor: char.color }}
+                    >
+                      <div className="flex items-baseline gap-2" style={{flexWrap:'wrap'}}>
+                        <span className="font-courier-bold"
+                          style={{ color: char.color, fontSize: '1.1rem' }}>
+                          {char.name}:
+                        </span>
+                        <a href={path}
+                          className="font-courier-bold hover:underline"
+                          style={{ color: '#0000ee', textDecoration: 'none' }}>
+                          {cls} of {asp}
+                        </a>
+                      </div>
                     </div>
-                  ) : (
-                    <div className="flex items-baseline gap-3">
-                      <a href={session.href}
-                        className="homestuck-command hover:underline"
-                        style={{ textDecoration: 'none', color: '#000' }}
-                      >
-                        {session.label}
-                      </a>
-                      <span className="font-courier italic"
-                        style={{ color: '#4b5563', fontSize: '0.9rem' }}
-                      >
-                        — {session.subtitle}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           <Footer theme={defaultTheme}/>
@@ -174,7 +155,7 @@ const HomestuckPage = () => {
 };
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<HomestuckPage/>);
+root.render(<InfluencersPage/>);
 </script>
 </body>
 </html>

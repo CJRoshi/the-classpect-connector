@@ -25,6 +25,11 @@ const TAG_PRIORITY = {
   'hiveswap': 11,
   'hauntswitch': 12,
   'pesterquest': 13,
+  // Influencers are a Beyond-Canon sub-set; slot in just after the
+  // main sources so the badge appears near 'beyond-canon' rather than
+  // falling to the 999 default (which would push it past the rung
+  // tags at the very bottom).
+  'influencer': 14,
 
   // Tier 5: Non-canon special tags
   'original-character': 100,
@@ -129,7 +134,7 @@ const TAG_METADATA = {
   'influencer': {
     label: 'The Influencers',
     color: '#6e11e6',
-    route: null
+    route: '/tag/influencers'
   },
   
   // Non-canon special tags

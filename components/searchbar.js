@@ -139,6 +139,25 @@ const SearchBar = ({ onNavigate, theme }) => {
     });
     pages.push({
       type: 'tag',
+      display: 'Influencers',
+      path: './tag/influencers.html',
+      searchTerms: [
+        'influencer', 'influencers',
+        'bc influencers', 'beyond canon influencers',
+        // Character aliases so typing an influencer's name surfaces
+        // the collective page alongside (or before) their classpect
+        // page. Names included: Ruthie Gold (Prince of Time), Imode
+        // Kurita (Witch of Light), Silas P. Beauregarde (Mage of Life),
+        // Avril Thorpe (Rogue of Space).
+        'ruthie', 'ruthie gold',
+        'imode', 'imode kurita',
+        'silas', 'silas beauregarde', 'silas p beauregarde', 'silas p. beauregarde', 'beauregarde',
+        'avril', 'avril thorpe',
+      ],
+      isExternal: true
+    });
+    pages.push({
+      type: 'tag',
       display: 'Balanced Classpects',
       path: './balanced.html',
       searchTerms: ['balanced', 'balance', 'zero value', 'zero-sum', 'zero sum'],
