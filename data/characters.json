@@ -751,6 +751,23 @@
         "hiveswap"
       ]
     },
+    "The Xtremist": {
+      "color": "#a15000",
+      "classpect": [
+        "Knight",
+        "Life"
+      ],
+      "lunarsway": "Prospit",
+      "reaction": [
+        {
+          "text": "IT IS MY DUTY TO PROTECT IT...\n\nX",
+          "color": "#a15000"
+        }
+      ],
+      "tags": [
+        "hiveswap"
+      ]  
+    },
     "MSPA Reader": {
       "color": "#000000",
       "classpect": [
