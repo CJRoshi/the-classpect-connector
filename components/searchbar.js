@@ -139,10 +139,10 @@ const SearchBar = ({ onNavigate, theme }) => {
     });
     pages.push({
       type: 'tag',
-      display: 'Influencers',
+      display: 'The Influencers',
       path: './tag/influencers.html',
       searchTerms: [
-        'influencer', 'influencers',
+        'influencer', 'influencers', 'the influencers',
         'bc influencers', 'beyond canon influencers',
         // Character aliases so typing an influencer's name surfaces
         // the collective page alongside (or before) their classpect

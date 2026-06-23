@@ -25,6 +25,10 @@
 
     .font-courier      { font-family: 'Courier New', monospace; }
     .font-courier-bold { font-family: 'Courier New', monospace; font-weight: bold; }
+    /* Header.js consumes .font-typostuck (nav links) and
+       .font-typostuck-header (title); both need to be defined here
+       or the shared chrome falls back to the inherited Courier font
+       and loses its branded face. Sizes mirror the other tag pages. */
     .font-typostuck {
       font-family: 'Typostuck', 'Courier New', monospace;
       font-size: 1.25rem; font-weight: normal;
@@ -37,6 +41,9 @@
       font-family: 'Typostuck', 'Courier New', monospace;
       font-size: 1.75rem; font-weight: normal;
     }
+    .font-garamond {
+      font-family: Garamond, "EB Garamond", "Times New Roman", serif;
+    }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -45,6 +52,125 @@
       min-height: 100vh;
       font-family: 'Courier New', monospace;
     }
+
+    .influencer-panel-wrap {
+      max-width: 720px;
+      margin: 0 auto 24px;
+    }
+    .influencer-panel {
+      position: relative;
+      width: 100%;
+      line-height: 0;
+      border-radius: 6px;
+      overflow: visible;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+    .influencer-panel .bg-layer {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      transition: filter 0.25s ease;
+    }
+    .influencer-panel .char-layer {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      transition: opacity 0.25s ease, filter 0.25s ease;
+    }
+    .influencer-panel.has-active .bg-layer {
+      filter: brightness(0.6) saturate(0.85);
+    }
+    .influencer-panel .char-layer.dim {
+      opacity: 0.18;
+      filter: brightness(0.5) saturate(0.5);
+    }
+    .influencer-panel .char-layer.glow {
+      filter:
+        drop-shadow(0 0 6px var(--glow))
+        drop-shadow(0 0 18px var(--glow))
+        brightness(1.08);
+    }
+
+    .hot-zone {
+      position: absolute;
+      top: 0; bottom: 0;
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    .char-arrow {
+      position: absolute;
+      bottom: calc(100% + 4px);
+      width: 0;
+      height: 0;
+      border: 8px solid transparent;
+      border-top-color: #444;
+      transform: translateX(-50%);
+      z-index: 20;
+      pointer-events: none;
+    }
+    .char-box {
+      position: absolute;
+      bottom: calc(100% + 18px);
+      background: #fafafa;
+      border: 2px solid #444;
+      border-radius: 6px;
+      padding: 8px 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+      white-space: nowrap;
+      z-index: 20;
+      pointer-events: auto;
+      line-height: 1.3;
+      transform: translateX(calc(-50% + var(--shift, 0px)));
+      animation: char-box-pop 0.18s ease-out;
+      /* Cap the box's max width so even very long character names
+         don't go past the panel on the narrowest viewports. */
+      max-width: min(280px, calc(100vw - 32px));
+    }
+    @keyframes char-box-pop {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .char-box .name {
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+    .char-box .classpect {
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      color: #0000ee;
+    }
+    .char-box .tap-hint {
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      color: #6b7280;
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    /* The narrator-voice tagline beneath the panel. Garamond per the
+       Beyond Canon style cue. */
+    .narrator-text {
+      font-family: Garamond, "EB Garamond", "Times New Roman", serif;
+      font-size: 1.2rem;
+      line-height: 1.45;
+      color: #1f2937;
+      max-width: 720px;
+      margin: 0 auto 24px;
+      text-indent: 1.5em;
+    }
+    .narrator-text p {
+      margin-bottom: 0.6em;
+    }
+    .narrator-text p:first-child { text-indent: 0; }
+    .narrator-text em {
+      font-style: italic;
+    }
   </style>
 </head>
 
@@ -52,6 +178,8 @@
 <div id="root"></div>
 
 <script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
 const defaultTheme = {
   bg: "#626262",
   contentBg: "#d0d0d0",
@@ -60,26 +188,106 @@ const defaultTheme = {
   isDark: false,
 };
 
-const InfluencersPage = () => {
-  const [chars, setChars] = React.useState([]);
-  const [loaded, setLoaded] = React.useState(false);
+/* Layout metadata for the comic panel. Maps each influencer to:
+     - characterKey:  the name in characters.json (single source for color
+                      / classpect data)
+     - image:         the per-character crop PNG, full-canvas with
+                      transparency
+     - x, w:          hot-zone horizontal strip in % of panel width.
+                      Easy-to-tune knobs — bump these if a character's
+                      strip feels too wide / narrow. Strips cover the
+                      full width of the panel with no gaps so every pixel
+                      maps to exactly one character.
+   Array order is BACK-TO-FRONT — later entries paint on top of earlier
+   ones. The group sits in a circle, so depth ordering per user spec:
+     Avril (furthest back)  →  Ruthie + Silas (mid, on opposite sides
+     so they don't overlap each other) → Imode (closest to camera,
+     foreground). */
+const INFLUENCER_LAYOUT = [
+  { id: 'avril',  characterKey: 'Avril Thorpe',         image: '../images/special/influencers/avril.png',  x: 52, w: 18 },
+  { id: 'ruthie', characterKey: 'Ruthie Gold',          image: '../images/special/influencers/ruthie.png', x:  0, w: 30 },
+  { id: 'silas',  characterKey: 'Silas P. Beauregarde', image: '../images/special/influencers/silas.png',  x: 70, w: 30 },
+  { id: 'imode',  characterKey: 'Imode Kurita',         image: '../images/special/influencers/imode.png',  x: 30, w: 22 },
+];
+const LAYOUT_BY_ID = Object.fromEntries(INFLUENCER_LAYOUT.map(l => [l.id, l]));
 
-  React.useEffect(() => {
+const InfluencersPage = () => {
+  const [characters, setCharacters] = useState({});
+  const [loaded, setLoaded] = useState(false);
+  const [active, setActive] = useState(null);
+  const [boxShift, setBoxShift] = useState(0);
+  const panelRef = useRef(null);
+  const boxRef   = useRef(null);
+
+  useEffect(() => {
     fetch('../data/characters.json')
       .then(r => r.json())
       .then(data => {
-        const canon = data.canon || {};
-        const allChars = Object.entries(canon);
-        const influencers = allChars
-          .filter(([, char]) => char.tags?.includes('influencer') && char.classpect)
-          .map(([name, char]) => ({ name, color: char.color, classpect: char.classpect }));
-        setChars(influencers);
+        setCharacters({ ...(data.canon || {}), ...(data.nonCanon || {}) });
         setLoaded(true);
       })
       .catch(() => setLoaded(true));
   }, []);
 
+  /* Tap-outside closes the active panel. */
+  useEffect(() => {
+    if (!active) return;
+    const onDocClick = e => {
+      if (panelRef.current && !panelRef.current.contains(e.target)) {
+        setActive(null);
+      }
+    };
+    document.addEventListener('click', onDocClick);
+    return () => document.removeEventListener('click', onDocClick);
+  }, [active]);
+
   const handleNavigate = path => { window.location.href = `../index.html#${path}`; };
+
+  const navigateToChar = char => {
+    if (!char || !char.classpect) return;
+    const [cls, asp] = char.classpect;
+    window.location.href = `../index.html#/classpect/${cls.toLowerCase()}-of-${asp.toLowerCase()}`;
+  };
+
+  /* Two-tap-to-navigate. */
+  const handleZoneClick = (e, layout) => {
+    e.stopPropagation();
+    if (active === layout.id) {
+      navigateToChar(characters[layout.characterKey]);
+    } else {
+      setActive(layout.id);
+    }
+  };
+
+  /* Pull data for the currently-active character from characters.json
+     (color / classpect for the tooltip). */
+  const activeLayout = active ? LAYOUT_BY_ID[active] : null;
+  const activeChar   = activeLayout ? characters[activeLayout.characterKey] : null;
+  const activeTooltipX = activeLayout ? (activeLayout.x + activeLayout.w / 2) : 0;
+
+  /* Tooltip-box edge clamp. */
+  useEffect(() => {
+    if (!active || !boxRef.current || !panelRef.current) {
+      setBoxShift(0);
+      return;
+    }
+    const box   = boxRef.current.getBoundingClientRect();
+    const panel = panelRef.current.getBoundingClientRect();
+    const pad   = 8;
+    let shift = 0;
+    if (box.left < panel.left + pad) {
+      shift = (panel.left + pad) - box.left;
+    } else if (box.right > panel.right - pad) {
+      shift = (panel.right - pad) - box.right;
+    }
+    setBoxShift(shift);
+  }, [active]);
+
+  /* Build the static char list (rendered below the panel as the
+     data-backed reference). Same list pattern other tag pages use. */
+  const charList = INFLUENCER_LAYOUT
+    .map(l => ({ key: l.characterKey, char: characters[l.characterKey] }))
+    .filter(x => x.char && x.char.classpect);
 
   return (
     <div style={{ backgroundColor: defaultTheme.bg, minHeight: '100vh' }}>
@@ -103,36 +311,103 @@ const InfluencersPage = () => {
           }}>
             <div className="text-center mb-6">
               <h1 className="font-typostuck-title mb-2">The Influencers</h1>
-              <p style={{
-                fontSize: '1.15rem',
-                color: '#4b5563',
-                fontFamily: 'Garamond, "EB Garamond", "Times New Roman", serif',
-                fontWeight: 'bold',
-              }}>
+            </div>
+
+            <div className="influencer-panel-wrap">
+              <div
+                ref={panelRef}
+                className={`influencer-panel${active ? ' has-active' : ''}`}
+                onMouseLeave={() => setActive(null)}
+              >
+                <img className="bg-layer"
+                     src="../images/special/influencers/bg.png"
+                     alt="The Influencers scene"/>
+
+                {INFLUENCER_LAYOUT.map(layout => {
+                  const ch = characters[layout.characterKey];
+                  const isActive = active === layout.id;
+                  const isDimmed = active && !isActive;
+                  return (
+                    <img
+                      key={layout.id}
+                      className={`char-layer${isActive ? ' glow' : ''}${isDimmed ? ' dim' : ''}`}
+                      src={layout.image}
+                      alt={layout.characterKey}
+                      style={{ '--glow': ch ? ch.color : '#ffffff' }}
+                    />
+                  );
+                })}
+
+                {INFLUENCER_LAYOUT.map(layout => (
+                  <div
+                    key={`hot-${layout.id}`}
+                    className="hot-zone"
+                    style={{ left: `${layout.x}%`, width: `${layout.w}%` }}
+                    onMouseEnter={() => setActive(layout.id)}
+                    onClick={(e) => handleZoneClick(e, layout)}
+                    title={layout.characterKey}
+                  />
+                ))}
+
+                {active && activeChar && (
+                  <>
+                    <div
+                      className="char-arrow"
+                      style={{ left: `${activeTooltipX}%` }}
+                    />
+                    <div
+                      ref={boxRef}
+                      className="char-box"
+                      style={{
+                        left: `${activeTooltipX}%`,
+                        '--shift': `${boxShift}px`,
+                      }}
+                      onClick={e => {
+                        e.stopPropagation();
+                        navigateToChar(activeChar);
+                      }}
+                    >
+                      <div className="name" style={{ color: activeChar.color }}>
+                        {activeLayout.characterKey}
+                      </div>
+                      {activeChar.classpect && (
+                        <div className="classpect">
+                          {activeChar.classpect[0]} of {activeChar.classpect[1]}
+                        </div>
+                      )}
+                      <div className="tap-hint">tap again to view</div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div className="narrator-text">
+              <p>
                 There are other stories to be told... What must this mean for them? For us?
               </p>
             </div>
 
             {!loaded ? (
               <p className="font-courier text-center" style={{ color: '#666' }}>Loading...</p>
-            ) : chars.length === 0 ? (
+            ) : charList.length === 0 ? (
               <p className="font-courier italic text-center" style={{ fontSize: '1.0rem', color: '#4b5563' }}>
                 No influencer classpects have been confirmed yet.
               </p>
             ) : (
               <div className="space-y-2">
-                {chars.map(char => {
+                {charList.map(({ key, char }) => {
                   const [cls, asp] = char.classpect;
                   const path = `../index.html#/classpect/${cls.toLowerCase()}-of-${asp.toLowerCase()}`;
                   return (
-                    <div key={char.name}
+                    <div key={key}
                       className="border-l-4 pl-4"
                       style={{ borderColor: char.color }}
                     >
-                      <div className="flex items-baseline gap-2" style={{flexWrap:'wrap'}}>
+                      <div className="flex items-baseline gap-2" style={{ flexWrap: 'wrap' }}>
                         <span className="font-courier-bold"
                           style={{ color: char.color, fontSize: '1.1rem' }}>
-                          {char.name}:
+                          {key}:
                         </span>
                         <a href={path}
                           className="font-courier-bold hover:underline"

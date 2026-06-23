@@ -33,6 +33,7 @@ Lock The Taskbar (2/28/2026):
 - Hotfix 1 -- Site Logo Fix
 - Hotfix 2 -- Tag Routing Fix
 - Hotfix 3 -- Influencers, Babel Fixes
+- Hotfix 4 -- Better Influencing
 
 ### Past Updates
 
