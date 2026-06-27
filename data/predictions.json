@@ -1,0 +1,112 @@
+{
+  "_meta": {
+    "description": "Speculative classpects for Homestuck: Beyond Canon characters who haven't been formally assigned classes/aspects in canon yet. Consumed by the Connector's predictions.html page AND by the Scryer's BC predictions special session, so any rename / re-shuffle here propagates to both surfaces.",
+    "stability": "speculative",
+    "lastTouched": "2026-06-26",
+    "moonConfidence": "Mixed. Ly'lac, Del'fi, championsTirade, and Vrissy on Derse + auguryAside on Prospit are confirmed by BC text. The rest (TC, Swiss, Harry, Tavvy, Yiffy) are best-guess reads. The Connector's predictions.html doesn't render moons in its UI, but the Scryer consumes them for lunar-balance stats."
+  },
+
+  "gammaKids": [
+    {
+      "name": "Vrissy",
+      "fullName": "Vriska Maryam-Lalonde",
+      "handle": "adamantGriftress",
+      "color": "#005682",
+      "classpect": ["Thief", "Mind"],
+      "moon": "Derse",
+      "symbol": "../images/special/symbols/scorpio.webp",
+      "note": null
+    },
+    {
+      "name": "Tavvy",
+      "fullName": "Tavros Crocker",
+      "handle": "glutinousGymnast",
+      "color": "#2b0057",
+      "classpect": ["Heir", "Rage"],
+      "moon": "Prospit",
+      "symbol": null,
+      "note": null
+    },
+    {
+      "name": "Harry",
+      "fullName": "Harry Anderson Egbert",
+      "handle": "thespiansGlamor",
+      "color": "#0671cd",
+      "classpect": ["Mage", "Light"],
+      "moon": "Derse",
+      "symbol": null,
+      "note": null
+    },
+    {
+      "name": "Yiffy",
+      "fullName": "Yiffany Longstocking Lalonde-Harley",
+      "handle": null,
+      "color": "#d00009",
+      "classpect": ["Rogue", "Life"],
+      "moon": "Prospit",
+      "symbol": null,
+      "note": null
+    }
+  ],
+
+  "deltaKids": [
+    {
+      "name": "Ly'lac",
+      "handle": "gavageCunctation",
+      "fullTitle": "of the Final Applause",
+      "color": "#8e5594",
+      "classpect": ["Witch", "Doom"],
+      "moon": "Derse",
+      "symbol": "../images/special/symbols/lylacsymbol.webp",
+      "note": null
+    },
+    {
+      "name": "Del'fi",
+      "handle": "cloisteredConnoisewer",
+      "fullTitle": "Who Aches to Be",
+      "hoverDetailName": "Dagger Tartarus, The Forgotten Hostage",
+      "color": "#018e71",
+      "classpect": ["Seer", "Heart"],
+      "moon": "Derse",
+      "symbol": "../images/special/symbols/daggersymbol.webp",
+      "note": null
+    },
+    {
+      "name": "auguryAside",
+      "handle": "auguryAside",
+      "color": "#801108",
+      "classpect": ["Sylph", "Time"],
+      "moon": "Prospit",
+      "symbol": "../images/special/symbols/aasymbol.webp",
+      "note": null
+    },
+    {
+      "name": "Swiss Elysi",
+      "handle": "agamemnonsTheory",
+      "hoverDetailName": "SWISS ELYSI, WARD OF THE EIGHTH REGION (01ST DISTRICT), COHORT CAPTAIN OF HONEYFALL GYMNASIKKOU'S CLASS OF 4005",
+      "color": "#9aa4b0",
+      "classpect": ["Page", "Blood"],
+      "moon": "Prospit",
+      "symbol": "../images/special/symbols/swisssymbol.webp",
+      "note": null
+    },
+    {
+      "name": "tinnitusChakra",
+      "handle": "tinnitusChakra",
+      "color": "#701dff",
+      "classpect": ["Bard", "Void"],
+      "moon": "Prospit",
+      "symbol": "../images/special/symbols/tcsymbol.webp",
+      "note": null
+    },
+    {
+      "name": "championsTirade",
+      "handle": "championsTirade",
+      "color": "#81ce42",
+      "classpect": ["Knight", "Space"],
+      "moon": "Derse",
+      "symbol": "../images/special/symbols/ctsymbol.webp",
+      "note": null
+    }
+  ]
+}

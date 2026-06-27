@@ -311,6 +311,14 @@ const InfluencersPage = () => {
           }}>
             <div className="text-center mb-6">
               <h1 className="font-typostuck-title mb-2">The Influencers</h1>
+              {/* Cross-link to the Scryer's Influencers special session.
+                  Uses the alias rather than the raw session code so the
+                  URL stays readable AND survives any future re-encoding.
+                  Same one-liner pattern the SBURB Beta / SBURB Alpha
+                  pages use. */}
+              <p className="font-courier" style={{marginTop: '4px', fontSize: '0.8rem', color: '#4b5563'}}>
+                (also: <a href="https://cjroshi.github.io/the-session-scryer/scry.html#INFLUENCERS" target="_blank" rel="noopener noreferrer" className="underline" style={{color: '#0000ee'}}>view on the Session Scryer</a>)
+              </p>
             </div>
 
             <div className="influencer-panel-wrap">

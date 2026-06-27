@@ -34,6 +34,7 @@ Lock The Taskbar (2/28/2026):
 - Hotfix 2 -- Tag Routing Fix
 - Hotfix 3 -- Influencers, Babel Fixes
 - Hotfix 4 -- Better Influencing
+- Hotfix 5 -- Sitemap, BC Predictions
 
 ### Past Updates
 

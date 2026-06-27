@@ -97,95 +97,16 @@ const defaultTheme = {
 };
 
 // ── DATA ──────────────────────────────────────────────────
-
-const OMEGA_KIDS = [
-  {
-    name: 'Vrissy',
-    fullName: 'Vriska Maryam-Lalonde',
-    handle: 'adamantGriftress',
-    color: '#005682',
-    classpect: ['Thief', 'Mind'],
-    symbol: '../images/special/symbols/scorpio.webp',
-  },
-  {
-    name: 'Tavvy',
-    fullName: 'Tavros Crocker',
-    handle: 'glutinousGymnast',
-    color: '#2b0057',
-    classpect: ['Heir', 'Rage'],
-    symbol: null,
-  },
-  {
-    name: 'Harry',
-    fullName: 'Harry Anderson Egbert',
-    handle: 'thespiansGlamor',
-    color: '#0671cd',
-    classpect: ['Mage', 'Light'],
-    symbol: null,
-  },
-  {
-    name: 'Yiffy',
-    fullName: 'Yiffany Longstocking Lalonde-Harley',
-    handle: null,
-    color: '#d00009',
-    classpect: ['Rogue', 'Life'],
-    symbol: null,
-  },
-];
-
-const DELTA_KIDS = [
-  {
-    name: "Ly'lac",
-    handle: 'gavageCunctation',
-    fullTitle: "of the Final Applause",
-    color: '#8e5594',
-    classpect: ['Witch', 'Doom'],
-    symbol: '../images/special/symbols/lylacsymbol.webp',
-    note: null,
-  },
-  {
-    name: "Del'fi",
-    handle: 'cloisteredConnoisewer',
-    fullTitle: "Who Aches to Be",
-    hoverDetailName: "Dagger Tartarus, The Forgotten Hostage",
-    color: '#018e71',
-    classpect: ['Seer', 'Heart'],
-    symbol: '../images/special/symbols/daggersymbol.webp',
-    note: null,
-  },
-  {
-    name: 'auguryAside',
-    handle: 'auguryAside',
-    color: '#801108',
-    classpect: ['Sylph', 'Time'],
-    symbol: '../images/special/symbols/aasymbol.webp',
-    note: null,
-  },
-  {
-    name: 'Swiss Elysi',
-    handle: 'agamemnonsTheory',
-    hoverDetailName: "SWISS ELYSI, WARD OF THE EIGHTH REGION (01ST DISTRICT), COHORT CAPTAIN OF HONEYFALL GYMNASIKKOU'S CLASS OF 4005",
-    color: '#9aa4b0',
-    classpect: ['Page', 'Blood'],
-    symbol: '../images/special/symbols/swisssymbol.webp',
-  },
-  {
-    name: 'tinnitusChakra',
-    handle: 'tinnitusChakra',
-    color: '#701dff',
-    classpect: ['Bard', 'Void'],
-    symbol: '../images/special/symbols/tcsymbol.webp',
-    note: null,
-  },
-  {
-    name: 'championsTirade',
-    handle: 'championsTirade',
-    color: '#81ce42',
-    classpect: ['Knight', 'Space'],
-    symbol: '../images/special/symbols/ctsymbol.webp',
-    note: null,
-  },
-];
+//
+// Character predictions live in ../data/predictions.json so the Scryer
+// can cross-fetch the same source for its BC Predictions special
+// session. Two arrays come back: `gammaKids` (offspring of the
+// original cast) and `deltaKids` (Deltritus natives). The Scryer
+// expects the file at this exact path relative to the Connector root
+// (https://<host>/the-classpect-connector/data/predictions.json) —
+// if you move it, update components/special-sessions.js in the
+// Scryer repo too.
+const PREDICTIONS_JSON_PATH = '../data/predictions.json';
 
 const CharRow = ({ char }) => {
   const [cls, asp] = char.classpect;
@@ -247,6 +168,35 @@ const CharRow = ({ char }) => {
 const PredictionsPage = () => {
   const handleNavigate = path => { window.location.href = `../index.html#${path}`; };
 
+  /* Predictions data is fetched at mount and held in component state.
+     Two arrays (`gammaKids`, `deltaKids`) are rendered as separate
+     sections. Initial state is `null` → renders a brief loading
+     line; fetch failure leaves `null` plus an error message rather
+     than wiping the page chrome, so users on flaky connections still
+     see the page header. */
+  const [data, setData]   = React.useState(null);
+  const [error, setError] = React.useState(null);
+
+  React.useEffect(() => {
+    /* AbortController guards against double-render quirks (strict mode,
+       fast hash-route flips) leaving an in-flight fetch to land on
+       an unmounted component. */
+    const controller = new AbortController();
+    fetch(PREDICTIONS_JSON_PATH, { signal: controller.signal })
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
+      .then(json => setData(json))
+      .catch(err => {
+        if (err.name !== 'AbortError') {
+          console.warn('[predictions] failed to load predictions.json:', err);
+          setError(err.message || 'fetch failed');
+        }
+      });
+    return () => controller.abort();
+  }, []);
+
   return (
     <div style={{ backgroundColor: defaultTheme.bg, minHeight: '100vh' }}>
       <Header onNavigate={handleNavigate} theme={defaultTheme}/>
@@ -274,27 +224,57 @@ const PredictionsPage = () => {
                 <br/>
                 <span style={{ fontSize: '0.8rem' }}>Speculative. Subject to being catastrophically wrong.</span>
               </p>
+              {/* Cross-link to the Scryer's BC Predictions special
+                  session. Uses the alias rather than the raw session
+                  code because the session is async-loaded on the
+                  Scryer side (members + code populated from this very
+                  JSON file at runtime) — the alias resolves regardless
+                  of load timing, the raw code wouldn't be stable. */}
+              <p className="font-courier" style={{marginTop: '6px', fontSize: '0.8rem', color: '#4b5563'}}>
+                (also: <a href="https://cjroshi.github.io/the-session-scryer/scry.html#BCPREDICTIONS" target="_blank" rel="noopener noreferrer" className="underline" style={{color: '#0000ee'}}>view on the Session Scryer</a>)
+              </p>
             </div>
 
-            {/* Omega Kids */}
-            <h2 className="font-typostuck-header mb-3">Omega Kids</h2>
-            <p className="font-courier italic mb-3" style={{ fontSize: '0.82rem', color: '#6b7280' }}>
-              Children of the original cast, freshly ripped from Candy by a certain sp8der.
-            </p>
-            <div className="space-y-2 mb-6">
-              {OMEGA_KIDS.map(char => <CharRow key={char.name} char={char}/>)}
-            </div>
+            {/* Loading / error fallback states. The error message stays
+                deliberately quiet — the data is speculative anyway,
+                so a failed fetch shouldn't read as a site-broken
+                emergency. */}
+            {!data && !error && (
+              <p className="font-courier italic text-center" style={{ color: '#6b7280' }}>
+                Loading predictions...
+              </p>
+            )}
+            {error && (
+              <p className="font-courier italic text-center" style={{ color: '#9b1c1c' }}>
+                Couldn't load predictions data ({error}). Try reloading.
+              </p>
+            )}
 
-            <hr className="section-divider"/>
+            {data && (
+              <>
+                {/* Gamma Kids (formerly "Omega Kids" — renamed per user
+                    spec to match the in-universe Greek-letter cohort
+                    nomenclature). */}
+                <h2 className="font-typostuck-header mb-3">Gamma Kids</h2>
+                <p className="font-courier italic mb-3" style={{ fontSize: '0.82rem', color: '#6b7280' }}>
+                  Children of the original cast, freshly ripped from Candy by a certain sp8der.
+                </p>
+                <div className="space-y-2 mb-6">
+                  {data.gammaKids.map(char => <CharRow key={char.name} char={char}/>)}
+                </div>
 
-            {/* Delta Kids */}
-            <h2 className="font-typostuck-header mb-3">Delta Kids</h2>
-            <p className="font-courier italic mb-3" style={{ fontSize: '0.82rem', color: '#6b7280' }}>
-              The players already on Deltritus; Rose and Dirk's passive-aggressive offspring/proteges.
-            </p>
-            <div className="space-y-2">
-              {DELTA_KIDS.map(char => <CharRow key={char.name} char={char}/>)}
-            </div>
+                <hr className="section-divider"/>
+
+                {/* Delta Kids */}
+                <h2 className="font-typostuck-header mb-3">Delta Kids</h2>
+                <p className="font-courier italic mb-3" style={{ fontSize: '0.82rem', color: '#6b7280' }}>
+                  The players already on Deltritus; Rose and Dirk's passive-aggressive offspring/proteges.
+                </p>
+                <div className="space-y-2">
+                  {data.deltaKids.map(char => <CharRow key={char.name} char={char}/>)}
+                </div>
+              </>
+            )}
 
           </div>
           <Footer theme={defaultTheme}/>
