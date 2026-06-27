@@ -4,6 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>D --> Build My Ma%ine - The Classpect Connector</title>
+  <meta name="description" content="????????????" />
+  <link rel="canonical" href="https://cjroshi.github.io/the-classpect-connector/email-of-equius.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="D --> Build My Ma%ine" />
+  <meta property="og:description" content="????????????" />
+  <meta property="og:url" content="https://cjroshi.github.io/the-classpect-connector/email-of-equius.html" />
+  <meta property="og:image" content="https://cjroshi.github.io/the-classpect-connector/images/special/CCLogoRegular.png" />
+  <meta property="og:site_name" content="The Classpect Connector" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="D --> Build My Ma%ine" />
+  <meta name="twitter:description" content="????????????" />
+  <meta name="twitter:image" content="https://cjroshi.github.io/the-classpect-connector/images/special/CCLogoRegular.png" />
   <link rel="icon" type="image/png" href="./images/special/CCLogoRegular.png" />
   
   <style>
@@ -197,7 +209,18 @@
       .subject-line {
         font-size: 2rem;
       }
-      
+
+      /* Clear the fixed .logo-home in the top-left corner. The logo
+         sits at top:20px and is 48px tall (ends ~68px down). Without
+         extra padding-top here, the centered .subject-line at the
+         default 40px container padding ends up overlapping the logo
+         on narrow viewports. 90px gives ~22px of breathing room above
+         the title; padding-bottom kept at the 40px default via the
+         shorthand override below. */
+      .email-container {
+        padding-top: 90px;
+      }
+
       .sollux-reaction {
         width: 40px;
         height: 40px;
