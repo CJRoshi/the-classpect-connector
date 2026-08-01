@@ -93,6 +93,7 @@
     {
       "name": "tinnitusChakra",
       "handle": "tinnitusChakra",
+      "fulltitle": "The Blackstar",
       "color": "#701dff",
       "classpect": ["Bard", "Void"],
       "moon": "Prospit",
@@ -102,6 +103,7 @@
     {
       "name": "championsTirade",
       "handle": "championsTirade",
+      "fulltitle": "The Mountain",
       "color": "#81ce42",
       "classpect": ["Knight", "Space"],
       "moon": "Derse",
