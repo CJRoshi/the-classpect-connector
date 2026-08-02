@@ -142,12 +142,27 @@ const CharRow = ({ char }) => {
                 {' '}{char.fullTitle}
               </span>
             )}
+            {/* Manthronym — the Satyr adult name (e.g. "The Blackstar"
+                for TC, "The Mountain" for CT). Italicized to
+                distinguish from a fullTitle honorific, otherwise same
+                inline treatment. */}
+            {char.manthronym && (
+              <span className="font-courier italic" style={{ color: char.color, fontSize: '0.85rem', opacity: 0.75 }}>
+                {' '}{char.manthronym}
+              </span>
+            )}
           </div>
           {char.fullName && (
             <div className="handle" style={{ opacity: 0.55 }}>{char.fullName}</div>
           )}
           {char.handle && char.handle !== char.name && (
             <div className="handle">{char.handle}</div>
+          )}
+          {/* Alt handle — currently only Vrissy's parent-hiding
+              "eminentBelladonna". Same visual as the primary handle;
+              no extra label per user spec. */}
+          {char.altHandle && (
+            <div className="handle">{char.altHandle}</div>
           )}
           {char.hoverDetailName && (
             <span
@@ -276,7 +291,7 @@ const PredictionsPage = () => {
                 {/* Delta Kids */}
                 <h2 className="font-typostuck-header mb-3">Delta Kids</h2>
                 <p className="font-courier italic mb-3" style={{ fontSize: '0.82rem', color: '#6b7280' }}>
-                  The players already on Deltritus; Rose and Dirk's passive-aggressive offspring/proteges.
+                  The players already on Deltritus; all the Satyrs and Nymphs.
                 </p>
                 <div className="space-y-2">
                   {data.deltaKids.map(char => <CharRow key={char.name} char={char}/>)}

@@ -158,6 +158,33 @@ const SearchBar = ({ onNavigate, theme }) => {
     });
     pages.push({
       type: 'tag',
+      display: 'HSBC Predictions',
+      path: './tag/predictions.html',
+      searchTerms: [
+        // Session + page-level terms.
+        'predictions', 'prediction', 'bc predictions', 'hsbc predictions',
+        'beyond canon predictions', 'deltritus', 'deltritus session',
+        // Cohort names.
+        'gamma kids', 'gammakids', 'gamma',
+        'delta kids', 'deltakids', 'delta',
+        // Gamma-Kid character names + chumhandles + Vrissy's alt.
+        'vrissy', 'adamantgriftress', 'eminentbelladonna',
+        'tavvy', 'tavros crocker', 'glutinousgymnast',
+        'harry', 'harry anderson egbert', 'thespiansglamor',
+        'yiffy', 'yiffany', 'yiffany longstocking', 'taciturntablesetter',
+        // Delta-Kid character names + chumhandles + Satyr manthronyms.
+        'lylac', "ly'lac", 'gavagecunctation',
+        'delfi', "del'fi", 'cloisteredconnoisewer', 'dagger tartarus',
+        'auguryaside', 'augury aside',
+        'swiss', 'swiss elysi', 'agamemnonstheory',
+        'tinnituschakra', 'tinnitus chakra', 'bobo', "bo'bo", '8o8o',
+        'the blackstar', 'blackstar',
+        'championstirade', 'champions tirade', 'the mountain', 'mountain',
+      ],
+      isExternal: true
+    });
+    pages.push({
+      type: 'tag',
       display: 'Balanced Classpects',
       path: './balanced.html',
       searchTerms: ['balanced', 'balance', 'zero value', 'zero-sum', 'zero sum'],

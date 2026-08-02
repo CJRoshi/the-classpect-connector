@@ -11,6 +11,7 @@
       "name": "Vrissy",
       "fullName": "Vriska Maryam-Lalonde",
       "handle": "adamantGriftress",
+      "altHandle": "eminentBelladonna",
       "color": "#005682",
       "classpect": ["Thief", "Mind"],
       "moon": "Derse",
@@ -40,7 +41,7 @@
     {
       "name": "Yiffy",
       "fullName": "Yiffany Longstocking Lalonde-Harley",
-      "handle": null,
+      "handle": "taciturnTablesetter",
       "color": "#d00009",
       "classpect": ["Rogue", "Life"],
       "moon": "Prospit",
@@ -93,6 +94,7 @@
     {
       "name": "tinnitusChakra",
       "handle": "tinnitusChakra",
+      "manthronym": "The Blackstar",
       "color": "#701dff",
       "classpect": ["Bard", "Void"],
       "moon": "Prospit",
@@ -102,6 +104,7 @@
     {
       "name": "championsTirade",
       "handle": "championsTirade",
+      "manthronym": "The Mountain",
       "color": "#81ce42",
       "classpect": ["Knight", "Space"],
       "moon": "Derse",
