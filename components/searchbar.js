@@ -147,11 +147,11 @@ const SearchBar = ({ onNavigate, theme }) => {
         // Character aliases so typing an influencer's name surfaces
         // the collective page alongside (or before) their classpect
         // page. Names included: Ruthie Gold (Prince of Time), Imode
-        // Kurita (Witch of Light), Silas P. Beauregarde (Mage of Life),
+        // Kurita (Witch of Light), Silas P. Beauregard (Mage of Life),
         // Avril Thorpe (Rogue of Space).
         'ruthie', 'ruthie gold',
         'imode', 'imode kurita',
-        'silas', 'silas beauregarde', 'silas p beauregarde', 'silas p. beauregarde', 'beauregarde',
+        'silas', 'silas beauregard', 'silas p beauregard', 'silas p. beauregard', 'beauregard',
         'avril', 'avril thorpe',
       ],
       isExternal: true
