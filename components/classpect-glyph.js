@@ -260,7 +260,7 @@ async function loadRingStrokeOverlay(className, outlineColor) {
 }
 
 /* Rasterize a URL to an off-screen canvas at `resPx` × `resPx`. */
-async function rasterize(url, resPx) {
+async function rasterize(url, targetLongSide) {
   const img = new Image();
   try {
     await new Promise((resolve, reject) => {
@@ -272,21 +272,34 @@ async function rasterize(url, resPx) {
     console.error(err);
     return null;
   }
+  // Size the raster canvas to the SOURCE's natural aspect ratio so
+  // browsers rasterize consistently.
+  const natW = img.naturalWidth  || targetLongSide;
+  const natH = img.naturalHeight || targetLongSide;
+  const scale = targetLongSide / Math.max(natW, natH);
+  const w = Math.max(1, Math.round(natW * scale));
+  const h = Math.max(1, Math.round(natH * scale));
   const canvas = document.createElement('canvas');
-  canvas.width  = resPx;
-  canvas.height = resPx;
+  canvas.width  = w;
+  canvas.height = h;
   const ctx = canvas.getContext('2d');
-  ctx.drawImage(img, 0, 0, resPx, resPx);
-  return { img, rgba: ctx.getImageData(0, 0, resPx, resPx).data, size: resPx };
+  ctx.drawImage(img, 0, 0, w, h);
+  // `size` alias kept for callers that assume square rasters (ring
+  // geometry math). It equals w since rings are 1:1 in the source.
+  return { img, rgba: ctx.getImageData(0, 0, w, h).data, w, h, size: w };
 }
 
 /* Full-image bbox of non-transparent pixels, expressed as unit-square
    fractions (x, y, w, h). Returns null if the raster is empty. */
-function pixelBboxFraction(rgba, size, alphaThresh = 32) {
-  let minX = size, maxX = -1, minY = size, maxY = -1;
-  for (let y = 0; y < size; y++) {
-    const row = y * size;
-    for (let x = 0; x < size; x++) {
+function pixelBboxFraction(rgba, w, h, alphaThresh = 32) {
+  // Backward-compat: earlier callers passed a single `size` (square
+  // canvas). If h is undefined or a threshold-shaped number, treat
+  // w as the shared side length.
+  if (typeof h !== 'number') { alphaThresh = h ?? alphaThresh; h = w; }
+  let minX = w, maxX = -1, minY = h, maxY = -1;
+  for (let y = 0; y < h; y++) {
+    const row = y * w;
+    for (let x = 0; x < w; x++) {
       if (rgba[(row + x) * 4 + 3] >= alphaThresh) {
         if (x < minX) minX = x;
         if (x > maxX) maxX = x;
@@ -297,10 +310,10 @@ function pixelBboxFraction(rgba, size, alphaThresh = 32) {
   }
   if (maxX < 0) return null;
   return {
-    xFrac: minX / size,
-    yFrac: minY / size,
-    wFrac: (maxX - minX + 1) / size,
-    hFrac: (maxY - minY + 1) / size,
+    xFrac: minX / w,
+    yFrac: minY / h,
+    wFrac: (maxX - minX + 1) / w,
+    hFrac: (maxY - minY + 1) / h,
   };
 }
 
@@ -383,7 +396,10 @@ async function loadAspectBboxCropped(aspect) {
   const url = `./images/aspects/no-bg/${aspect}.svg`;
   const raster = await rasterize(url, 400);
   if (!raster) return null;
-  const bboxFrac = pixelBboxFraction(raster.rgba, raster.size);
+  // Pass the raster's actual W and H — the SVG's natural aspect
+  // ratio is preserved now, so fractions map 1:1 onto the source's
+  // coordinate system regardless of browser rasterization behavior.
+  const bboxFrac = pixelBboxFraction(raster.rgba, raster.w, raster.h);
   if (!bboxFrac) return null;
 
   const resp = await fetch(url);
