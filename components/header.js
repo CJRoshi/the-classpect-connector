@@ -47,7 +47,7 @@ const PESTER_QUOTES_BC = [
 // Pre-scratch Counterquest cast
 const PESTER_QUOTES_OC = [
   { handle: 'caprineCappuccino',    color: '#1B7539', quote: 'Lëmë rehat!' },
-  { handle: 'fracturedWildfire',    color: '#480C57', quote: '. O zot i madh. Qetësohu!' },
+  { handle: 'fracturedWildfire',    color: '#480C57', quote: '. O Zot i madh. Qetësohu!' },
   { handle: 'achromaticBlockbuster', color: '#999999', quote: "[bluntly] I can't work with all this noise." },
   { handle: 'pestilentStrain',      color: '#2A6648', quote: 'on diraait la cacaaphonieee' },
   { handle: 'rushingEnchain',       color: '#1B39E2', quote: '<puta>---<merda> stop messaging me pfr' },
