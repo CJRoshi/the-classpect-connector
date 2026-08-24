@@ -1062,7 +1062,7 @@ const ClasspectGlyph = React.forwardRef(({
           )}
 
           {/* 3. Rotating ring group — ONE animation, both layers inside. */}
-          <div style={ringRotatorStyle}>
+          <div key={`ring-rotator-${cls}-${direction}`} style={ringRotatorStyle}>
             {/* Ring fill — colored silhouette via mask. */}
             <div style={ringStyle}/>
 
