@@ -292,10 +292,9 @@ async function rasterize(url, targetLongSide) {
 /* Full-image bbox of non-transparent pixels, expressed as unit-square
    fractions (x, y, w, h). Returns null if the raster is empty. */
 function pixelBboxFraction(rgba, w, h, alphaThresh = 32) {
-  // Backward-compat: earlier callers passed a single `size` (square
-  // canvas). If h is undefined or a threshold-shaped number, treat
-  // w as the shared side length.
-  if (typeof h !== 'number') { alphaThresh = h ?? alphaThresh; h = w; }
+  // Always pass both w and h. (The old single-`size` signature is
+  // gone — a numeric alpha threshold in the h slot was silently
+  // truncating the scan to 32 rows.)
   let minX = w, maxX = -1, minY = h, maxY = -1;
   for (let y = 0; y < h; y++) {
     const row = y * w;
@@ -331,7 +330,8 @@ async function loadRingGeometry(className) {
   const A = 32;   // opacity threshold
 
   // Outer geometry = pixel bbox of the whole ring silhouette.
-  const outerBbox = pixelBboxFraction(rgba, size, A);
+  // Rings are square-ish; pass size for both dimensions explicitly.
+  const outerBbox = pixelBboxFraction(rgba, size, size, A);
   if (!outerBbox) {
     return { outerFrac: 0.9, holeFrac: 0.46, holeCxFrac: 0.5, holeCyFrac: 0.5, img: raster.img, url };
   }
