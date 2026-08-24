@@ -3,6 +3,7 @@
    Visualizes classpect rotations and reflections on a coordinate grid
    Requires: constants.js (classesNumeric, aspectsNumeric, aspectColors, aspectColorsDark)
    Requires: utility-functions.js (totalValue)
+   Requires: settings.js (Settings — for graphXAxisLabels / graphYAxisLabels)
    ========================= */
 
 const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigate, theme }) => {
@@ -10,18 +11,30 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
   const [showReflection, setShowReflection] = useState(true);
   const [hoveredPoint, setHoveredPoint] = useState(null);
   const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 });
+
+  // Axis label style — driven by sitewide settings.
+  const [xLabelStyle, setXLabelStyle] = useState(
+    () => (typeof Settings !== 'undefined' ? Settings.get('graphXAxisLabels') : 'text')
+  );
+  const [yLabelStyle, setYLabelStyle] = useState(
+    () => (typeof Settings !== 'undefined' ? Settings.get('graphYAxisLabels') : 'icon')
+  );
+  React.useEffect(() => {
+    const onChange = (e) => {
+      if (!e.detail || typeof Settings === 'undefined') return;
+      if (e.detail.name === 'graphXAxisLabels') setXLabelStyle(Settings.get('graphXAxisLabels'));
+      if (e.detail.name === 'graphYAxisLabels') setYLabelStyle(Settings.get('graphYAxisLabels'));
+    };
+    window.addEventListener('cc-setting-change', onChange);
+    return () => window.removeEventListener('cc-setting-change', onChange);
+  }, []);
   // Default list open on mobile so small-screen users don't need to squint at a tiny graph
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
   const [showList, setShowList] = useState(isMobile);
   const [graphCollapsed, setGraphCollapsed] = useState(isMobile);
   const [exportStatus, setExportStatus] = useState(null); // null | 'saving' | 'saved' | 'copying' | 'copied' | 'error'
 
-  /* Underlay overlay state — mutually exclusive ('none' | 'value' |
-     'leadership'). Renders a diverging colormap wash under the grid
-     lines so the reader can see at a glance where each classpect
-     falls on the sum-value or leadership scale. Picks Vanimo on dark
-     theme, PuY on light theme. Disabled by default (no visual noise
-     unless asked for). */
+  /* Underlay overlay state — mutually exclusive ('none' | 'value' | 'leadership'). */
   const [tintMode, setTintMode] = useState('none');
   const colormap = (theme?.isDark ? vanimoColor : puyColor);
   const tintFn = useMemo(() => {
@@ -50,8 +63,24 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
   const centerX = 280;
   const centerY = 200;
 
-  const toSvgX = (val) => centerX + val * scale;
-  const toSvgY = (val) => centerY - val * scale;
+  // Polarity — subscribe to sitewide sign convention.
+  const [polarity, setPolarity] = React.useState(() => Settings.get('polarityMode'));
+  React.useEffect(() => {
+    const onChange = (ev) => {
+      if (ev.detail?.name === 'polarityMode') setPolarity(Settings.get('polarityMode'));
+    };
+    window.addEventListener('cc-setting-change', onChange);
+    return () => window.removeEventListener('cc-setting-change', onChange);
+  }, []);
+  const polar = v => (polarity === 'cal' ? v : -v);
+
+  const toSvgX = (val) => centerX + polar(val) * scale;
+  const toSvgY = (val) => centerY - polar(val) * scale;
+
+  // Chrome anchors for the graph border
+  const chromeLeftX   = centerX - 7 * scale;
+  const chromeBottomY = centerY + 6 * scale;
+  const chromeTopY    = centerY - 6 * scale;
 
   // Helper to get total value
   const totalValue = (c, a) => classesNumeric[c] + aspectsNumeric[a];
@@ -64,7 +93,7 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
     "Rogue": "Rg", "Bard": "Bd", "Heir": "Hr", "Muse": "Ms"
   };
 
-  // Aspect abbreviations — used as fallback text when image fails to load
+  // Aspect abbreviations (Y-axis)
   const aspectAbbrev = {
     "Space": "SPC", "Void": "VD",  "Doom": "DM",  "Heart": "HRT",
     "Blood": "BLD", "Time": "TME", "Rage": "RGE", "Breath": "BTH",
@@ -87,12 +116,7 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
 
   // ── Image export helpers ──────────────────────────────────────────────────
 
-  /** Build the filename from current state.
-      Trickle-back: when an underlay is active, append a tag so saved
-      PNGs remember which wash was visible (otherwise two exports of
-      the same classpect with/without an underlay would collide on
-      disk). Theme also baked in since PuY vs Vanimo changes the look
-      meaningfully. */
+  /* Build the filename from current state. */
   const getFilename = (ext) => {
     const c = className.toLowerCase().replace(/\s+/g, '-');
     const a = aspectName.toLowerCase().replace(/\s+/g, '-');
@@ -284,16 +308,19 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
           />
           <span className="text-sm">Leadership</span>
         </label>
-        {/* Tiny gradient legend so the colormap reads at a glance.
-            Purple = negative, yellow = positive, near-neutral center. */}
+        {/* Tiny gradient legend so the colormap reads at a glance. */}
         <span className="flex items-center gap-1" style={{opacity: tintMode === 'none' ? 0.4 : 1}}>
           <span className="text-xs" style={{color: theme?.isDark ? '#888' : '#666'}}>−</span>
           <span style={{
             display: 'inline-block', width: '52px', height: '8px',
             border: `1px solid ${theme?.isDark ? '#555' : '#999'}`,
             background: theme?.isDark
-              ? 'linear-gradient(to right, #14025a 0%, #782c92 25%, #160a1e 50%, #dcb464 75%, #faf06e 100%)'
-              : 'linear-gradient(to right, #661482 0%, #b87acc 25%, #fafafa 50%, #f0dc78 75%, #e6bc1e 100%)'
+              ? (polarity === 'cal'
+                  ? 'linear-gradient(to right, #14025a 0%, #782c92 25%, #160a1e 50%, #dcb464 75%, #faf06e 100%)'
+                  : 'linear-gradient(to right, #faf06e 0%, #dcb464 25%, #160a1e 50%, #782c92 75%, #14025a 100%)')
+              : (polarity === 'cal'
+                  ? 'linear-gradient(to right, #661482 0%, #b87acc 25%, #fafafa 50%, #f0dc78 75%, #e6bc1e 100%)'
+                  : 'linear-gradient(to right, #e6bc1e 0%, #f0dc78 25%, #fafafa 50%, #b87acc 75%, #661482 100%)')
           }}/>
           <span className="text-xs" style={{color: theme?.isDark ? '#888' : '#666'}}>+</span>
         </span>
@@ -390,7 +417,7 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
             {tintFn && (
               <defs>
                 <clipPath id="rg-grid-clip">
-                  <rect x={toSvgX(-7)} y={toSvgY(6)}
+                  <rect x={chromeLeftX} y={chromeTopY}
                         width={14 * scale} height={12 * scale}/>
                 </clipPath>
                 <filter id="rg-tint-blur" x="-25%" y="-25%" width="150%" height="150%">
@@ -448,35 +475,36 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
             <line x1={toSvgX(-7)} y1={toSvgY(0)} x2={toSvgX(7)} y2={toSvgY(0)} stroke={theme?.isDark ? "#888888" : "#666666"} strokeWidth="2" />
             <line x1={toSvgX(0)} y1={toSvgY(-6)} x2={toSvgX(0)} y2={toSvgY(6)} stroke={theme?.isDark ? "#888888" : "#666666"} strokeWidth="2" />
 
-            {/* Y-axis labels (Aspect icons inside SVG, text abbrev fallback on load failure) */}
+            {/* Y-axis labels. */}
             {aspectOrder.map((asp) => {
               const aspValue = aspectsNumeric[asp];
               const needsOutline = theme?.isDark
                 ? (asp === 'Doom' || asp === 'Void')
                 : (asp === 'Space' || asp === 'Hope' || asp === 'Light');
               const imgFailed = failedAspectImages.has(asp);
+              const useIcon = yLabelStyle === 'icon' && !imgFailed;
 
               return (
                 <g key={`y-label-${asp}`}>
-                  {!imgFailed ? (
+                  {useIcon ? (
                     <image
-                      href={`./images/aspects/no-bg/${asp.toLowerCase()}.webp`}
-                      x={toSvgX(-7) - 34}
+                      href={`./images/aspects/no-bg/${asp.toLowerCase()}.svg`}
+                      x={chromeLeftX - 34}
                       y={toSvgY(aspValue) - 12}
                       width="24"
                       height="24"
                       style={{
                         filter: needsOutline
                           ? (theme?.isDark
-                              ? 'drop-shadow(0 0 2px rgba(255,255,255,0.8))'
-                              : 'drop-shadow(0 0 2px rgba(0,0,0,0.8))')
+                              ? 'drop-shadow(1px 0 0 rgba(255,255,255,1)) drop-shadow(-1px 0 0 rgba(255,255,255,1)) drop-shadow(0 1px 0 rgba(255,255,255,1)) drop-shadow(0 -1px 0 rgba(255,255,255,1)) drop-shadow(0 0 2px rgba(255,255,255,0.8))'
+                              : 'drop-shadow(1px 0 0 rgba(0,0,0,1)) drop-shadow(-1px 0 0 rgba(0,0,0,1)) drop-shadow(0 1px 0 rgba(0,0,0,1)) drop-shadow(0 -1px 0 rgba(0,0,0,1)) drop-shadow(0 0 2px rgba(0,0,0,0.8))')
                           : 'none'
                       }}
                       onError={() => setFailedAspectImages(prev => new Set([...prev, asp]))}
                     />
                   ) : (
                     <text
-                      x={toSvgX(-7) - 22}
+                      x={chromeLeftX - 22}
                       y={toSvgY(aspValue) + 4}
                       textAnchor="middle"
                       fontSize="9"
@@ -491,20 +519,31 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
               );
             })}
 
-            {/* X-axis labels (below graph, inside box) */}
+            {/* X-axis labels. */}
             {Object.entries(classesNumeric).map(([cls, val]) => (
-              <text
-                key={`x-label-${cls}`}
-                x={toSvgX(val)}
-                y={toSvgY(-6) + 25}
-                textAnchor="middle"
-                fontSize="11"
-                fontFamily="Courier New"
-                fontWeight="bold"
-                fill={theme?.isDark ? "#cccccc" : "#333333"}
-              >
-                {classAbbrev[cls]}
-              </text>
+              xLabelStyle === 'icon' ? (
+                <image
+                  key={`x-label-${cls}`}
+                  href={`./images/classes/outline/${cls.toLowerCase()}.svg`}
+                  x={toSvgX(val) - 12}
+                  y={chromeBottomY + 12}
+                  width="24"
+                  height="24"
+                />
+              ) : (
+                <text
+                  key={`x-label-${cls}`}
+                  x={toSvgX(val)}
+                  y={chromeBottomY + 25}
+                  textAnchor="middle"
+                  fontSize="11"
+                  fontFamily="Courier New"
+                  fontWeight="bold"
+                  fill={theme?.isDark ? "#cccccc" : "#333333"}
+                >
+                  {classAbbrev[cls]}
+                </text>
+              )
             ))}
 
             {/* Original classpect vector */}
@@ -647,7 +686,7 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
                 </button>
                 {' '}
                 <span style={{color: theme?.isDark ? "#cccccc" : "#333333"}}>
-                  ({total>=0?'+':''}{total}) ({degrees}°)
+                  ({polarityValueString(total, polarity)}) ({degrees}°)
                 </span>
               </div>
             );
@@ -663,7 +702,7 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
               </button>
               {' '}
               <span style={{color: theme?.isDark ? "#cccccc" : "#333333"}}>
-                ({totalValue(reflection[0], reflection[1])>=0?'+':''}{totalValue(reflection[0], reflection[1])}) (Rflxn.)
+                ({polarityValueString(totalValue(reflection[0], reflection[1]), polarity)}) (Rflxn.)
               </span>
             </div>
           )}

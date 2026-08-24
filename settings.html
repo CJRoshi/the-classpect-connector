@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Settings - The Classpect Connector</title>
+  <meta name="description" content="Sitewide settings for The Classpect Connector — graph label styles, and more to come." />
+  <link rel="canonical" href="https://cjroshi.github.io/the-classpect-connector/settings.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Settings - The Classpect Connector" />
+  <meta property="og:description" content="Sitewide settings for The Classpect Connector." />
+  <meta property="og:url" content="https://cjroshi.github.io/the-classpect-connector/settings.html" />
+  <meta property="og:image" content="https://cjroshi.github.io/the-classpect-connector/images/special/CCLogoRegular.png" />
+  <meta property="og:site_name" content="The Classpect Connector" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Settings - The Classpect Connector" />
+  <meta name="twitter:description" content="Sitewide settings for The Classpect Connector." />
+  <meta name="twitter:image" content="https://cjroshi.github.io/the-classpect-connector/images/special/CCLogoRegular.png" />
+
+  <link rel="icon" type="image/png" href="./images/special/CCLogoRegular.png" />
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <link rel="stylesheet" href="./components/mobile.css">
+
+  <!-- Shared Components -->
+  <script type="text/babel" src="./components/constants.js"></script>
+  <script type="text/babel" src="./components/settings.js"></script>
+  <script type="text/babel" src="./components/header.js"></script>
+  <script type="text/babel" src="./components/searchbar.js"></script>
+  <script type="text/babel" src="./components/footer.js"></script>
+  <script type="text/babel" src="./components/classpect-glyph.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('./fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+    .font-courier      { font-family: 'Courier New', monospace; }
+    .font-courier-bold { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem; font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem; font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem; font-weight: normal;
+    }
+    .homestuck-command {
+      font-family: Verdana, Arial, sans-serif;
+      font-weight: bold; font-size: 1.25rem; color: #000;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { width: 100%; min-height: 100vh; font-family: 'Courier New', monospace; }
+
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .setting-row:last-child { border-bottom: none; }
+    .setting-label-block { flex: 1 1 auto; min-width: 0; }
+    .setting-label { font-weight: bold; font-size: 0.95rem; margin-bottom: 4px; }
+    .setting-desc {
+      font-size: 0.8rem;
+      color: #666;
+      line-height: 1.45;
+    }
+    .setting-control {
+      flex-shrink: 0;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    /* Segmented-control style for enum settings.
+       (Declared BEFORE the mobile media query below so the mobile
+       overrides win the cascade — an earlier revision had this after
+       the query and the base `display: inline-flex` was shadowing
+       the mobile `display: grid` on phone viewports.) */
+    .segmented {
+      display: inline-flex;
+      border: 1px solid #a0a0a0;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #f0f0f0;
+    }
+    .segmented button {
+      background: transparent;
+      border: none;
+      padding: 6px 14px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: #333;
+      transition: background 0.12s, color 0.12s;
+    }
+    .segmented button + button { border-left: 1px solid #a0a0a0; }
+    .segmented button:hover { background: #e0e0e0; }
+    .segmented button.active {
+      background: #626262;
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    @media (max-width: 640px) {
+      .setting-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .setting-control {
+        justify-content: flex-start;
+        width: 100%;
+      }
+      /* Switch the segmented control from a single row to a 2-column
+         grid: 4-option rows wrap 2×2, 3-option rows do 2+1, 5-option
+         rows do 2×2+1. Prior attempt (tighter padding + smaller font)
+         still overflowed narrow viewports for 4+ option rows and
+         squeezed the label column to a single character wide. */
+      .segmented {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+      }
+      /* Reset the horizontal-only left border, then re-apply it for
+         the right column and add a top divider on row 2+. Keeps the
+         connected-pill look in the grid. */
+      .segmented button + button { border-left: none; }
+      .segmented button:nth-child(even) {
+        border-left: 1px solid #a0a0a0;
+      }
+      .segmented button:nth-child(n+3) {
+        border-top: 1px solid #a0a0a0;
+      }
+      /* Preview column centers itself when it wraps below Style on
+         mobile — without this it flex-anchored to the left. */
+      .style-preview-block { margin: 0 auto; }
+    }
+
+    .section-divider {
+      border: none;
+      border-top: 2px solid #a0a0a0;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const defaultTheme = {
+  bg: "#626262", contentBg: "#d0d0d0",
+  textColor: "#000000", accentBg: "#a0a0a0", isDark: false,
+};
+
+/* Segmented enum picker. Reads the current setting on mount, writes
+   on click. Local state mirrors the storage value so the UI updates
+   immediately without waiting for the change event. */
+const EnumSetting = ({ name, spec }) => {
+  const [value, setValue] = React.useState(() => Settings.get(name));
+  const handle = (v) => {
+    Settings.set(name, v);
+    setValue(v);
+  };
+  // Optional per-value display overrides:
+  //   `valueLabels[v]` — button caption (fallback: v)
+  //   `valueStyles[v]` — CSS style object applied to that button
+  return (
+    <div className="setting-row">
+      <div className="setting-label-block">
+        <div className="setting-label">{spec.label}</div>
+        <div className="setting-desc">{spec.description}</div>
+      </div>
+      <div className="setting-control">
+        <div className="segmented">
+          {spec.values.map(v => (
+            <button
+              key={v}
+              onClick={() => handle(v)}
+              className={v === value ? 'active' : ''}
+              style={spec.valueStyles ? spec.valueStyles[v] : undefined}
+            >
+              {spec.valueLabels ? spec.valueLabels[v] : v}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+/* Beta-kid roster for the Style-section preview grid. Each preview
+   uses the live Settings values (via the ClasspectGlyph subscription
+   pattern), so the grid updates in place as the user tweaks the
+   segmented controls above it. Lunar sway is passed as a synthetic
+   canonCharacters entry so the "Automatic" outline option resolves
+   correctly per kid. */
+const BETA_KIDS_PREVIEW = [
+  { name: 'June',  className: 'Heir',   aspectName: 'Breath', lunarsway: 'Prospit' },
+  { name: 'Rose',  className: 'Seer',   aspectName: 'Light',  lunarsway: 'Derse'   },
+  { name: 'Dave',  className: 'Knight', aspectName: 'Time',   lunarsway: 'Derse'   },
+  { name: 'Jade',  className: 'Witch',  aspectName: 'Space',  lunarsway: 'Prospit' },
+];
+
+const PreviewGrid = ({ theme }) => (
+  <div style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, auto)',
+    gap: '14px',
+    justifyContent: 'center',
+    padding: '4px',
+  }}>
+    {BETA_KIDS_PREVIEW.map((kid) => (
+      <div key={kid.name} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px'}}>
+        <ClasspectGlyph
+          className={kid.className}
+          aspectName={kid.aspectName}
+          theme={theme}
+          size={110}
+          showButtons={false}
+          animate={false}
+          canonCharacters={[{ lunarsway: kid.lunarsway }]}
+        />
+        <div className="font-courier" style={{fontSize: '0.75rem', color: '#333'}}>{kid.name}</div>
+      </div>
+    ))}
+  </div>
+);
+
+
+/* SECRETS TRACKER
+   Reads localStorage `cc_unlocks` — the shared flat array of unlock
+   flag strings maintained by:
+     * searchbar.js  — writes `sr_<id>` when a secret redirect fires
+     * tag/cherubs.html — writes `visited_cherubs` on first visit
+     * tag/oc-session.html — writes `visited_oc_session` on first visit. 
+*/
+const SECRET_REGISTRY = [
+  { keys: ['sr_mutt_of_slop'],           label: '"Mutt of Slop"' },
+  { keys: ['sr_waste_of_space'],         label: '"Waste of Space"' },
+  { keys: ['sr_douche_of_tears'],        label: '"Douche of Tears"' },
+  { keys: ['sr_gent_of_piss'],           label: '"Gent of Piss"' },
+  { keys: ['sr_trash_of_time'],          label: '"Trash of Time"' },
+  { keys: ['sr_nic_of_time'],            label: '"Nick of Time"' },
+  { keys: ['sr_champion_of_pulchritude'], label: '"Champion of Pulchritude"' },
+  { keys: ['sr_nogue_of_noid'],          label: '"Nogue of Noid"' },
+  { keys: ['sr_email_of_equius'],        label: '"Email of Equius"',
+    revisitUrl: './email-of-equius.html' },
+  { keys: ['sr_dave_of_guy'],            label: '"Dave of Guy"',
+    revisitUrl: './index.html#/classpect/knight-of-time' },
+  { keys: ['sr_son_of_god'],             label: '"Son of God"' },
+  // Merged entry.
+  { keys: ['sr_myocdonotsteal', 'visited_oc_session'],
+    label: 'Got Counterquest Lore',
+    revisitUrl: './tag/oc-session.html' },
+  { keys: ['visited_cherubs'],           label: 'Found Allie',
+    revisitUrl: './index.html#/classpect/muse-of-space' },
+  { keys: ['logo_spammed'],              label: 'Got Pestered' },
+];
+
+const SecretsTracker = () => {
+  // Read the unlock set on mount + whenever storage changes in
+  // another tab.
+  const [unlocked, setUnlocked] = React.useState(() => {
+    try {
+      return new Set(JSON.parse(localStorage.getItem('cc_unlocks') || '[]'));
+    } catch {
+      return new Set();
+    }
+  });
+  React.useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key !== 'cc_unlocks') return;
+      try {
+        setUnlocked(new Set(JSON.parse(e.newValue || '[]')));
+      } catch {
+        setUnlocked(new Set());
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
+  // A registry entry counts as "found" if ANY of its keys is set.
+  const found = SECRET_REGISTRY.filter(s => s.keys.some(k => unlocked.has(k)));
+  const total = SECRET_REGISTRY.length;
+
+  // Pester progress.
+  let pesterSeenCount = 0;
+  try {
+    pesterSeenCount = JSON.parse(localStorage.getItem('cc_pester_seen') || '[]').length;
+  } catch {}
+  const pesterTotal = (typeof PESTER_TOTAL_UNIQUE === 'number' && PESTER_TOTAL_UNIQUE > 0)
+    ? PESTER_TOTAL_UNIQUE : 0;
+  // Block-shade progress bar: 20 cells, middle cell rides ░▒▓.
+  const buildBar = (seen, tot) => {
+    const BAR_CELLS = 20;
+    if (tot <= 0) return '░'.repeat(BAR_CELLS);
+    const fills      = (seen / tot) * BAR_CELLS;
+    const fullCells  = Math.min(BAR_CELLS, Math.floor(fills));
+    const remainder  = fills - fullCells;
+    const midChar    = remainder > 0.75 ? '▓'
+                     : remainder > 0.25 ? '▒'
+                     : remainder > 0    ? '░'
+                     :                    '';
+    const emptyCells = Math.max(0, BAR_CELLS - fullCells - (midChar ? 1 : 0));
+    return '█'.repeat(fullCells) + midChar + '░'.repeat(emptyCells);
+  };
+  const pesterBar = buildBar(pesterSeenCount, pesterTotal);
+
+  return (
+    <div className="font-courier" style={{ fontSize: '0.85rem' }}>
+      <p className="mb-3" style={{ color: '#4b5563' }}>
+        Search phrases and hidden pages you've discovered.{' '}
+        <span style={{ fontWeight: 'bold' }}>
+          {found.length} of {total} found.
+        </span>
+      </p>
+      {found.length === 0 ? (
+        <p className="italic" style={{ color: '#6b7280', fontSize: '0.82rem' }}>
+          Nothing yet — get to snooping! (Maybe try searching something...?)
+        </p>
+      ) : (
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          {found.map(s => {
+            // Pester row gets a per-row progress bar (unique
+            // characters seen out of the site-wide pester pool).
+            // Rendered stacked so label sits on top, bar underneath.
+            const isPester = s.keys.includes('logo_spammed');
+            return (
+              <li key={s.keys[0]} style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '6px',
+                padding: '8px 0',
+                borderBottom: '1px solid rgba(0,0,0,0.06)',
+              }}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  gap: '12px',
+                }}>
+                  <span>{s.label}</span>
+                  {s.revisitUrl && (
+                    <a href={s.revisitUrl}
+                       style={{
+                         fontSize: '0.78rem',
+                         color: '#4b5563',
+                         textDecoration: 'underline',
+                         flexShrink: 0,
+                       }}>
+                      Revisit
+                    </a>
+                  )}
+                </div>
+                {isPester && pesterTotal > 0 && (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    fontFamily: "'Courier New', monospace",
+                    fontSize: '0.82rem',
+                    color: '#4b5563',
+                  }}>
+                    <span style={{ letterSpacing: '-1px', color: '#333' }}>
+                      {pesterBar}
+                    </span>
+                    <span style={{ whiteSpace: 'nowrap' }}>
+                      {pesterSeenCount} / {pesterTotal} messages
+                    </span>
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+const SettingsPage = () => {
+  const handleNavigate = path => { window.location.href = `./index.html#${path}`; };
+
+  const graphSettings = ['graphXAxisLabels', 'graphYAxisLabels'];
+  const styleSettings = ['glyphRingMode', 'glyphOutlineMode'];
+
+  return (
+    <div style={{ backgroundColor: defaultTheme.bg, minHeight: '100vh' }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme}/>
+
+      <div className="px-3 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <SearchBar onNavigate={handleNavigate} theme={defaultTheme}/>
+        </div>
+      </div>
+
+      <div className="px-3 sm:px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="content-box-mobile" style={{
+            backgroundColor: defaultTheme.contentBg,
+            color: defaultTheme.textColor,
+            padding: '24px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+            border: `2px solid ${defaultTheme.accentBg}`,
+          }}>
+            <div className="text-center mb-6">
+              <h1 className="font-typostuck-title mb-2">Settings</h1>
+              <p className="font-courier italic" style={{ fontSize: '0.9rem', color: '#4b5563' }}>
+                Saved to this browser. Changes take effect on the next page load.
+              </p>
+            </div>
+
+            <h2 className="font-typostuck-header mb-3">Polarity</h2>
+            {/* Wrap in a div so the single setting-row becomes
+                :last-child of its parent — kills its own bottom border
+                so only the section-divider below shows, not a doubled
+                pair of horizontal rules. */}
+            <div>
+              <EnumSetting name="polarityMode" spec={Settings.registry.polarityMode}/>
+            </div>
+
+            <hr className="section-divider"/>
+
+            <h2 className="font-typostuck-header mb-3">Graph Widget</h2>
+
+            <div>
+              {graphSettings.map(name => (
+                <EnumSetting key={name} name={name} spec={Settings.registry[name]}/>
+              ))}
+            </div>
+
+            <hr className="section-divider"/>
+
+            {/* Style — glyph ring color + outline. Two-column layout
+                begins at the section heading level so the "Preview"
+                label lands on the same baseline as "Style" rather
+                than floating below. */}
+            <div style={{display: 'flex', gap: '24px', alignItems: 'flex-start', flexWrap: 'wrap'}}>
+              <div style={{flex: '1 1 340px', minWidth: 0}}>
+                <h2 className="font-typostuck-header mb-3">Style</h2>
+                {styleSettings.map(name => (
+                  <EnumSetting key={name} name={name} spec={Settings.registry[name]}/>
+                ))}
+              </div>
+              <div className="style-preview-block" style={{flexShrink: 0}}>
+                {/* Matching typostuck-header height (mb-3 to align
+                    with the "Style" heading's bottom baseline). */}
+                <h2 className="font-typostuck-header mb-3" style={{textAlign: 'center'}}>Preview</h2>
+                <PreviewGrid theme={defaultTheme}/>
+              </div>
+            </div>
+
+            <hr className="section-divider"/>
+
+            <h2 className="font-typostuck-header mb-3">Secrets</h2>
+            <SecretsTracker/>
+
+          </div>
+          <Footer theme={defaultTheme}/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<SettingsPage/>);
+</script>
+</body>
+</html>

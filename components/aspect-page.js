@@ -18,12 +18,21 @@ const AspectPage = ({aspectName, onNavigate, theme}) => {
   
   const value = getAspectValue(aspectName);
   const inverses = aspectInverses[aspectName];
+
+  // Polarity — sitewide sign convention.
+  const [polarity, setPolarity] = React.useState(() => Settings.get('polarityMode'));
+  React.useEffect(() => {
+    const onChange = (ev) => {
+      if (ev.detail?.name === 'polarityMode') setPolarity(Settings.get('polarityMode'));
+    };
+    window.addEventListener('cc-setting-change', onChange);
+    return () => window.removeEventListener('cc-setting-change', onChange);
+  }, []);
   
   // Get all classpects with this aspect
   const allClasspects = Object.keys(classesNumeric).map(c => [c, aspectName]);
   
-  // Get canon examples — exclude unlockable-only characters (no regular reaction)
-  // so they don't appear as duplicates before being discovered on classpect pages
+  // Get canon examples
   const canonExamples = Object.entries(characterData.canon)
   .filter(([_, data]) => data.classpect[1] === aspectName && data.reaction && data.reaction.length > 0)
   .map(([name, data]) => ({
@@ -54,7 +63,7 @@ const AspectPage = ({aspectName, onNavigate, theme}) => {
             onError={(e) => e.target.style.display = 'none'}
           />
         </div>
-        <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#4b5563"}}>Numeric Value: {value>=0?"+":""}{value}</p>
+        <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#4b5563"}}>Numeric Value: {polarityValueString(value, polarity)}</p>
       </div>
       
       {/* Relations Table */}

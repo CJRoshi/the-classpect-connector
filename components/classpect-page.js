@@ -35,6 +35,16 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
     } catch { return new Set(); }
   });
 
+  // Polarity mode — subscribes to the sitewide sign-convention setting.
+  const [polarity, setPolarity] = React.useState(() => Settings.get('polarityMode'));
+  React.useEffect(() => {
+    const onChange = (ev) => {
+      if (ev.detail?.name === 'polarityMode') setPolarity(Settings.get('polarityMode'));
+    };
+    window.addEventListener('cc-setting-change', onChange);
+    return () => window.removeEventListener('cc-setting-change', onChange);
+  }, []);
+
   // Build the effective render lists:
   // - Characters with a regular reaction always appear.
   // - Characters with an unlockable reaction appear (using that reaction) only
@@ -108,24 +118,35 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
       <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 md:gap-6">
         {/* Title block */}
         <div style={{minWidth: 0}}>
-          <h1 className="mb-2" style={{display: 'flex', gap: '0.5rem', flexWrap: 'wrap'}}>
-            <ClassLink c={className} onClick={onNavigate} theme={theme} isTitle={true}/>
+          <h1 className="mb-2" style={{display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center'}}>
+            {/* Discord-preferred layout: [Class] of [Aspect] then both
+                icons at the end. Class/AspectLink render text-only via
+                showIcon=false; the class + aspect bg tiles trail after. */}
+            <ClassLink c={className} onClick={onNavigate} theme={theme} isTitle={true} showIcon={false}/>
             <span className="font-typostuck-title">of</span>
-            <AspectLink a={aspectName} onClick={onNavigate} theme={theme} isTitle={true}/>
+            <AspectLink a={aspectName} onClick={onNavigate} theme={theme} isTitle={true} showIcon={false}/>
+            <img
+              src={`./images/classes/bg/${className.toLowerCase()}.svg`}
+              alt=""
+              style={{width: '40px', height: '40px', display: 'inline-block', verticalAlign: 'middle'}}
+              onError={(e) => e.target.style.display = 'none'}
+            />
+            <img
+              src={`./images/aspects/with-bg/${aspectName.toLowerCase()}bg.svg`}
+              alt=""
+              style={{width: '40px', height: '40px', display: 'inline-block', verticalAlign: 'middle'}}
+              onError={(e) => e.target.style.display = 'none'}
+            />
           </h1>
 
           <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#4b5563", wordBreak: 'break-word'}}>
-            [{className} ({getClassValue(className)>=0?"+":""}{getClassValue(className)}) + {aspectName} ({getAspectValue(aspectName)>=0?"+":""}{getAspectValue(aspectName)}) = {originalTotal>=0?"+":""}{originalTotal}]
+            [{className} ({polarityValueString(getClassValue(className), polarity)}) + {aspectName} ({polarityValueString(getAspectValue(aspectName), polarity)}) = {polarityValueString(originalTotal, polarity)}]
           </p>
 
-          {/* Raw leadership score — mirrors the sum-value line above
-              with the same bracket convention. Implicit if positive,
-              Explicit if negative, Balanced at zero. Sits here so
-              quick numeric readers see both stats together at the top
-              of the page. */}
+          {/* Raw leadership score. */}
           {leadership !== null && (
             <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#4b5563", wordBreak: 'break-word'}}>
-              [Leadership = {CLASS_LEAD[className]>=0?"+":""}{CLASS_LEAD[className]} + 2·({ASPECT_LEAD[aspectName]>=0?"+":""}{ASPECT_LEAD[aspectName]}) = {leadership>=0?"+":""}{leadership}{' '}
+              [Leadership = {polarityValueString(CLASS_LEAD[className], polarity)} + 2·({polarityValueString(ASPECT_LEAD[aspectName], polarity)}) = {polarityValueString(leadership, polarity)}{' '}
               <span style={{opacity: 0.75}}>
                 ({leadership > 0 ? 'Implicit' : leadership < 0 ? 'Explicit' : 'Balanced'})
               </span>]
@@ -134,10 +155,10 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
 
           {/* Tags Display */}
           <TagsDisplay tags={tags} onTagClick={handleTagClick} />
-        </div>
 
-        {/* Reactions — full width on mobile, max-w-md on desktop */}
-        <div className="flex flex-col gap-4 w-full md:w-auto md:max-w-md">
+          {/* Reactions — kept in the left column beneath the tags so
+              there's no dead space next to the glyph box. */}
+          <div className="flex flex-col gap-4 w-full mt-4">
           {/* Canon reactions */}
           {visibleCanon && visibleCanon.map((ch) => (
             <div
@@ -219,7 +240,20 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
             </>
           )}
 
+          </div>
         </div>
+
+        {/* Glyph box. */}
+        <ClasspectGlyph
+          className={className}
+          aspectName={aspectName}
+          theme={theme}
+          /* Pass the VISIBLE lists (post-unlock filter), not the raw
+             character rosters — this way Automatic outlines only pick
+             up characters the user can actually see on the page. */
+          canonCharacters={visibleCanon}
+          nonCanonCharacters={visibleNonCanon}
+        />
       </div>
 
 
@@ -275,7 +309,7 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
         <h2 className={theme?.isDark ? "homestuck-command-dark mb-3" : "homestuck-command mb-3"}>Classpects by Numeric Value</h2>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <h3 className="font-semibold mb-2">Same Value ({originalTotal>=0?"+":""}{originalTotal})</h3>
+            <h3 className="font-semibold mb-2">Same Value ({polarityValueString(originalTotal, polarity)})</h3>
             <div className="space-y-1">
               {sameValue.map(([c,a])=>(
                 <div key={`${c}-${a}`}>
@@ -285,7 +319,7 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
             </div>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">Opposite Value ({-originalTotal>=0?"+":""}{-originalTotal})</h3>
+            <h3 className="font-semibold mb-2">Opposite Value ({polarityValueString(-originalTotal, polarity)})</h3>
             <div className="space-y-1">
               {oppositeValue.map(([c,a])=>(
                 <div key={`${c}-${a}`}>

@@ -191,12 +191,18 @@ const CharRow = ({ char }) => {
 const PredictionsPage = () => {
   const handleNavigate = path => { window.location.href = `../index.html#${path}`; };
 
-  /* Predictions data is fetched at mount and held in component state.
-     Two arrays (`gammaKids`, `deltaKids`) are rendered as separate
-     sections. Initial state is `null` → renders a brief loading
-     line; fetch failure leaves `null` plus an error message rather
-     than wiping the page chrome, so users on flaky connections still
-     see the page header. */
+  // Unlock trigger.
+  React.useEffect(() => {
+    try {
+      const existing = JSON.parse(localStorage.getItem('cc_unlocks') || '[]');
+      if (!existing.includes('visited_predictions')) {
+        localStorage.setItem('cc_unlocks',
+          JSON.stringify([...existing, 'visited_predictions']));
+      }
+    } catch {}
+  }, []);
+
+  /* Predictions data is fetched at mount and held in component state. */
   const [data, setData]   = React.useState(null);
   const [error, setError] = React.useState(null);
 
@@ -248,11 +254,7 @@ const PredictionsPage = () => {
                 <span style={{ fontSize: '0.8rem' }}>Speculative. Subject to being catastrophically wrong.</span>
               </p>
               {/* Cross-link to the Scryer's BC Predictions special
-                  session. Uses the alias rather than the raw session
-                  code because the session is async-loaded on the
-                  Scryer side (members + code populated from this very
-                  JSON file at runtime) — the alias resolves regardless
-                  of load timing, the raw code wouldn't be stable. */}
+                  session. */}
               <p className="font-courier" style={{marginTop: '6px', fontSize: '0.8rem', color: '#4b5563'}}>
                 (also: <a href="https://cjroshi.github.io/the-session-scryer/scry.html#BCPREDICTIONS" target="_blank" rel="noopener noreferrer" className="underline" style={{color: '#0000ee'}}>view on the Session Scryer</a>)
               </p>

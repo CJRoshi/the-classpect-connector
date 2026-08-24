@@ -31,6 +31,7 @@
 
   <!-- Shared Components -->
   <script type="text/babel" src="./components/constants.js"></script>
+  <script type="text/babel" src="./components/settings.js"></script>
   <script type="text/babel" src="./components/header.js"></script>
   <script type="text/babel" src="./components/searchbar.js"></script>
   <script type="text/babel" src="./components/footer.js"></script>
@@ -298,8 +299,23 @@ const RungsGraph = ({ activeRung, onNavigate }) => {
   const scale = 30;
   const centerX = 280;
   const centerY = 200;
-  const toSvgX = v => centerX + v * scale;
-  const toSvgY = v => centerY - v * scale;
+
+  // Polarity — subscribe to the sitewide sign convention.
+  const [polarity, setPolarity] = React.useState(() => Settings.get('polarityMode'));
+  React.useEffect(() => {
+    const onChange = (ev) => {
+      if (ev.detail?.name === 'polarityMode') setPolarity(Settings.get('polarityMode'));
+    };
+    window.addEventListener('cc-setting-change', onChange);
+    return () => window.removeEventListener('cc-setting-change', onChange);
+  }, []);
+  const polar = v => (polarity === 'cal' ? v : -v);
+  const toSvgX = v => centerX + polar(v) * scale;
+  const toSvgY = v => centerY - polar(v) * scale;
+
+  // Chrome anchors.
+  const chromeLeftX   = centerX - 7 * scale;
+  const chromeBottomY = centerY + 6 * scale;
 
   const r2 = activeRung ? RUNG_R2_ORDER[activeRung - 1] : null;
   const r  = r2 != null ? Math.sqrt(r2) : null;
@@ -351,8 +367,8 @@ const RungsGraph = ({ activeRung, onNavigate }) => {
         return (
           <g key={`y-label-${asp}`}>
             {!imgFailed ? (
-              <image href={`./images/aspects/no-bg/${asp.toLowerCase()}.webp`}
-                     x={toSvgX(-7) - 34}
+              <image href={`./images/aspects/no-bg/${asp.toLowerCase()}.svg`}
+                     x={chromeLeftX - 34}
                      y={toSvgY(aspValue) - 12}
                      width="24" height="24"
                      style={{
@@ -362,7 +378,7 @@ const RungsGraph = ({ activeRung, onNavigate }) => {
                      }}
                      onError={() => setFailedAspectImages(prev => new Set([...prev, asp]))}/>
             ) : (
-              <text x={toSvgX(-7) - 22} y={toSvgY(aspValue) + 4}
+              <text x={chromeLeftX - 22} y={toSvgY(aspValue) + 4}
                     textAnchor="middle" fontSize="9" fontFamily="Courier New"
                     fontWeight="bold" fill="#333">{aspectAbbrev[asp]}</text>
             )}
@@ -370,11 +386,14 @@ const RungsGraph = ({ activeRung, onNavigate }) => {
         );
       })}
 
-      {/* X labels */}
+      {/* X labels — Y anchored to the visual bottom via chromeBottomY
+          so the row of labels stays put; the label CONTENT (which
+          class lands under which column) still flips with polarity
+          because each label's X uses toSvgX. */}
       {Object.entries(classesNumeric).map(([cls, val]) => (
         <text key={`x-label-${cls}`}
               x={toSvgX(val)}
-              y={toSvgY(-6) + 25}
+              y={chromeBottomY + 25}
               textAnchor="middle"
               fontSize="11"
               fontFamily="Courier New"

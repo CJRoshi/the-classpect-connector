@@ -6,40 +6,34 @@ Inspired by *Homestuck* by Andrew Hussie.
 
 ---
 
-## Most Recent Update
+## Most Recent Updates
+
+Glyphs Galore (8/24/2026):
+
+- Added Classpect Glyphs to all Classpect Pages
+- New Settings Page to Customize Things
+- New Secrets?
+- Improved Graphics and Assets
+- Made Kankri Buggier
 
 Scryer Sepulchre (5/26/2026):
 
-- Added Rungs page, Rungs tags
-- Added Leadership to Classpect Pages
-- Improved Graph QOL
-- New Theory for the Session Scryer
-- New FAQ/Glossary entries for the Session Scryer
-- More things in the header
-- Touchups to many tag pages
-- Made Kankri Buggier
+- New Theory Coinciding with Scryer release
 
 SEO Suffering (3/12/2026):
 
 - Added a bunch of changes to make the site indexable and searchable
 
-Lock The Taskbar (2/28/2026):
-
-- Changed some secret reactions to be unlockable
-- Made Kankri Buggier
-
 ### Hotfixes
 
-- Hotfix 1 -- Site Logo Fix
-- Hotfix 2 -- Tag Routing Fix
-- Hotfix 3 -- Influencers, Babel Fixes
-- Hotfix 4 -- Better Influencing
-- Hotfix 5 -- Sitemap, BC Predictions
+- Hotfix 1 (Planned) -- Day Zero Bugs
+- Hotfix 2 (Planned) -- Merch Merch Merch
 
 ### Past Updates
 
 - Initial Release
 - The "Fresh Coat" Upd8
+- Lock The Taskbar
 
 ## What It Does
 
@@ -62,6 +56,7 @@ You can also browse:
 ```plain
 /
 ├── index.html                  # App shell + hash router
+├── 404.html                    # Custom 404
 ├── about.html                  # About page
 ├── balanced.html               # Balanced classpects
 ├── canon.html                  # Canon classpects overview
@@ -70,16 +65,27 @@ You can also browse:
 ├── derse.html                  # Derse dreamers
 ├── theory.html                 # Extended theory notes
 ├── rungs.html                  # Rungs notes and views
-├── faq.html                    # FAQ
+├── faq.html                    # FAQ + Glossary
 ├── credits.html                # Credits
+├── settings.html               # Sitewide settings (Polarity, glyph style, Secrets tracker)
 │
 ├── components/                 # Shared React components
 │
-├── tag/                        # Character tag pages (standalone HTML)
+├── data/                       # JSON data files (aspects, classes, moons, characters, predictions)
 │
-├── data/                       # JSON data files
+├── fonts/                      # Bundled display font (Typostuck)
 │
-├── images/                     # All static image assets
+├── images/
+│   ├── aspects/                # Aspect icons (no-bg + with-bg)
+│   ├── classes/                # Class emblems (bg / no-bg / outline / rings)
+│   ├── figures/                # Theory-page figures
+│   ├── playericons-deco/       # Crowns, chevrons, player pawns
+│   ├── special/                # Logos, OG-image, misc marks
+│   └── tags/                   # Per-tag banner art
 │
-└── snd/                        # Sound effects
+├── snd/                        # UI chimes (item-get, pester notif)
+│
+└── tag/                        # Standalone tag pages (Homestuck, Sburb A/B, Sgrub A/B,
+                                #   Cherubs, Beyond Canon, Predictions, Influencers,
+                                #   Hiveswap, OC Session)
 ```

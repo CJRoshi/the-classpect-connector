@@ -70,7 +70,12 @@
 
     .aspect-btn {
       position: relative;
-      border-radius: 6px;
+      /* Matches the with-bg aspect SVG's built-in corner radius —
+         rx=96 on a 512×512 rect = 18.75%. Without this, the black
+         .aspect-btn background peeked through in the corners where
+         the image's rounded edge sat inside the container's less-
+         rounded one. */
+      border-radius: 18.75%;
       overflow: hidden;
       cursor: pointer;
       transition: transform 0.18s;

@@ -940,13 +940,33 @@
         "Mage",
         "Time"
       ],
-      "lunarsway": "Dual",
+      "lunarsway": "Prospit",
       "unlockable": {
         "condition": "visited_oc_session",
         "reaction": [
           {
             "text": "Mirë se erdhe.",
             "color": "#1b7539"
+          }
+        ]
+      },
+      "tags": [
+        "original-character"
+      ]
+    },
+    "Ebony Derosin": {
+      "color": "#480C57",
+      "classpect": [
+        "Mage",
+        "Time"
+      ],
+      "lunarsway": "Derse",
+      "unlockable": {
+        "condition": "visited_oc_session",
+        "reaction": [
+          {
+            "text": "♨ Mirë se gjeta.",
+            "color": "#480C57"
           }
         ]
       },

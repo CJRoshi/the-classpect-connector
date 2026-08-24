@@ -11,12 +11,21 @@ const ClassPage = ({className, onNavigate, theme}) => {
   
   const value = getClassValue(className);
   const inverses = classInverses[className];
+
+  // Polarity — sitewide sign convention.
+  const [polarity, setPolarity] = React.useState(() => Settings.get('polarityMode'));
+  React.useEffect(() => {
+    const onChange = (ev) => {
+      if (ev.detail?.name === 'polarityMode') setPolarity(Settings.get('polarityMode'));
+    };
+    window.addEventListener('cc-setting-change', onChange);
+    return () => window.removeEventListener('cc-setting-change', onChange);
+  }, []);
   
   // Get all classpects with this class
   const allClasspects = Object.keys(aspectsNumeric).map(a => [className, a]);
   
-  // Get canon examples — exclude unlockable-only characters (no regular reaction)
-  // so they don't appear as duplicates before being discovered on classpect pages
+  // Get canon examples
   const canonExamples = Object.entries(characterData.canon)
   .filter(([_, data]) => data.classpect[0] === className && data.reaction && data.reaction.length > 0)
   .map(([name, data]) => ({
@@ -30,8 +39,23 @@ const ClassPage = ({className, onNavigate, theme}) => {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="font-typostuck-title mb-2" style={{fontSize: "3rem"}}>{className}</h1>
-        <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#4b5563"}}>Numeric Value: {value>=0?"+":""}{value}</p>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center',
+                     gap: '1rem', marginBottom: '0.5rem', flexWrap: 'wrap'}}>
+          <img
+            src={`./images/classes/bg/${className.toLowerCase()}.svg`}
+            alt={`${className} icon`}
+            style={{width: '48px', height: '48px'}}
+            onError={(e) => e.target.style.display = 'none'}
+          />
+          <h1 className="font-typostuck-title" style={{fontSize: "3rem"}}>{className}</h1>
+          <img
+            src={`./images/classes/bg/${className.toLowerCase()}.svg`}
+            alt={`${className} icon`}
+            style={{width: '48px', height: '48px'}}
+            onError={(e) => e.target.style.display = 'none'}
+          />
+        </div>
+        <p className="font-courier" style={{color: theme?.isDark ? "#cccccc" : "#4b5563"}}>Numeric Value: {polarityValueString(value, polarity)}</p>
       </div>
       
       {/* Relations Table */}

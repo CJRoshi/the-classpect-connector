@@ -17,6 +17,30 @@ const aspectsNumeric = {
   Heart: 3, Doom: 4, Void: 5, Space: 6
 };
 
+/* =====================================================================
+   POLARITY HELPERS — display-only sign flip.
+   The stored classesNumeric / aspectsNumeric values are in the site's
+   original convention (Cal: Lord=−7, Muse=+7, Time=+1, Space=+6).
+   Depending on the current polarityMode setting, flip the sign
+   when *rendering* values to the user so Huss mode shows +7 for Lord
+   without touching any of the underlying leadership, distance, or
+   rank math (which is symmetric under sign flip anyway).
+
+   Usage:
+     const mode = Settings.get('polarityMode');
+     polaritySign(-7, mode);            // → +7 in Huss, -7 in Cal
+     polarityValueString(-7, mode);     // → "+7" in Huss, "-7" in Cal
+   ===================================================================== */
+function polaritySign(v, mode) {
+  if (v === null || v === undefined) return v;
+  return mode === 'cal' ? v : -v;   // default (Huss) flips
+}
+function polarityValueString(v, mode) {
+  const f = polaritySign(v, mode);
+  if (f === null || f === undefined) return '';
+  return f >= 0 ? `+${f}` : `${f}`;
+}
+
 // GRAPH COLORS (optimized for white background)
 const aspectColors = {
   Hope: "#d69500",     // Darker gold (was #ffc331)
@@ -42,7 +66,7 @@ const aspectColorsDark = {
 };
 
 /* =====================================================================
-   LEADERSHIP TABLES (G.4)
+   LEADERSHIP TABLES
    Implicit = positive, Explicit = negative; rank 1 strongest on each side.
    Per-classpect leadership score = class_lead + 2·aspect_lead.
    Ported from session-prototype/components/session-constants.js.

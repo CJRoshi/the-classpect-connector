@@ -212,7 +212,7 @@ const TrollCard=({aspect})=>{
     <a href={`../index.html#/classpect/${cls.toLowerCase()}-of-${asp.toLowerCase()}`}
       style={{display:'flex',alignItems:'center',gap:'10px',padding:'10px 12px',background:'rgba(0,0,20,0.88)',
         border:`1px solid ${bc}`,borderLeft:`3px solid ${nc}`,borderRadius:'6px',textDecoration:'none',minHeight:'52px'}}>
-      <img src={`../images/aspects/no-bg/${aspect.toLowerCase()}.webp`}
+      <img src={`../images/aspects/no-bg/${aspect.toLowerCase()}.svg`}
         style={{width:34,height:'auto',flexShrink:0,filter:'drop-shadow(0 0 4px rgba(200,160,255,0.5))'}} alt={aspect}/>
       <div>
         <div style={{fontFamily:'Courier New',fontWeight:'bold',fontSize:'0.82rem',color:nc,lineHeight:1.25}}>{t.name}</div>
@@ -311,7 +311,7 @@ const SGRUBAlphaPage=()=>{
                         if(selectedIndex===i){handleClick(i);}
                         else{setSelectedIndex(i);setHoveredIndex(i);}
                       }}>
-                      <img src={`../images/aspects/no-bg/${aspect.toLowerCase()}.webp`} className="aspect-icon" alt={aspect}/>
+                      <img src={`../images/aspects/no-bg/${aspect.toLowerCase()}.svg`} className="aspect-icon" alt={aspect}/>
                     </div>
                   );
                 })}

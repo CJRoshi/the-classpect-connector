@@ -164,6 +164,12 @@ const SearchBar = ({ onNavigate, theme }) => {
         // Session + page-level terms.
         'predictions', 'prediction', 'bc predictions', 'hsbc predictions',
         'beyond canon predictions', 'deltritus', 'deltritus session',
+        // Legacy mnemonic — used to be a secret redirect back when the
+        // predictions page wasn't advertised. Now that Predictions is
+        // publicly hinted by the search bar, `mybcmetas` just routes
+        // like any other alias for the page (no longer tracked as a
+        // secret in Settings > Secrets).
+        'mybcmetas',
         // Cohort names.
         'gamma kids', 'gammakids', 'gamma',
         'delta kids', 'deltakids', 'delta',
@@ -210,8 +216,7 @@ const SearchBar = ({ onNavigate, theme }) => {
       isExternal: true
     });
     // Per-rung deep links — typing "rung 7" jumps straight to that
-    // rung's section on the Rungs page (which auto-scrolls + selects
-    // it on hash change via the page's useEffect).
+    // rung's section on the Rungs page.
     if (typeof RUNG_NAMES !== 'undefined') {
       for (let n = 1; n <= 26; n++) {
         const name = RUNG_NAMES[n - 1];
@@ -236,12 +241,18 @@ const SearchBar = ({ onNavigate, theme }) => {
   const allPages = React.useMemo(() => getAllPages(), []);
 
   // Secret redirect pages definition
+  // Each entry carries a stable `id` — used as the `sr_<id>` key
+  // written into localStorage `cc_unlocks` when the redirect fires,
+  // so the Settings > Secrets tracker can render a "found" entry
+  // without needing to know the search phrase in advance.
   const secretRedirects = [
     {
+      id: 'mutt_of_slop',
       searchTerms: ['mutt of slop', 'dog of oil', 'muttofslop', 'dogofoil'],
       url: 'https://youtu.be/EUELs5Uzn3I?si=Um6uBy0XDC3qenal'
     },
     {
+      id: 'waste_of_space',
       searchTerms: ['waste of space', 'huss of lips', 'wasteofspace', 'hussoflips'],
       url: () => {
         // Random choice between two URLs -- Homoerotic interest in viewer OR Hussie barging in and interrupting Doc Scratch
@@ -253,26 +264,32 @@ const SearchBar = ({ onNavigate, theme }) => {
       }
     },
     {
+      id: 'douche_of_tears',
       searchTerms: ['douche of tears', 'doucheoftears'],
       url: 'https://homestuck.com/001951'
     },
     {
+      id: 'gent_of_piss',
       searchTerms: ['gent of piss', 'gentofpiss'],
       url: 'https://homestuck.com/005854'
     },
     {
+      id: 'trash_of_time',
       searchTerms: ['trash of time', 'trashoftime'],
       url: 'https://deltarune.com/'
     },
     {
+      id: 'nic_of_time',
       searchTerms: ['nic of time', 'nick of time', 'nicoftime', 'nickoftime'],
       url: 'https://www.homestuck.com/004687'
     },
     {
+      id: 'champion_of_pulchritude',
       searchTerms: ['champion of pulchritude', 'championofpulchritude'],
       url: 'https://homestuck.com/problemsleuth/001760'
     },
     {
+      id: 'nogue_of_noid',
       searchTerms: ['nogue of noid', 'gent of time', 'nogueofnoid', 'gentoftime'],
       url: () => {
         // Random choice between two URLs -- The first page of Noxyquest or Nascade
@@ -284,22 +301,22 @@ const SearchBar = ({ onNavigate, theme }) => {
       }
     },
     {
+      id: 'email_of_equius',
       searchTerms: ['email of equius', 'emailofequius'],
       url: './email-of-equius.html'
     },
     {
+      id: 'dave_of_guy',
       searchTerms: ['dave of guy', 'daveofguy'],
       url: "./index.html#/classpect/knight-of-time"
     },
     {
+      id: 'son_of_god',
       searchTerms: ['son of god', 'sonofgod', 'seer of any', 'seerofany', 'seer of all', 'seerofall', 'christ of jesus', 'christofjesus', 'jesus of christ', 'jesusofchrist', 'lord of lords', 'lordoflords'],
       url: "https://youtu.be/GTh5J0HsIAg?si=gpAQLAj0UMtSq-md" // Several euphemisms for "Jesus" redirecting to that video of Morshu reading the whole Bible
     },
     {
-      searchTerms: ['mybcmetas'],
-      url: './tag/predictions.html'
-    },
-    {
+      id: 'myocdonotsteal',
       searchTerms: ['myocdonotsteal', 'stera', 'stera2', 'sterahalf', 'loredump', 'counterquest', 'cqc'],
       url: './tag/oc-session.html'
     }
@@ -361,6 +378,17 @@ const SearchBar = ({ onNavigate, theme }) => {
     );
     
     if (secretMatch) {
+      // Record the discovery into cc_unlocks so the Settings > Secrets
+      // tracker can show it.
+      if (secretMatch.id) {
+        try {
+          const existing = JSON.parse(localStorage.getItem('cc_unlocks') || '[]');
+          const key = 'sr_' + secretMatch.id;
+          if (!existing.includes(key)) {
+            localStorage.setItem('cc_unlocks', JSON.stringify([...existing, key]));
+          }
+        } catch {}
+      }
       let url = typeof secretMatch.url === 'function' ? secretMatch.url() : secretMatch.url;
       // Fix relative paths when in a subdirectory
       if (isInSubdirectory && url.startsWith('./')) {

@@ -47,7 +47,7 @@ const TiledAspectBackground = ({ aspectName }) => {
   };
   
   const positions = React.useMemo(() => generateIconPositions(), [iconSize.spacing]);
-  const iconPath = `./images/aspects/no-bg/${aspectName.toLowerCase()}.webp`;
+  const iconPath = `./images/aspects/no-bg/${aspectName.toLowerCase()}.svg`;
   
   return (
     <div style={{

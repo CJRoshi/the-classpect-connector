@@ -36,33 +36,42 @@ const Homepage = ({ onNavigate, theme }) => {
 
       {/* Classes and Aspects Grid */}
       <div className="grid grid-cols-2 gap-4 md:gap-8">
-        {/* Classes */}
+        {/* Classes — the header + list are grouped in a single mx-auto
+            block sized to fit-content. The block centers horizontally
+            in its column, and within the block both the header and the
+            list rows share the same left edge. Effect: the header
+            visually establishes the column origin and the list flows
+            left-aligned beneath it. */}
         <div>
-          <h2 className="font-verdana mb-4" style={{fontSize: "1.5rem"}}>
-            All Classes
-          </h2>
-          <div className="space-y-2">
-            {classes.map(cls => (
-              <div key={cls} className="flex items-center gap-2">
-                <span className="font-courier" style={{color: theme?.textColor || '#000'}}>{'>'}</span>
-                <ClassLink c={cls} onClick={onNavigate} theme={theme} />
-              </div>
-            ))}
+          <div className="mx-auto" style={{width: 'fit-content'}}>
+            <h2 className="font-verdana mb-4" style={{fontSize: "1.5rem"}}>
+              All Classes
+            </h2>
+            <div className="space-y-2">
+              {classes.map(cls => (
+                <div key={cls} className="flex items-center gap-2">
+                  <span className="font-courier" style={{color: theme?.textColor || '#000'}}>{'>'}</span>
+                  <ClassLink c={cls} onClick={onNavigate} theme={theme} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Aspects */}
+        {/* Aspects — same header+list grouping as Classes. */}
         <div>
-          <h2 className="font-verdana mb-4" style={{fontSize: "1.5rem"}}>
-            All Aspects
-          </h2>
-          <div className="space-y-2">
-            {aspectWheelOrder.map(asp => (
-              <div key={asp} className="flex items-center gap-2">
-                <span className="font-courier" style={{color: theme?.textColor || '#000'}}>{'>'}</span>
-                <AspectLink a={asp} onClick={onNavigate} theme={theme} />
-              </div>
-            ))}
+          <div className="mx-auto" style={{width: 'fit-content'}}>
+            <h2 className="font-verdana mb-4" style={{fontSize: "1.5rem"}}>
+              All Aspects
+            </h2>
+            <div className="space-y-2">
+              {aspectWheelOrder.map(asp => (
+                <div key={asp} className="flex items-center gap-2">
+                  <span className="font-courier" style={{color: theme?.textColor || '#000'}}>{'>'}</span>
+                  <AspectLink a={asp} onClick={onNavigate} theme={theme} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

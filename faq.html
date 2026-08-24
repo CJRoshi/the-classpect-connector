@@ -125,14 +125,85 @@ const FAQPage = () => {
       
       {/* FAQ Section */}
       <div className="font-courier space-y-6" style={{lineHeight: '1.6'}}>
-        
+
         {/* Q1 */}
         <div>
           <h2 className="homestuck-command mb-2">&gt; Is this canon?</h2>
           <p>
-            Hell no! This is a tool I made FOR FUN, and I fully expect that it will be obliterated by the 
-            "Classpectology" book that is allegedly in some future plans for Hussie. I don't mind updating 
+            Hell no! This is a tool I made FOR FUN, and I fully expect that it will be obliterated by the
+            "Classpectology" book that is allegedly in some future plans for Hussie. I don't mind updating
             it when that happens, though. I strive to make this stuff as applicable as possible.
+          </p>
+        </div>
+
+        {/* Q2 — Huss vs Cal polarity rationale. */}
+        <div>
+          <h2 className="homestuck-command mb-2">
+            &gt; Why are you using + for Active, and &minus; for Passive? Didn't Calliope have it the other way around?
+          </h2>
+          <p className="mb-4">
+            I'm using it for a few reasons. The most obvious of these is that this is what Hussie is
+            using right now, and I would rather stay up-to-date. The other part of this has to do with
+            it making much more sense as a labeling choice, since people tend to interpret the plus as
+            "active" outside of classpecting. My explanation is a bit different. If you will allow me
+            to dip into my electrical engineering background for a moment:
+          </p>
+          <div className="my-6" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', flexWrap: 'wrap'}}>
+            <img src="./images/figures/huss_battery.png" alt="Huss-labeled battery in a simple circuit" style={{maxHeight: '260px'}}/>
+            <img src="./images/figures/cal_battery.png"  alt="Cal-labeled battery in a simple circuit"  style={{maxHeight: '260px'}}/>
+          </div>
+          <p className="mb-4">
+            Here we have two equivalent 14-V batteries, one labeled Cal and the other labeled Huss,
+            by the labeling convention. In a typical circuit with only one voltage supply, current
+            flows outwards from the positive terminal of an active voltage source towards the positive
+            terminals of any passive devices such as resistors, diodes, and lights, according to the
+            Passive Sign Convention. This current returns to the battery at the negative terminal.
+            Considering the semantic interpretation of Active classes as "providers" or "creators"
+            (often attributed to Witch/Sylph in specific), whilst the Passive classes "receive"
+            (attributed to Heir/Maid), it makes most sense for the Active classes to be the positive
+            terminal, and Passive classes to form the negative terminal. Electrons flow opposite the
+            direction of the current, but they do so at a very slow speed (about one millimeter per
+            second) when compared to the electric signal (about half the speed of light).
+          </p>
+          <div className="my-6 text-center">
+            {/* Wrapper with a fixed 5:3 aspect ratio + overflow hidden
+                lets the wide-column image get cropped symmetrically
+                top and bottom, killing the generous whitespace baked
+                into the source PNG without having to re-export it.
+                `object-fit: cover` scales the image up to fill the
+                container; `object-position: center` keeps the useful
+                content centered. Tune the aspect ratio if the crop
+                clips into anything you want visible. */}
+            <div style={{
+              width: '100%',
+              aspectRatio: '4 / 3',
+              overflow: 'hidden',
+              margin: '0 auto',
+            }}>
+              <img src="./images/figures/huss_circuit.png"
+                   alt="Huss-labeled circuit showing electron drift versus current direction"
+                   style={{
+                     width: '100%',
+                     height: '100%',
+                     objectFit: 'cover',
+                     objectPosition: 'center',
+                     display: 'block',
+                   }}/>
+            </div>
+          </div>
+          <p>
+            In this sense, electron drift is almost a sort of passive movement which happens as
+            electrons move from the positive to negative terminal while the battery discharges. Of
+            course, this is just semantics; you could change the labels and make the electrons be
+            received by the passive classes at the positive terminal, discharged at the negative
+            terminal&mdash; but most of us think in terms of current, not electron drift. Batteries
+            are an active device, so it makes most sense for their active or positive terminal to be
+            associated with the Active Classes.
+          </p>
+          <p className="mt-4">
+            If you don't like it, that's no problem! You can go to{' '}
+            <a href="./settings.html" className="underline" style={{color: '#0000ee'}}>Settings</a>{' '}
+            and toggle the Polarity setting to your preferred convention.
           </p>
         </div>
         
@@ -269,13 +340,17 @@ const FAQPage = () => {
             &gt; Can you explain the layout of the classpect page?
           </h2>
           <p>
-            Sure. At the very top is the numeric-numeric relation-- inverting both components numerically. This is 
-            guaranteed to be a shadow. In the Magic/Rulebreaker Group, this leads to "odd" inversions of components. 
-            The next header has the pair-pair, antipair-antipair, and quasipair-quasipair relations. Then it's the 
-            headings for siblings and shadows. Then you have my rotation graph system, which also displays the 
-            reflective inverse (about the line of symmetry, Class = Aspect). You get a list of all classpects of the 
-            same/opposite value. And finally, the boring results table, which applies all four types of class changing 
-            and then all six types of aspect changing. This does produce at least one duplicate row.
+            Sure. The top of the page is the headline block: the Classpect glyph, the title (Class of Aspect
+            with icons), the numeric breakdown ([Class (n) + Aspect (n) = total]), and the leadership breakdown
+            ([Leadership = n + 2&middot;n = total, Implicit/Explicit/Balanced]), plus any tags and shared-with
+            canon/non-canon reactions. Below the headline you get the numeric-numeric relation-- inverting both
+            components numerically. This is guaranteed to be a shadow. In the Magic/Rulebreaker Group, this
+            leads to "odd" inversions of components. The next header has the pair-pair, antipair-antipair, and
+            quasipair-quasipair relations. Then it's the headings for siblings and shadows. Then you have my
+            rotation graph system, which also displays the reflective inverse (about the line of symmetry,
+            Class = Aspect). You get a list of all classpects of the same/opposite value. And finally, the
+            boring results table, which applies all four types of class changing and then all six types of
+            aspect changing. This does produce at least one duplicate row.
           </p>
         </div>
         
@@ -520,7 +595,7 @@ const FAQPage = () => {
                 <p className="text-sm">antipairs</p>
               </div>
             </div>
-            <p className="text-xs mb-4">Credit: Hussie, bellCarved, caprineCappuccino (respectively)</p>
+            <p className="text-xs mb-4">Credit: Hussie, bellCarved, cesiumCalamity (respectively)</p>
           </div>
           
           <div>

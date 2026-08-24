@@ -178,14 +178,18 @@ const TheoryPage = () => {
         <p>
           OK. Time for the big theorypost. I gotta break this into sections, it's a little long. (Hehehe.)
         </p>
-        
+
+        <p className="italic" style={{fontSize: '0.85rem', color: '#4b5563'}}>
+          (Just a quick note, this document uses Hussie's latest convention, where (+) means Active/Explicit and (&minus;) means Passive/Implicit. This is the opposite of the convention used by Calliope.)
+        </p>
+
         {/* Background/Introduction */}
         <div id="intro" className="pt-6">
           <h2 className="font-typostuck-header mb-4">Background/Introduction</h2>
           
           <p className="mb-4">
             On October 29, 2025, Andrew Hussie answered an ask in the HSOD's{' '}
-            <span className="discord-channel">#q-n-a</span> channel and showed us the canonical pairings and 
+            <span className="discord-channel">#q-n-a</span> channel and showed us the canonical pairings and,
             more importantly, numeric activity levels for every single class. This uprooted tons of theory that 
             existed in the community, especially about how to interrelate classpects to one another.
           </p>
@@ -211,7 +215,7 @@ const TheoryPage = () => {
           </p>
           
           <p className="mb-4">
-            This creates two numeric scales-- one for classes, and one for aspects-- that is easily able to be manipulated 
+            This creates two numeric scales-- one for classes, and one for aspects-- that are easy to manipulate
             mathematically. Remember math? There's going to be a small amount of it here.
           </p>
           
@@ -243,11 +247,12 @@ const TheoryPage = () => {
           </p>
           
           <p className="mb-4">
-            So, let's start at the beginning, with the image posted by Hussie:
+            So, let's start at the beginning, with the image posted by Hussie (Oct 2025 at left, Aug 2026 at right):
           </p>
-          
-          <div className="text-center my-6">
-            <img src="./images/figures/normalpairs.png" alt="Normal Pairs" style={{maxHeight: '400px', margin: '0 auto'}} />
+
+          <div className="text-center my-6" style={{display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: '16px', flexWrap: 'wrap'}}>
+            <img src="./images/figures/classes_list_old.png" alt="Hussie's original class list (Oct 2025)" style={{maxHeight: '400px'}} />
+            <img src="./images/figures/classes_list_new.jpg" alt="Hussie's updated class list (Aug 2026)" style={{maxHeight: '400px'}} />
           </div>
           
           <p className="mb-4">
@@ -301,7 +306,9 @@ const TheoryPage = () => {
             to shine. I also call this group the <strong>Rulebreaker Group</strong> because of the fact that it contains the Dual Actives 
             and Passives-- a major motivating factor for the assignment of Aspects to Classes down the line. The corresponding name for
             the involved <strong>Aspects</strong>, Hope/Rage and Time/Space, is the <strong>Narrative Group</strong>, as they're most 
-            cleanly tied to the idea of setting, plot, and audience.
+            cleanly tied to the idea of setting, plot, and audience. This pairing is supported by the new Class symbols, as both symbols are 
+            items of clothing specific to the more extreme ends of the scale (Heir hood/windsock and Witch hat respectively). They also replicate 
+            the sharp/wavy pairing echoed in Group 3.
           </p>
           
           <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
@@ -311,6 +318,8 @@ const TheoryPage = () => {
             an issue. In other words: all of them can be the scheming eunuch, if they want. The corresponding name for the involved <strong>Aspects</strong>, 
             Breath/Blood and Light/Void, is the <strong>Advising Group</strong>, as it is most cleanly related
             to the idea of not only the associated Classes and their Vizier myth, but also communication and presentation in narratives more broadly.
+            This pairing is supported by the new Class symbols, as both of the symbols are symbolic objects (not weapons); the symbols of a ruler's scepter and an eye staff 
+            both share a similar shape where the bottom is a long handle and the top is essentially a bulb.
           </p>
           
           <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
@@ -320,20 +329,22 @@ const TheoryPage = () => {
             good, or a noble Rogue who takes from the rich and gives to the poor. The corresponding name for the involved <strong>Aspects</strong>, 
             Mind/Heart and Doom/Life, is the <strong>Authoritative Group</strong>, as it is most cleanly related to the idea of good and evil, 
             and authorial/character control and choice in narratives, both with external and internal factors. It can also deal with subversion 
-            of all of these, by proxy.
+            of all of these, by proxy. This pairing is supported by the new Class symbols, as both are bladed melee weapons, with the Knight/Page sword being
+            straight whilst the Rogue/Thief dagger is curved much like a kris/keris, echoing the sharp/wavy pairing in Group 1.
           </p>
           
           <p className="mb-4">
-            This obviously leaves Lord and Muse stranded. What's their relation to one another? Right now, they are both 
-            their own Pairs and Antipairs, and also their own Quasipairs. Were there to be a class of zero value, like 
-            the Waste, both would be Quasipaired with it, but such a Class does not exist. If it ever gets canonized, 
-            I'm updating this post.
+            This obviously leaves Lord and Muse stranded. What's their relation to one another? Right now, they are both
+            their own Pairs and Antipairs, and also their own Quasipairs. Operatively, this is the same as connecting the
+            classes which are different by a magnitude of seven. Were there to be a class of zero value, like the Waste,
+            both would be Quasipaired with it, but such a Class does not exist. If it ever gets canonized, I'm updating
+            this post.
           </p>
           
           <p className="mb-4">
-            On that note, we may well discuss the notion of Quasipairs. BC actually developed these independently of me, 
-            but it turns out that they are well covered by asking the question of "which Class in my group is not covered 
-            by neither my Pair, nor my Antipair?" BC is also responsible for this lovely diagram illustrating the idea.
+            On that note, we may well discuss the notion of Quasipairs. BC actually developed these independently of me,
+            but it turns out that they are well covered by asking the question of "which Class in my group is covered
+            by neither my Pair nor my Antipair?" BC was also responsible for the original version of the diagram illustrating this idea.
           </p>
           
           <div className="text-center my-6">
@@ -438,9 +449,9 @@ const TheoryPage = () => {
           <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
             <strong>Seer of Blood</strong> and <strong>Mage of Breath</strong> are both linked to this idea of connections 
             and flows-- in other words, the classes that deal with knowledge make a lot of connections, or connect with/to 
-            their Aspects. Kankri being here becomes less surprising in light of this thought. Also, blood flow is passive 
+            their Aspects. Kankri being here becomes less surprising in light of this thought. Also, blood flow is passive
             and involuntary, while breathing can be controlled; that's part of how we decided active/passive here, but there
-            is other reasoning relating to symbology and the descriptions of both Aspects supporting the idea also.
+            is other reasoning relating to symbology and the descriptions of both Aspects supporting the idea.
           </p>
           
           <p className="mb-4 ml-8" style={{fontSize: '0.95rem'}}>
@@ -522,16 +533,16 @@ const TheoryPage = () => {
           
           <ul className="list-none ml-6 mb-4">
             <li className="mb-2">
-              <strong>Pair-Preserving:</strong> you want to change the class to that of the Pair (Heir), but preserve 
-              the overall value (+1 + +6 = +7); Heir is +6; we need the Aspect that is +1, Time. Maid of Space into 
+              <strong>Pair-Preserving:</strong> you want to change the class to that of the Pair (Heir), but preserve
+              the overall value (-1 + -6 = -7); Heir is -6; we need the Aspect that is -1, Time. Maid of Space into
               Heir of Time.
             </li>
             <li className="mb-2">
-              <strong>QP-Preserving:</strong> Same idea, but with the Quasipair. Sylph (-1) doesn't have any Aspect 
+              <strong>QP-Preserving:</strong> Same idea, but with the Quasipair. Sylph (+1) doesn't have any Aspect
               that can be added to it to preserve the over-all value, so this is undefined.
             </li>
             <li className="mb-2">
-              <strong>AP-Preserving:</strong> Again, but with Witch (-6) you're even further off base. Still undefined.
+              <strong>AP-Preserving:</strong> Again, but with Witch (+6) you're even further off base. Still undefined.
             </li>
           </ul>
           
@@ -539,8 +550,8 @@ const TheoryPage = () => {
           
           <ul className="list-none ml-6 mb-4">
             <li className="mb-2">
-              <strong>Pair-Inverting:</strong> Change the class to that of the Pair, but pick the Aspect that INVERTS 
-              the overall value. Heir (+6) has no Aspect that can make -7, so this is undefined.
+              <strong>Pair-Inverting:</strong> Change the class to that of the Pair, but pick the Aspect that INVERTS
+              the overall value. Heir (-6) has no Aspect that can make +7, so this is undefined.
             </li>
             <li className="mb-2">
               <strong>QP-Inv:</strong> Same idea, Sylph needs Hope, so Maid of Space into Sylph of Hope.
@@ -602,9 +613,9 @@ const TheoryPage = () => {
             Okay. This is where the real math begins. So, I want you to imagine the{' '}
             <a href="./index.html#/classpect/sylph-of-light" className="underline" style={{color: '#0000ee'}}>
               Sylph of Light
-            </a>, as a classpect. Now that we have two numeric scales, we can place this classpect on a Cartesian 
-            grid-- the point (-1, -5). We can also place the reflective inverse-- swapping Class and Aspect-- here too. 
-            This is the Prince of Rage, (-5, -1).
+            </a>, as a classpect. Now that we have two numeric scales, we can place this classpect on a Cartesian
+            grid-- the point (+1, +5). We can also place the reflective inverse-- swapping Class and Aspect-- here too.
+            This is the Prince of Rage, (+5, +1).
           </p>
           
           <div className="text-center my-6">
@@ -1068,35 +1079,35 @@ const TheoryPage = () => {
                 <thead>
                   <tr><th colSpan={2} className="pb-2 text-center border-b-2 border-gray-700">CLASSES</th></tr>
                   <tr>
-                    <th className="py-1 text-center border-b border-gray-500">Implicit (+)</th>
-                    <th className="py-1 text-center border-b border-gray-500">Explicit (&minus;)</th>
+                    <th className="py-1 text-center border-b border-gray-500">Implicit (&minus;)</th>
+                    <th className="py-1 text-center border-b border-gray-500">Explicit (+)</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td className="py-1 text-center">+7 Muse</td><td className="py-1 text-center">&minus;7 Lord</td></tr>
-                  <tr><td className="py-1 text-center">+6 Heir</td><td className="py-1 text-center">&minus;6 Prince</td></tr>
-                  <tr><td className="py-1 text-center">+5 Rogue</td><td className="py-1 text-center">&minus;5 Thief</td></tr>
-                  <tr><td className="py-1 text-center">+4 Mage</td><td className="py-1 text-center">&minus;4 Sylph</td></tr>
-                  <tr><td className="py-1 text-center">+3 Maid</td><td className="py-1 text-center">&minus;3 Seer</td></tr>
-                  <tr><td className="py-1 text-center">+2 Page</td><td className="py-1 text-center">&minus;2 Knight</td></tr>
-                  <tr><td className="py-1 text-center">+1 Bard</td><td className="py-1 text-center">&minus;1 Witch</td></tr>
+                  <tr><td className="py-1 text-center">&minus;7 Muse</td><td className="py-1 text-center">+7 Lord</td></tr>
+                  <tr><td className="py-1 text-center">&minus;6 Heir</td><td className="py-1 text-center">+6 Prince</td></tr>
+                  <tr><td className="py-1 text-center">&minus;5 Rogue</td><td className="py-1 text-center">+5 Thief</td></tr>
+                  <tr><td className="py-1 text-center">&minus;4 Mage</td><td className="py-1 text-center">+4 Sylph</td></tr>
+                  <tr><td className="py-1 text-center">&minus;3 Maid</td><td className="py-1 text-center">+3 Seer</td></tr>
+                  <tr><td className="py-1 text-center">&minus;2 Page</td><td className="py-1 text-center">+2 Knight</td></tr>
+                  <tr><td className="py-1 text-center">&minus;1 Bard</td><td className="py-1 text-center">+1 Witch</td></tr>
                 </tbody>
               </table>
               <table className="w-full font-courier text-sm border-collapse">
                 <thead>
                   <tr><th colSpan={2} className="pb-2 text-center border-b-2 border-gray-700">ASPECTS</th></tr>
                   <tr>
-                    <th className="py-1 text-center border-b border-gray-500">Implicit (+)</th>
-                    <th className="py-1 text-center border-b border-gray-500">Explicit (&minus;)</th>
+                    <th className="py-1 text-center border-b border-gray-500">Implicit (&minus;)</th>
+                    <th className="py-1 text-center border-b border-gray-500">Explicit (+)</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td className="py-1 text-center">+6 Breath</td><td className="py-1 text-center">&minus;6 Blood</td></tr>
-                  <tr><td className="py-1 text-center">+5 Void</td><td className="py-1 text-center">&minus;5 Life</td></tr>
-                  <tr><td className="py-1 text-center">+4 Space</td><td className="py-1 text-center">&minus;4 Rage</td></tr>
-                  <tr><td className="py-1 text-center">+3 Hope</td><td className="py-1 text-center">&minus;3 Time</td></tr>
-                  <tr><td className="py-1 text-center">+2 Doom</td><td className="py-1 text-center">&minus;2 Light</td></tr>
-                  <tr><td className="py-1 text-center">+1 Heart</td><td className="py-1 text-center">&minus;1 Mind</td></tr>
+                  <tr><td className="py-1 text-center">&minus;6 Breath</td><td className="py-1 text-center">+6 Blood</td></tr>
+                  <tr><td className="py-1 text-center">&minus;5 Void</td><td className="py-1 text-center">+5 Life</td></tr>
+                  <tr><td className="py-1 text-center">&minus;4 Space</td><td className="py-1 text-center">+4 Rage</td></tr>
+                  <tr><td className="py-1 text-center">&minus;3 Hope</td><td className="py-1 text-center">+3 Time</td></tr>
+                  <tr><td className="py-1 text-center">&minus;2 Doom</td><td className="py-1 text-center">+2 Light</td></tr>
+                  <tr><td className="py-1 text-center">&minus;1 Heart</td><td className="py-1 text-center">+1 Mind</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1104,7 +1115,7 @@ const TheoryPage = () => {
 
           <p className="mb-4">
             To calculate a leadership value, add the Class value plus 2x the Aspect value. The over-all
-            sign of the result determines whether you are an Explicit (&minus;) or Implicit (+) leader, but
+            sign of the result determines whether you are an Explicit (+) or Implicit (&minus;) leader, but
             the <i>magnitude</i> is what is used in the rankings.
           </p>
 
