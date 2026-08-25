@@ -23,8 +23,8 @@ const PESTER_QUOTES_CANON = [
   { handle: 'timaeusTestified',  color: '#f2a400', quote: 'Is this really the best use of your time? Come on, now.' },
   { handle: 'golgothasTerror',   color: '#1f9400', quote: 'Gadzooks! What has gotten into you old chum?' },
   { handle: 'gutsyGumshoe',      color: '#00d5f2', quote: 'My word, spare some messages for the rest of us!' },
-  // AR
-  { handle: 'timaeusTestified',  color: '#e00707', quote: "It seems you're trying to spam my inbox." },
+  // Hal (Dirk's AR) — Dave-red text under Dirk's handle.
+  { handle: 'timaeusTestified', color: '#e00707', quote: "It seems you're trying to spam my inbox." },
   { handle: 'ideogramicDramaturgy', color: '#bdb49c', quote: '🖕😡💢' },
   { handle: 'crucifiedGnosis', color: '#ff0000', fontSize: '0.68rem',
     quote: "9kay, first 9ff, I'd like t9 issue c9ntent warnings f9r the f9ll9wing: cursing (cens9red), threats 9f vi9lence (redacted), gun 9wnership (pr96lematic), military ide9l9gy, self-aggrandizement, and 9verall unnecessary aggressi9n. What in the actual 9ppress9r-class did you just say a69ut me, y9u pr96lematic-9r-privileged individual? I'll have y9u kn9w that I graduated t9p of my class in c9ntent m9deration, and I've been inv9lved in numer9us secret call-9ut threads. I have 9ver 300 c9nfirmed m9deration rep9rts. I am trained in dec9nstructing pr96lematic language, and I am the t9p sc9lder in the entire dancestor r9ster. Y9u are n9thing t9 me 6ut just an9ther 6ad act9r." },
