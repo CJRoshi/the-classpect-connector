@@ -4,6 +4,33 @@
    Requires: constants.js, utility-functions.js, links.js, section.js, rotation-graph.js, tags.js
    ========================= */
 
+const renderReactionText = (text, color) => {
+  // Rendering helper
+  const parts = text.split(/(<a\b[^>]*>.*?<\/a>)/gis);
+  return parts.map((part, idx) => {
+    const match = part.match(/^<a\b([^>]*)>(.*?)<\/a>$/is);
+    if (!match) return <React.Fragment key={idx}>{part}</React.Fragment>;
+
+    const attrs = match[1];
+    const href = (attrs.match(/\bhref=["']([^"']+)["']/i) || [])[1];
+    const target = (attrs.match(/\btarget=["']([^"']+)["']/i) || [])[1];
+    const rel = (attrs.match(/\brel=["']([^"']+)["']/i) || [])[1];
+
+    return (
+      <a
+        key={idx}
+        href={href}
+        target={target}
+        rel={rel}
+        className="underline"
+        style={{ color }}
+      >
+        {match[2]}
+      </a>
+    );
+  });
+};
+
 const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
   const analysis = analyzeClasspect(className, aspectName);
   if(!analysis.valid) return <div className="text-red-600">Invalid classpect.</div>;
@@ -173,7 +200,21 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
                 <div className="whitespace-pre-wrap font-bold">
                   {ch.reaction.map((line, idx) => (
                   <div key={idx}>
-                    {line.link ? (
+                    {line.image ? (
+                      /* Image quote (e.g. Mizzlebip's pleading emoji).
+                         `scale` multiplies a 32-px baseline; keep aspect
+                         ratio so a non-square source doesn't get squashed. */
+                      <img
+                        src={line.image}
+                        alt={line.alt || ''}
+                        style={{
+                          width: (line.scale || 1) * 32 + 'px',
+                          height: 'auto',
+                          display: 'inline-block',
+                          verticalAlign: 'middle',
+                        }}
+                      />
+                    ) : line.link ? (
                       <a
                         href={line.link}
                         target="_blank"
@@ -185,7 +226,7 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
                       </a>
                     ) : (
                       <span style={{ color: line.color }}>
-                        {line.text}
+                        {renderReactionText(line.text, line.color)}
                       </span>
                     )}
                   </div>
@@ -216,7 +257,18 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
                     <div className="whitespace-pre-wrap font-bold">
                       {ch.reaction.map((line, idx) => (
                         <div key={idx}>
-                          {line.link ? (
+                          {line.image ? (
+                            <img
+                              src={line.image}
+                              alt={line.alt || ''}
+                              style={{
+                                width: (line.scale || 1) * 32 + 'px',
+                                height: 'auto',
+                                display: 'inline-block',
+                                verticalAlign: 'middle',
+                              }}
+                            />
+                          ) : line.link ? (
                             <a
                               href={line.link}
                               target="_blank"
@@ -228,7 +280,7 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
                             </a>
                           ) : (
                             <span style={{ color: line.color }}>
-                              {line.text}
+                              {renderReactionText(line.text, line.color)}
                             </span>
                           )}
                         </div>

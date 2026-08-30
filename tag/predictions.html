@@ -116,6 +116,64 @@ const defaultTheme = {
 // original cast) and `deltaKids` (Deltritus natives).
 const PREDICTIONS_JSON_PATH = '../data/predictions.json';
 
+/* Obfuscated — Minecraft §k-style scrambled text with random length.
+   Every ~90 ms it re-rolls both the length (4–10 chars) and the char
+   set. */
+const OBF_POOL = (() => {
+  const pool = [];
+  // Box-drawing + block chars (U+2500–U+259F).
+  for (let c = 0x2500; c <= 0x259F; c++) pool.push(String.fromCodePoint(c));
+  // Braille patterns (U+2800–U+28FF, all 256 dot combinations).
+  for (let c = 0x2800; c <= 0x28FF; c++) pool.push(String.fromCodePoint(c));
+  // Mathematical operators + misc technical (U+2200–U+23FF, sampled).
+  for (let c = 0x2200; c <= 0x22FF; c++) pool.push(String.fromCodePoint(c));
+  // A few classic ASCII-ish garbage chars for readability variety.
+  for (const ch of '!@#$%^&*<>{}[]/\\|~+=?') pool.push(ch);
+  return pool;
+})();
+
+const roll = () => {
+  const len = 4 + Math.floor(Math.random() * 7);   // 4..10 inclusive
+  let s = '';
+  for (let i = 0; i < len; i++) {
+    s += OBF_POOL[Math.floor(Math.random() * OBF_POOL.length)];
+  }
+  return s;
+};
+
+const Obfuscated = ({ tickMs = 90 }) => {
+  const [text, setText] = React.useState(roll);
+  React.useEffect(() => {
+    const id = setInterval(() => setText(roll()), tickMs);
+    return () => clearInterval(id);
+  }, [tickMs]);
+  return (
+    <span style={{
+      display: 'inline-block',
+      minWidth: '5.5em',           // keeps neighboring text from jumping
+      textAlign: 'center',
+      fontFamily: "'Courier New', monospace",
+      letterSpacing: '0.05em',
+    }}>{text}</span>
+  );
+};
+
+/* renderLand — split a `land` string on " and " and render each half.
+   Any half equal to "???" becomes an <Obfuscated /> instance so
+   partially-revealed lands (e.g. "Beginning and ???") work too. */
+const renderLand = (land) => {
+  const parts = land.split(/\s+and\s+/i);
+  return parts.map((part, i) => {
+    const isUnknown = /^\?{2,}$/.test(part.trim());
+    return (
+      <React.Fragment key={i}>
+        {i > 0 && ' and '}
+        {isUnknown ? <Obfuscated /> : part}
+      </React.Fragment>
+    );
+  });
+};
+
 const CharRow = ({ char }) => {
   const [cls, asp] = char.classpect;
   const path = `../index.html#/classpect/${cls.toLowerCase()}-of-${asp.toLowerCase()}`;
@@ -180,6 +238,15 @@ const CharRow = ({ char }) => {
               {cls} of {asp}
             </a>
           </div>
+          {/* Land — as of [S] Ly'lac: Enter, canon has begun revealing
+              Delta-kid lands. Confirmed lands render in full; the rest
+              use "??? and ???" until Hussie tips their hand. */}
+          {char.land && (
+            <div style={{ marginTop: '2px', fontSize: '0.85rem', opacity: 0.75, color: char.color }}
+                 className="font-courier">
+              Land of {renderLand(char.land)}
+            </div>
+          )}
         </div>
 
       </div>
@@ -211,7 +278,10 @@ const PredictionsPage = () => {
        fast hash-route flips) leaving an in-flight fetch to land on
        an unmounted component. */
     const controller = new AbortController();
-    fetch(PREDICTIONS_JSON_PATH, { signal: controller.signal })
+    // `cache: 'no-cache'` forces a conditional GET (If-Modified-Since /
+    // ETag) so predictions.json edits show up on a plain refresh
+    // instead of requiring Ctrl+Shift+R.
+    fetch(PREDICTIONS_JSON_PATH, { signal: controller.signal, cache: 'no-cache' })
       .then(r => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json();

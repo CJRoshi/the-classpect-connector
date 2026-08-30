@@ -2,7 +2,7 @@
   "_meta": {
     "description": "Speculative classpects for Homestuck: Beyond Canon characters who haven't been formally assigned classes/aspects in canon yet. Consumed by the Connector's predictions.html page AND by the Scryer's BC predictions special session, so any rename / re-shuffle here propagates to both surfaces.",
     "stability": "speculative",
-    "lastTouched": "2026-06-26",
+    "lastTouched": "2026-10-26",
     "moonConfidence": "Mixed. Ly'lac, Del'fi, championsTirade, and Vrissy on Derse + auguryAside on Prospit are confirmed by BC text. The rest (TC, Swiss, Harry, Tavvy, Yiffy) are best-guess reads. The Connector's predictions.html doesn't render moons in its UI, but the Scryer consumes them for lunar-balance stats."
   },
 
@@ -16,6 +16,7 @@
       "classpect": ["Thief", "Mind"],
       "moon": "Derse",
       "symbol": "../images/special/symbols/scorpio.webp",
+      "land": "??? and ???",
       "note": null
     },
     {
@@ -26,6 +27,7 @@
       "classpect": ["Heir", "Rage"],
       "moon": "Prospit",
       "symbol": null,
+      "land": "??? and ???",
       "note": null
     },
     {
@@ -36,6 +38,7 @@
       "classpect": ["Mage", "Light"],
       "moon": "Derse",
       "symbol": null,
+      "land": "??? and ???",
       "note": null
     },
     {
@@ -46,6 +49,7 @@
       "classpect": ["Rogue", "Life"],
       "moon": "Prospit",
       "symbol": null,
+      "land": "??? and ???",
       "note": null
     }
   ],
@@ -59,6 +63,7 @@
       "classpect": ["Witch", "Doom"],
       "moon": "Derse",
       "symbol": "../images/special/symbols/lylacsymbol.webp",
+      "land": "Beginning and End",
       "note": null
     },
     {
@@ -70,6 +75,7 @@
       "classpect": ["Seer", "Heart"],
       "moon": "Derse",
       "symbol": "../images/special/symbols/daggersymbol.webp",
+      "land": "??? and ???",
       "note": null
     },
     {
@@ -79,6 +85,7 @@
       "classpect": ["Sylph", "Time"],
       "moon": "Prospit",
       "symbol": "../images/special/symbols/aasymbol.webp",
+      "land": "??? and ???",
       "note": null
     },
     {
@@ -89,6 +96,7 @@
       "classpect": ["Page", "Blood"],
       "moon": "Prospit",
       "symbol": "../images/special/symbols/swisssymbol.webp",
+      "land": "??? and ???",
       "note": null
     },
     {
@@ -99,6 +107,7 @@
       "classpect": ["Bard", "Void"],
       "moon": "Prospit",
       "symbol": "../images/special/symbols/tcsymbol.webp",
+      "land": "??? and ???",
       "note": null
     },
     {
@@ -109,6 +118,7 @@
       "classpect": ["Knight", "Space"],
       "moon": "Derse",
       "symbol": "../images/special/symbols/ctsymbol.webp",
+      "land": "??? and ???",
       "note": null
     }
   ]

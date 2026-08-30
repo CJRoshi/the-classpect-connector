@@ -33,7 +33,8 @@ const TAG_PRIORITY = {
 
   // Tier 5: Non-canon special tags
   'original-character': 100,
-  'sweetbroandhellajeff': 101
+  'sweetbroandhellajeff': 101,
+  'psycholonials': 102
   // Rung tags ('rung-1' … 'rung-26') are auto-generated below and
   // append at the lowest priority via the default fallback (999).
 };
@@ -148,6 +149,18 @@ const TAG_METADATA = {
   'sweetbroandhellajeff': {
     label: 'Sweet Bro and Hella Jeff',
     color: '#ff5722',
+    route: null
+  },
+  'psycholonials': {
+    /* Mimics the game's logo. */
+    label: 'Psycholonials',
+    renderLabel: () => (
+      <>
+        Psych<span style={{color: '#e5032e'}}>◇</span>l<span style={{color: '#e5032e'}}>◇</span>nials
+      </>
+    ),
+    color: '#000000',
+    textColor: '#ffffff',
     route: null
   }
 };
@@ -287,7 +300,7 @@ const TagBadge = ({ tag, onClick }) => {
         transform: (isClickable && isHovered) ? 'translateY(-1px)' : 'translateY(0)'
       }}
     >
-      {metadata.label}
+      {metadata.renderLabel ? metadata.renderLabel(isHovered) : metadata.label}
     </span>
   );
 };

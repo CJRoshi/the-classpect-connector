@@ -1189,6 +1189,109 @@
       "tags": [
         "sweetbroandhellajeff"
       ]
+    },
+    "Zhen": {
+      "color": "#b35fe9",
+      "classpect": [
+        "Witch",
+        "Rage"
+      ],
+      "lunarsway": null,
+      "reaction": [
+        {
+          "text": "y'know i haven't thought about that stuff in years but it does sound good and true",
+          "color": "#b35fe9"
+        }
+      ],
+      "tags": [
+        "psycholonials"
+      ]
+    },
+    "Abby": {
+      "color": "#6aa6ef",
+      "classpect": [
+        "Mage",
+        "Heart"
+      ],
+      "lunarsway": null,
+      "reaction": [
+        {
+          "text": "Oh Zhen used to tell me about these way back when!! She thought they were completely made up haha",
+          "color": "#6aa6ef"
+        }
+      ],
+      "tags": [
+        "psycholonials"
+      ]
+    },
+    "Joculine": {
+      "color": "#ff3037",
+      "classpect": [
+        "Maid",
+        "Doom"
+      ],
+      "lunarsway": null,
+      "reaction": [
+        {
+          "text": "At your humble service! :)",
+          "color": "#ff3037"
+        }
+      ],
+      "tags": [
+        "psycholonials"
+      ]
+    },
+    "Mizzlebip": {
+      "color": "#ff7aea",
+      "classpect": [
+        "Thief",
+        "Mind"
+      ],
+      "lunarsway": null,
+      "reaction": [
+        {
+          "image": "./images/psycholonials/pleading.png",
+          "alt": "🥺",
+          "scale": 2
+        }
+      ],
+      "tags": [
+        "psycholonials"
+      ]
+    },
+    "Percy": {
+      "color": "#000000",
+      "classpect": [
+        "Page",
+        "Blood"
+      ],
+      "lunarsway": null,
+      "reaction": [
+        {
+          "text": "alas percy, we hardly knew ye. just kidding. i still miss you",
+          "color": "#b35fe9"
+        }
+      ],
+      "tags": [
+        "psycholonials"
+      ]
+    },
+    "Riotus": {
+      "color": "#0da13e",
+      "classpect": [
+        "Maid",
+        "Void"
+      ],
+      "lunarsway": null,
+      "reaction": [
+        {
+          "text": "If you are here, I suppose <a href=\"https://homestuck.com/psycholonials\" target=\"_blank\" rel=\"noopener noreferrer\">my work</a> is already <a href=\"./index.html#/classpect/thief-of-mind\">finished</a>.",
+          "color": "#0da13e"
+        }
+      ],
+      "tags": [
+        "psycholonials"
+      ]
     }
   }
 }
