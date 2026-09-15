@@ -666,6 +666,28 @@
         "cherubs"
       ]
     },
+    "Del'fi": {
+      "color": "#018e71",
+      "classpect": [
+        "Seer",
+        "Life"
+      ],
+      "lunarsway": "Derse",
+      "reaction": [
+        {
+          "text": "*achoo*",
+          "color": "#018e71"
+        },
+        {
+          "text": "o soz u startld meeee... sorry ur sick now.",
+          "color": "#018e71"
+        }
+      ],
+      "tags": [
+        "homestuck",
+        "beyond-canon"
+      ]
+    },
     "Kalian Delfin": {
       "color": "#6a006a",
       "classpect": [
