@@ -117,6 +117,22 @@
       color: #ffffff;
       font-weight: bold;
     }
+    /* Desktop wrap variant — used by EnumSetting when the enum has
+       enough options to overcrowd the row (currently 5+, e.g. the
+       Ring-color picker once GradientR is unlocked). Mirrors the
+       2-column grid trick used in the mobile media query so the
+       layout stays consistent across breakpoints. */
+    .segmented.segmented--wrap {
+      display: inline-grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .segmented.segmented--wrap button + button { border-left: none; }
+    .segmented.segmented--wrap button:nth-child(even) {
+      border-left: 1px solid #a0a0a0;
+    }
+    .segmented.segmented--wrap button:nth-child(n+3) {
+      border-top: 1px solid #a0a0a0;
+    }
 
     @media (max-width: 640px) {
       .setting-row {
@@ -189,7 +205,7 @@ const EnumSetting = ({ name, spec }) => {
         <div className="setting-desc">{spec.description}</div>
       </div>
       <div className="setting-control">
-        <div className="segmented">
+        <div className={'segmented' + (spec.values.length >= 5 ? ' segmented--wrap' : '')}>
           {spec.values.map(v => (
             <button
               key={v}

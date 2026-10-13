@@ -6,7 +6,7 @@
 
 /* ----- Pesterchum-style logo-spam easter egg ----- */
 const PESTER_QUOTES_CANON = [
-  { handle: 'ectoBiologist',     color: '#0715cd', quote: 'what are you doing? thats just a logo!' },
+  { handle: 'ectoBiologist',     color: '#0715cd', quote: 'what are you doing? that\'s just a logo!' },
   { handle: 'tentacleTherapist', color: '#b536da', quote: 'Snooping as usual, I see?' },
   { handle: 'turntechGodhead',   color: '#e00707', quote: 'bro you cant just click the logo to make it love you' },
   { handle: 'gardenGnostic',     color: '#4ac925', quote: 'hehehehe stoooop! youre going to wear it out!!' },
@@ -22,12 +22,17 @@ const PESTER_QUOTES_CANON = [
   { handle: 'tipsyGnostalgic',   color: '#ff6ff2', quote: 'lmaoooo wut r u doin stop clickin like that... ur gonna ruin your mouse' },
   { handle: 'timaeusTestified',  color: '#f2a400', quote: 'Is this really the best use of your time? Come on, now.' },
   { handle: 'golgothasTerror',   color: '#1f9400', quote: 'Gadzooks! What has gotten into you old chum?' },
+  { handle: 'golgothasTerror',   color: '#1f9400', quote: 'Now i do enjoy digging around for hidden secrets as much as any adventure minded gent but by jove that rackets wearing my last nerve raw!!' },
   { handle: 'gutsyGumshoe',      color: '#00d5f2', quote: 'My word, spare some messages for the rest of us!' },
-  // Hal (Dirk's AR) — Dave-red text under Dirk's handle.
+  // Hal
   { handle: 'timaeusTestified', color: '#e00707', quote: "It seems you're trying to spam my inbox." },
   { handle: 'ideogramicDramaturgy', color: '#bdb49c', quote: '🖕😡💢' },
   { handle: 'crucifiedGnosis', color: '#ff0000', fontSize: '0.68rem',
     quote: "9kay, first 9ff, I'd like t9 issue c9ntent warnings f9r the f9ll9wing: cursing (cens9red), threats 9f vi9lence (redacted), gun 9wnership (pr96lematic), military ide9l9gy, self-aggrandizement, and 9verall unnecessary aggressi9n. What in the actual 9ppress9r-class did you just say a69ut me, y9u pr96lematic-9r-privileged individual? I'll have y9u kn9w that I graduated t9p of my class in c9ntent m9deration, and I've been inv9lved in numer9us secret call-9ut threads. I have 9ver 300 c9nfirmed m9deration rep9rts. I am trained in dec9nstructing pr96lematic language, and I am the t9p sc9lder in the entire dancestor r9ster. Y9u are n9thing t9 me 6ut just an9ther 6ad act9r." },
+  // Caliborn — rare "knock-the-page-over" effect, nod to homestuck.com/007395.
+  { handle: 'undyingUmbrage',  color: '#323232',
+    quote: "SHuT uP. WORM.",
+    fx: 'knock' },
 ];
 // Beyond-Canon cast — gated behind visited_predictions
 const PESTER_QUOTES_BC = [
@@ -43,6 +48,13 @@ const PESTER_QUOTES_BC = [
   // Swiss just has the bot do it for him.
   { handle: 'testudinesConsort', color: '#9aa4b0',
     quote: 'You were put on timeout in CHA.OS Official. Reason: Being EXTREMELY ROWDY in my personal messages.' },
+  { handle: 'auguryAside', color: '#801108',
+    quote: 'Do not spam.' },
+  { handle: 'glutinousGymnast', color: '#2b0057', quote: 'Could you,,, not,'},
+  { handle: 'taciturnTablesetter', color: '#d00009', quote: 'shut up or ill give u a smile to match mine.' },
+  { handle: 'thespiansGlamor', color: '#0671cd', quote: 'babe i know the logo looks fresh but you gotta stop blowing up my phone.'},
+  { handle: 'championsTirade', color: '#81C342', quote: '* The Mountain lowers his head. It seems there is no hope for either of you. *'},
+  { handle: 'adamantGriftress', color: '#005682', quote: 'Sc8mmer Get Sc8mmed, huh???? Well you\'re WR8NG!!!!'}
 ];
 // Pre-scratch Counterquest cast
 const PESTER_QUOTES_OC = [
@@ -54,6 +66,240 @@ const PESTER_QUOTES_OC = [
   { handle: 'aeronauticRockstar',   color: '#A2752A', quote: "Pipe d°⁸°wn °⁸°'er there °⁸°r I'll make ya!" },
   { handle: 'obscuraTelos',         color: '#A24875', quote: 'my head hurtzzz......' },
 ];
+
+/* ----- Hidden ring-style unlock sync ----- */
+const CC_SECRET_KEY_GROUPS = [
+  ['sr_mutt_of_slop'],
+  ['sr_waste_of_space'],
+  ['sr_douche_of_tears'],
+  ['sr_gent_of_piss'],
+  ['sr_trash_of_time'],
+  ['sr_nic_of_time'],
+  ['sr_champion_of_pulchritude'],
+  ['sr_nogue_of_noid'],
+  ['sr_email_of_equius'],
+  ['sr_dave_of_guy'],
+  ['sr_son_of_god'],
+  ['sr_myocdonotsteal', 'visited_oc_session'],
+  ['visited_cherubs'],
+  ['logo_spammed'],
+];
+function syncGradientRUnlock() {
+  try {
+    const set = new Set(JSON.parse(localStorage.getItem('cc_unlocks') || '[]'));
+    const allFound = CC_SECRET_KEY_GROUPS.every(g => g.some(k => set.has(k)));
+    if (allFound) localStorage.setItem('cc_gradientR_unlocked', '1');
+    else          localStorage.removeItem('cc_gradientR_unlocked');
+  } catch {}
+}
+syncGradientRUnlock();
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'cc_unlocks') syncGradientRUnlock();
+  });
+}
+
+/* Caliborn knocking the page over */
+const CALIBORN_KNOCK_MS = 350;
+(function injectCalibornCss() {
+  if (typeof document === 'undefined') return;
+  if (document.getElementById('caliborn-knock-style')) return;
+  const style = document.createElement('style');
+  style.id = 'caliborn-knock-style';
+  style.textContent = `
+    html.caliborn-knocked, html.caliborn-knocked body {
+      overflow: visible !important;
+    }
+  `;
+  document.head.appendChild(style);
+})();
+/* Collect every "knockable" element on the page, split into two layers. */
+const KNOCK_TAGS = new Set([
+  'A', 'BUTTON', 'IMG', 'SVG', 'INPUT', 'SELECT', 'LABEL',
+  'H1', 'H2', 'H3', 'H4', 'H5', 'H6',
+  'P', 'LI', 'TD', 'TH', 'SUMMARY', 'FIGCAPTION',
+]);
+function collectKnockables() {
+  const bgs    = Array.from(document.querySelectorAll('.knock-bg'));
+  const groups = Array.from(document.querySelectorAll('.knock-group'));
+  const leaves = Array.from(document.body.querySelectorAll('*')).filter((el) => {
+    if (!KNOCK_TAGS.has(el.tagName)) return false;
+    const r = el.getBoundingClientRect();
+    if (r.width < 4 || r.height < 4) return false;
+    // Inside a knock-group → group handles it as one unit.
+    if (el.closest('.knock-group')) return false;
+    // Inside the toast root → toast handles it as one unit.
+    if (el.closest('[data-pester-toast]') && !el.hasAttribute('data-pester-toast')) return false;
+    return true;
+  });
+  const leafSet = new Set(leaves);
+  const prunedLeaves = leaves.filter((el) => {
+    for (const other of leafSet) {
+      if (other !== el && el.contains(other)) return false;
+    }
+    return true;
+  });
+  const toast = document.querySelector('[data-pester-toast]');
+  const allEls = [...bgs, ...groups, ...prunedLeaves];
+  if (toast && !allEls.includes(toast)) allEls.push(toast);
+  // Return with layer tags so the physics pass can keep them separate.
+  return allEls.map((el) => ({
+    el,
+    layer: el.classList.contains('knock-bg') ? 'bg' : 'fg',
+  }));
+}
+/* Walk ancestor chain summing displacements from any victim ancestor.
+   A row (fg) inside a shaken column box (bg) inherits the box's drift. */
+function worldDisp(el, dispMap) {
+  let dx = 0, dy = 0;
+  let p = el;
+  while (p) {
+    const d = dispMap.get(p);
+    if (d) { dx += d.dx; dy += d.dy; }
+    p = p.parentElement;
+  }
+  return { dx, dy };
+}
+function worldRect(el, origRects, dispMap) {
+  const r = origRects.get(el);
+  const { dx, dy } = worldDisp(el, dispMap);
+  return { left: r.left + dx, top: r.top + dy, right: r.right + dx, bottom: r.bottom + dy };
+}
+function rectsOverlap(a, b) {
+  return !(a.right <= b.left || a.left >= b.right ||
+           a.bottom <= b.top || a.top >= b.bottom);
+}
+/* Undo the knock. */
+function resetCalibornKnock() {
+  if (typeof document === 'undefined') return;
+  const victims = document.querySelectorAll('.caliborn-knocked-el');
+  for (const el of victims) {
+    el.style.transition = '';
+    el.style.transform = '';
+    el.style.transformOrigin = '';
+    el.style.willChange = '';
+    el.style.pointerEvents = '';
+    el.style.zIndex = '';
+    el.style.position = '';
+    el.classList.remove('caliborn-knocked-el');
+  }
+  document.documentElement.classList.remove('caliborn-knocked');
+}
+/* Reset whenever the user navigates. */
+if (typeof window !== 'undefined') {
+  const onNav = () => {
+    const path = window.location.pathname;
+    const hash = window.location.hash || '';
+    const onHome = (path === '/' || path.endsWith('/index.html') || path.endsWith('/'))
+                   && (hash === '' || hash === '#' || hash === '#/' || hash.startsWith('#/?'));
+    if (!onHome) resetCalibornKnock();
+  };
+  window.addEventListener('hashchange', onNav);
+  window.addEventListener('popstate',   onNav);
+}
+
+function triggerCalibornKnock() {
+  if (typeof document === 'undefined') return;
+  const root = document.documentElement;
+  root.classList.add('caliborn-knocked');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const items = collectKnockables();          // [{el, layer}, ...]
+    if (!items.length) return;
+    // Clamp bounds are PAGE bounds.
+    const docW = document.documentElement.scrollWidth;
+    const docH = document.documentElement.scrollHeight;
+    const scrollX = window.scrollX, scrollY = window.scrollY;
+    const origRects = new Map();
+    for (const { el } of items) origRects.set(el, el.getBoundingClientRect());
+    // Initial random displacement. dy positive (gravity), dx + dr symmetric.
+    // Smaller offsets for larger elements.
+    const dispMap = new Map();
+    for (const { el } of items) {
+      const r = origRects.get(el);
+      const sizeScale = Math.max(0.4, Math.min(1.3, 70 / Math.max(r.width, r.height, 1) + 0.5));
+      dispMap.set(el, {
+        dx: (Math.random() * 90 - 45) * sizeScale,
+        dy: (18 + Math.random() * 90) * sizeScale,
+        dr: (Math.random() * 28 - 14),
+      });
+    }
+    // Overlap-avoidance relaxation.
+    const PAD = 8;
+    const bgMembers = items.filter((it) => it.layer === 'bg').map((it) => it.el);
+    const fgMembers = items.filter((it) => it.layer === 'fg').map((it) => it.el);
+    const ITERS = 40;
+    for (let iter = 0; iter < ITERS; iter++) {
+      let anyMoved = false;
+      for (const members of [bgMembers, fgMembers]) {
+        for (let i = 0; i < members.length; i++) {
+          for (let j = i + 1; j < members.length; j++) {
+            const a = members[i], b = members[j];
+            const ra = worldRect(a, origRects, dispMap);
+            const rb = worldRect(b, origRects, dispMap);
+            const overlapX = Math.min(ra.right + PAD, rb.right + PAD) - Math.max(ra.left - PAD, rb.left - PAD);
+            const overlapY = Math.min(ra.bottom + PAD, rb.bottom + PAD) - Math.max(ra.top - PAD, rb.top - PAD);
+            if (overlapX <= 0 || overlapY <= 0) continue;
+            const aCx = (ra.left + ra.right) / 2, bCx = (rb.left + rb.right) / 2;
+            const aCy = (ra.top + ra.bottom) / 2, bCy = (rb.top + rb.bottom) / 2;
+            const dA = dispMap.get(a), dB = dispMap.get(b);
+            if (overlapX < overlapY) {
+              const half = overlapX / 2 + 0.5;
+              if (aCx < bCx) { dA.dx -= half; dB.dx += half; }
+              else           { dA.dx += half; dB.dx -= half; }
+            } else {
+              // Gravity-respecting Y resolution: push the LOWER one all
+              // the way down past the upper one, leave the upper alone.
+              const push = overlapY + 0.5;
+              if (aCy < bCy) dB.dy += push;
+              else           dA.dy += push;
+            }
+            anyMoved = true;
+          }
+        }
+      }
+      if (!anyMoved) break;
+    }
+    // Clamp final world rects to PAGE bounds.
+    const MARGIN = 20;
+    for (const { el } of items) {
+      const r = origRects.get(el);
+      const { dx, dy } = worldDisp(el, dispMap);
+      const own = dispMap.get(el);
+      // Viewport-space final rect:
+      const finalX = r.left + dx, finalR = r.right + dx;
+      const finalY = r.top + dy,  finalB = r.bottom + dy;
+      // Translate to document-space to compare with page edges.
+      const docLeft  = finalX + scrollX;
+      const docRight = finalR + scrollX;
+      const docTop   = finalY + scrollY;
+      const docBottom = finalB + scrollY;
+      if (docLeft   < MARGIN)         own.dx += (MARGIN - docLeft);
+      if (docRight  > docW - MARGIN)  own.dx += (docW - MARGIN - docRight);
+      if (dy < 0) own.dy += -dy;      // never above original top
+      if (docBottom > docH - MARGIN)  own.dy += (docH - MARGIN - docBottom);
+      // Re-check gravity guard after the bottom clamp.
+      const dy2 = worldDisp(el, dispMap).dy;
+      if (dy2 < 0) own.dy += -dy2;
+    }
+    // Apply with jittery steps() timing so the page looks like it's shaking.
+    for (const { el, layer } of items) {
+      const d = dispMap.get(el);
+      const prevTransform = el.style.transform || '';
+      el.style.transition = `transform ${CALIBORN_KNOCK_MS}ms steps(5, end)`;
+      el.style.transformOrigin = 'center center';
+      el.style.willChange = 'transform';
+      if (layer === 'fg') {
+        if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+        el.style.zIndex = '100';
+        el.style.pointerEvents = 'auto';
+      } else {
+        el.style.pointerEvents = 'none';
+      }
+      el.classList.add('caliborn-knocked-el');
+      el.style.transform = `${prevTransform} translate(${d.dx}px, ${d.dy}px) rotate(${d.dr}deg)`.trim();
+    }
+  }));
+}
 
 const PESTER_BURST_COUNT     = 8;    // clicks inside window to trigger
 const PESTER_BURST_WINDOW_MS = 2000; // window duration (ms)
@@ -113,6 +359,8 @@ const Header = ({ onNavigate, theme }) => {
       const pick = pickPesterQuote();
       setPester(pick);
       clickTimesRef.current = [];
+      // Caliborn's "knock the page over" one-shot.
+      if (pick.fx === 'knock') triggerCalibornKnock();
       // First-time trigger writes `logo_spammed` into cc_unlocks
       try {
         const existing = JSON.parse(localStorage.getItem('cc_unlocks') || '[]');
@@ -131,8 +379,10 @@ const Header = ({ onNavigate, theme }) => {
       } catch {}
       try {
         const inSub = window.location.pathname.includes('/tag/');
-        const a = new Audio((inSub ? '../' : './') + 'snd/notif.mp3');
-        a.volume = 0.7;
+        // Caliborn's knock gets a CLANG instead of the usual ping.
+        const sndFile = pick.fx === 'knock' ? 'CLANG.wav' : 'notif.mp3';
+        const a = new Audio((inSub ? '../' : './') + 'snd/' + sndFile);
+        a.volume = pick.fx === 'knock' ? 0.9 : 0.7;
         a.play().catch(() => {});
       } catch {}
     }
@@ -275,7 +525,7 @@ const Header = ({ onNavigate, theme }) => {
   );
 
   return (
-    <div style={{
+    <div className="knock-bg" style={{
       backgroundColor: theme?.headerBg || theme?.accentBg || '#a0a0a0',
       padding: '12px 16px',
       marginBottom: '16px',
@@ -462,6 +712,7 @@ const Header = ({ onNavigate, theme }) => {
       {/* Pesterchum-style toast. */}
       {pester && (
         <div
+          data-pester-toast=""
           onClick={() => setPester(null)}
           style={{
             position: 'fixed',

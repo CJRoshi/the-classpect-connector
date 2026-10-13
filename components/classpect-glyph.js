@@ -107,13 +107,17 @@ function resolveRingColor(mode, className, aspectName) {
     const t = (sign - (-7)) / 14;
     return { kind: 'solid', color: interpHex(GS_LORD_DARK, GS_MUSE_LIGHT, t) };
   }
-  if (mode === 'gradient') {
+  if (mode === 'gradient' || mode === 'gradientR') {
     // Bright stop = FG, dark stop = FG darkened.
     let bright = FG_COLORS[asp];
     const [r, g, b] = hexToRgb(bright);
     if (r + g + b < 90) bright = RING_COLORS[asp];
     const dark = darkenHex(bright, GRADIENT_DARKEN);
-    return { kind: 'gradient', inner: dark, outer: bright };
+    // Gradient:  dark at inner hole,  bright at outer edge.
+    // GradientR: bright at inner hole, dark at outer edge (reversed).
+    return mode === 'gradientR'
+      ? { kind: 'gradient', inner: bright, outer: dark }
+      : { kind: 'gradient', inner: dark, outer: bright };
   }
   // Unknown mode — fall back to canonical.
   return { kind: 'solid', color: RING_COLORS[asp] };
@@ -148,6 +152,11 @@ function resolveOutlineColor(mode, canonChars, nonCanonChars) {
        into the ring's inner spokes. */
 const DISC_OVERSHOOT = 1.05;
 const DISC_INSET     = 0.92;
+
+/* Per-aspect vertical offset inside the disc. */
+const ASPECT_DISC_Y_OFFSET_FRAC = {
+  blood: 0.045,
+};
 
 /* Module-level cache of bbox-cropped aspect assets. */
 const aspectAssetCache = {};
@@ -724,12 +733,14 @@ const ClasspectGlyph = React.forwardRef(({
     aspectRenderW = bboxW * scale;
     aspectRenderH = bboxH * scale;
   }
+  // Per-aspect vertical nudge inside the disc (see ASPECT_DISC_Y_OFFSET_FRAC).
+  const aspectYOffset = (ASPECT_DISC_Y_OFFSET_FRAC[asp] || 0) * discSize;
 
   // Compose the glyph — disc + aspect + ring + substance — into a
   // transparent-background PNG blob at the requested outputSize. No
   // box background or border, just the glyph on transparent.
   // Default is 2× innerSize
-  const composeStaticPng = async (outputSize = innerSize * 2) => {
+  const composeStaticPng = async (outputSize = 1024) => {
     if (!ringGeom || !aspectAsset) return null;
 
     const OUT     = outputSize;
@@ -756,7 +767,7 @@ const ClasspectGlyph = React.forwardRef(({
     if (aspectAsset.img && aspectAsset.img.complete) {
       const aw = cs(aspectRenderW);
       const ah = cs(aspectRenderH);
-      ctx.drawImage(aspectAsset.img, cs(discCxPx) - aw / 2, cs(discCyPx) - ah / 2, aw, ah);
+      ctx.drawImage(aspectAsset.img, cs(discCxPx) - aw / 2, cs(discCyPx + aspectYOffset) - ah / 2, aw, ah);
     }
 
     // 3. Ring — tint via scratch canvas + source-in.
@@ -1097,7 +1108,7 @@ const ClasspectGlyph = React.forwardRef(({
               alt=""
               style={{
                 position: 'absolute',
-                top:  `${discCyPx - aspectRenderH / 2}px`,
+                top:  `${discCyPx + aspectYOffset - aspectRenderH / 2}px`,
                 left: `${discCxPx - aspectRenderW / 2}px`,
                 width:  `${aspectRenderW}px`,
                 height: `${aspectRenderH}px`,

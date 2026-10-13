@@ -13,7 +13,7 @@ const Footer = ({ theme }) => {
       padding: '24px',
       textAlign: 'center'
     }}>
-      <div style={{
+      <div className="knock-bg" style={{
         backgroundColor: 'rgba(0, 0, 0, 0.4)',
         padding: '20px 32px',
         borderRadius: '16px',

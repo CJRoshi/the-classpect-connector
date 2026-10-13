@@ -184,13 +184,15 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        canvas.width = 550;
-        canvas.height = 430;
+        // Fixed export width; scale SVG to fit so output size never
+        // depends on the device's rendered SVG size.
+        canvas.width = 1024;
+        canvas.height = Math.round(1024 * 430 / 550);
         const ctx = canvas.getContext('2d');
         // Fill background
         ctx.fillStyle = bgColor || (theme?.isDark ? '#0d0d0d' : '#e8e8e8');
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         URL.revokeObjectURL(url);
         canvas.toBlob(resolve, 'image/png');
       };
@@ -519,16 +521,22 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
               );
             })}
 
-            {/* X-axis labels. */}
+            {/* X-axis labels.*/}
             {Object.entries(classesNumeric).map(([cls, val]) => (
               xLabelStyle === 'icon' ? (
                 <image
                   key={`x-label-${cls}`}
-                  href={`./images/classes/outline/${cls.toLowerCase()}.svg`}
+                  href={`./images/classes/no-bg/${cls.toLowerCase()}.svg`}
                   x={toSvgX(val) - 12}
                   y={chromeBottomY + 12}
                   width="24"
                   height="24"
+                  style={{
+                    // Single soft radial drop-shadow to make the icon pop against the background.
+                    filter: theme?.isDark
+                      ? 'drop-shadow(0 0 0.75px rgba(255,255,255,0.95))'
+                      : 'drop-shadow(0 0 0.75px rgba(0,0,0,0.7))'
+                  }}
                 />
               ) : (
                 <text

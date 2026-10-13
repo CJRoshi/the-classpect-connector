@@ -9,6 +9,12 @@
 
 const SETTING_NS = 'cc.setting.';
 
+/* GradientR ring-color is gated behind 100% secrets completion. */
+const CC_GRADIENTR_UNLOCKED = (() => {
+  try { return localStorage.getItem('cc_gradientR_unlocked') === '1'; }
+  catch { return false; }
+})();
+
 /* Registry — one entry per setting.
      kind:    'enum' | 'bool'
      default: canonical default value (returned when unset/invalid)
@@ -51,11 +57,14 @@ const SETTINGS_REGISTRY = {
   glyphRingMode: {
     kind:        'enum',
     default:     'canonical',
-    values:      ['canonical', 'background', 'gradient', 'grayscale'],
+    values:      CC_GRADIENTR_UNLOCKED
+                   ? ['canonical', 'background', 'gradient', 'gradientR', 'grayscale']
+                   : ['canonical', 'background', 'gradient', 'grayscale'],
     valueLabels: {
       canonical:  'Canonical',
       background: 'Background',
       gradient:   'Gradient',
+      ...(CC_GRADIENTR_UNLOCKED ? { gradientR: 'GradientR' } : {}),
       grayscale:  'Grayscale',
     },
     label:       'Ring color',

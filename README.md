@@ -8,6 +8,16 @@ Inspired by *Homestuck* by Andrew Hussie.
 
 ## Most Recent Updates
 
+Fresh Blood (10/13/2026):
+
+- Recentered the Blood emblem inside its disc (the gash now sits at the disc's center instead of the bbox center)
+- More "pester" messages.
+- Added a hidden ring-color option, unlocked at 100% secrets
+- Updated characters: Del'fi (Seer of Life) added to canon, Equius marked Meat-exclusive on the Beyond Canon page
+- Fixed exported glyph PNGs to always render at a fixed 1024px, independent of device display size
+- Fixed jagged class icons on the Rotation graph
+- Made Kankri Buggier
+
 Glyphs Galore (8/24/2026):
 
 - Added Classpect Glyphs to all Classpect Pages
@@ -26,8 +36,7 @@ SEO Suffering (3/12/2026):
 
 ### Hotfixes
 
-- Hotfix 1 (Planned) -- Day Zero Bugs
-- Hotfix 2 (Planned) -- Merch Merch Merch
+- Hotfix 1 (Planned) -- Merch Merch Merch
 
 ### Past Updates
 

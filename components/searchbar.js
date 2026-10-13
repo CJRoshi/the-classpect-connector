@@ -481,7 +481,7 @@ const SearchBar = ({ onNavigate, theme }) => {
   }, []);
 
   return (
-    <div ref={searchRef} className="relative mb-4">
+    <div ref={searchRef} className="relative mb-4 knock-bg">
       <form onSubmit={handleSearch} className="flex items-center gap-2">
         <div className="flex-1 relative">
           <div className="flex items-center" style={{

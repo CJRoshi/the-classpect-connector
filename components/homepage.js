@@ -26,8 +26,8 @@ const Homepage = ({ onNavigate, theme }) => {
 
   return (
     <div className="space-y-6">
-      {/* Title Banner */}
-      <div className="text-center mb-8">
+      {/* Title Banner — a knock-group so title + subtitle move as one. */}
+      <div className="text-center mb-8 knock-group">
         <h1 className="font-verdana-title mb-2">The Classpect Connector</h1>
         <p className="font-verdana-subtitle opacity-80">
           A web-based tool for searching numerically and/or geometrically related classpects.
@@ -43,13 +43,13 @@ const Homepage = ({ onNavigate, theme }) => {
             visually establishes the column origin and the list flows
             left-aligned beneath it. */}
         <div>
-          <div className="mx-auto" style={{width: 'fit-content'}}>
+          <div className="mx-auto knock-bg" style={{width: 'fit-content'}}>
             <h2 className="font-verdana mb-4" style={{fontSize: "1.5rem"}}>
               All Classes
             </h2>
             <div className="space-y-2">
               {classes.map(cls => (
-                <div key={cls} className="flex items-center gap-2">
+                <div key={cls} className="flex items-center gap-2 knock-group">
                   <span className="font-courier" style={{color: theme?.textColor || '#000'}}>{'>'}</span>
                   <ClassLink c={cls} onClick={onNavigate} theme={theme} />
                 </div>
@@ -60,13 +60,13 @@ const Homepage = ({ onNavigate, theme }) => {
 
         {/* Aspects — same header+list grouping as Classes. */}
         <div>
-          <div className="mx-auto" style={{width: 'fit-content'}}>
+          <div className="mx-auto knock-bg" style={{width: 'fit-content'}}>
             <h2 className="font-verdana mb-4" style={{fontSize: "1.5rem"}}>
               All Aspects
             </h2>
             <div className="space-y-2">
               {aspectWheelOrder.map(asp => (
-                <div key={asp} className="flex items-center gap-2">
+                <div key={asp} className="flex items-center gap-2 knock-group">
                   <span className="font-courier" style={{color: theme?.textColor || '#000'}}>{'>'}</span>
                   <AspectLink a={asp} onClick={onNavigate} theme={theme} />
                 </div>
@@ -77,12 +77,12 @@ const Homepage = ({ onNavigate, theme }) => {
       </div>
 
       {/* Prospit and Derse Links */}
-      <div className="mt-8 pt-6 border-t-2" style={{borderColor: theme?.accentBg || '#a0a0a0'}}>
+      <div className="mt-8 pt-6 border-t-2 knock-bg" style={{borderColor: theme?.accentBg || '#a0a0a0'}}>
         <h2 className="font-typostuck mb-4 text-center" style={{fontSize: "1.5rem"}}>
           {'>'} Lunar Sway
         </h2>
         <div className="grid grid-cols-2 gap-4">
-          <div className="text-center">
+          <div className="text-center knock-group">
             <a
               href="./prospit.html"
               className="font-typostuck hover:underline inline-block"
@@ -91,7 +91,7 @@ const Homepage = ({ onNavigate, theme }) => {
               Prospit
             </a>
           </div>
-          <div className="text-center">
+          <div className="text-center knock-group">
             <a
               href="./derse.html"
               className="font-typostuck hover:underline inline-block"
