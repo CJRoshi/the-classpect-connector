@@ -111,7 +111,7 @@ function resolveRingColor(mode, className, aspectName) {
     // Bright stop = FG, dark stop = FG darkened.
     let bright = FG_COLORS[asp];
     const [r, g, b] = hexToRgb(bright);
-    if (r + g + b < 90) bright = RING_COLORS[asp];
+    if (r + g + b < 150) bright = BG_COLORS[asp];
     const dark = darkenHex(bright, GRADIENT_DARKEN);
     // Gradient:  dark at inner hole,  bright at outer edge.
     // GradientR: bright at inner hole, dark at outer edge (reversed).
