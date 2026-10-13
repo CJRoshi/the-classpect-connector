@@ -29,9 +29,9 @@ const PESTER_QUOTES_CANON = [
   { handle: 'ideogramicDramaturgy', color: '#bdb49c', quote: '🖕😡💢' },
   { handle: 'crucifiedGnosis', color: '#ff0000', fontSize: '0.68rem',
     quote: "9kay, first 9ff, I'd like t9 issue c9ntent warnings f9r the f9ll9wing: cursing (cens9red), threats 9f vi9lence (redacted), gun 9wnership (pr96lematic), military ide9l9gy, self-aggrandizement, and 9verall unnecessary aggressi9n. What in the actual 9ppress9r-class did you just say a69ut me, y9u pr96lematic-9r-privileged individual? I'll have y9u kn9w that I graduated t9p of my class in c9ntent m9deration, and I've been inv9lved in numer9us secret call-9ut threads. I have 9ver 300 c9nfirmed m9deration rep9rts. I am trained in dec9nstructing pr96lematic language, and I am the t9p sc9lder in the entire dancestor r9ster. Y9u are n9thing t9 me 6ut just an9ther 6ad act9r." },
-  // Caliborn — rare "knock-the-page-over" effect, nod to homestuck.com/007395.
-  { handle: 'undyingUmbrage',  color: '#323232',
-    quote: "SHuT uP. WORM.",
+  // Caliborn — hits the page, nod to homestuck pg. 007395.
+  { handle: 'undyingUmbrage',  color: '#2ED73A',
+    quote: "SHUT uP. WORM.",
     fx: 'knock' },
 ];
 // Beyond-Canon cast — gated behind visited_predictions
@@ -280,6 +280,19 @@ function triggerCalibornKnock() {
       // Re-check gravity guard after the bottom clamp.
       const dy2 = worldDisp(el, dispMap).dy;
       if (dy2 < 0) own.dy += -dy2;
+    }
+    // Toast safety.
+    const toastEl = document.querySelector('[data-pester-toast]');
+    if (toastEl && dispMap.has(toastEl)) {
+      const r = origRects.get(toastEl);
+      const d = dispMap.get(toastEl);
+      const topY = r.top + d.dy;
+      const leftX  = r.left + d.dx;
+      const rightX = r.right + d.dx;
+      const viewW = window.innerWidth, viewH = window.innerHeight;
+      const outOfView = topY < 0 || topY > viewH ||
+                        leftX < 0 || rightX > viewW;
+      if (outOfView) { d.dx = 0; d.dy = 0; d.dr = 0; }
     }
     // Apply with jittery steps() timing so the page looks like it's shaking.
     for (const { el, layer } of items) {

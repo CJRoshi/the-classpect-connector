@@ -36,7 +36,8 @@ SEO Suffering (3/12/2026):
 
 ### Hotfixes
 
-- Hotfix 1 (Planned) -- Merch Merch Merch
+- Hotfitx 1 (10/13/2026) -- Visual Tweaks
+- Hotfix 2 (Planned) -- Merch Merch Merch
 
 ### Past Updates
 
