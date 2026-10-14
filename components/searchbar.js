@@ -312,7 +312,7 @@ const SearchBar = ({ onNavigate, theme }) => {
     },
     {
       id: 'son_of_god',
-      searchTerms: ['son of god', 'sonofgod', 'seer of any', 'seerofany', 'seer of all', 'seerofall', 'christ of jesus', 'christofjesus', 'jesus of christ', 'jesusofchrist', 'lord of lords', 'lordoflords'],
+      searchTerms: ['son of god', 'sonofgod', 'seer of any', 'seerofany', 'seer of all', 'seerofall', 'christ of jesus', 'christofjesus', 'jesus of christ', 'jesusofchrist', 'lord of lords', 'lordoflords', 'prince of peace', 'princeofpeace', 'jesus of nazareth', 'jesusofnazareth'],
       url: "https://youtu.be/GTh5J0HsIAg?si=gpAQLAj0UMtSq-md" // Several euphemisms for "Jesus" redirecting to that video of Morshu reading the whole Bible
     },
     {
