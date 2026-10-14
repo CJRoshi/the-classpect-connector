@@ -73,16 +73,27 @@ const SETTINGS_REGISTRY = {
   glyphOutlineMode: {
     kind:        'enum',
     default:     'none',
-    values:      ['none', 'automatic', 'prospit', 'derse', 'neutral'],
+    values:      CC_GRADIENTR_UNLOCKED
+                   ? ['none', 'automatic', 'prospit', 'derse', 'neutral', 'text']
+                   : ['none', 'automatic', 'prospit', 'derse', 'neutral'],
     valueLabels: {
       none:      'Off',
       automatic: 'Auto',
       prospit:   'Prospit',
       derse:     'Derse',
       neutral:   'Neutral',
+      ...(CC_GRADIENTR_UNLOCKED ? { text: 'Text' } : {}),
     },
     label:       'Outline',
     description: "Lunar-sway stroke on the ring & disc edges.",
+  },
+  glyphOutlineThickness: {
+    kind:        'enum',
+    default:     '1',
+    values:      ['1', '2', '3'],
+    valueLabels: { '1': '1px', '2': '2px', '3': '3px' },
+    label:       'Outline thickness',
+    description: "Stroke width used by the Outline above.",
   },
 };
 

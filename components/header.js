@@ -174,13 +174,10 @@ function resetCalibornKnock() {
   if (typeof document === 'undefined') return;
   const victims = document.querySelectorAll('.caliborn-knocked-el');
   for (const el of victims) {
-    el.style.transition = '';
-    el.style.transform = '';
-    el.style.transformOrigin = '';
-    el.style.willChange = '';
-    el.style.pointerEvents = '';
-    el.style.zIndex = '';
-    el.style.position = '';
+    const orig = el.dataset.calibornOrigStyle;
+    if (orig) el.setAttribute('style', orig);
+    else      el.removeAttribute('style');
+    delete el.dataset.calibornOrigStyle;
     el.classList.remove('caliborn-knocked-el');
   }
   document.documentElement.classList.remove('caliborn-knocked');
@@ -298,6 +295,11 @@ function triggerCalibornKnock() {
     for (const { el, layer } of items) {
       const d = dispMap.get(el);
       const prevTransform = el.style.transform || '';
+      // Snapshot the pre-knock inline style so resetCalibornKnock can
+      // restore it.
+      if (!('calibornOrigStyle' in el.dataset)) {
+        el.dataset.calibornOrigStyle = el.getAttribute('style') || '';
+      }
       el.style.transition = `transform ${CALIBORN_KNOCK_MS}ms steps(5, end)`;
       el.style.transformOrigin = 'center center';
       el.style.willChange = 'transform';

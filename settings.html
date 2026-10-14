@@ -230,10 +230,10 @@ const EnumSetting = ({ name, spec }) => {
    canonCharacters entry so the "Automatic" outline option resolves
    correctly per kid. */
 const BETA_KIDS_PREVIEW = [
-  { name: 'June',  className: 'Heir',   aspectName: 'Breath', lunarsway: 'Prospit' },
-  { name: 'Rose',  className: 'Seer',   aspectName: 'Light',  lunarsway: 'Derse'   },
-  { name: 'Dave',  className: 'Knight', aspectName: 'Time',   lunarsway: 'Derse'   },
-  { name: 'Jade',  className: 'Witch',  aspectName: 'Space',  lunarsway: 'Prospit' },
+  { name: 'June',  className: 'Heir',   aspectName: 'Breath', lunarsway: 'Prospit', color: '#0715cd' },
+  { name: 'Rose',  className: 'Seer',   aspectName: 'Light',  lunarsway: 'Derse',   color: '#b536da' },
+  { name: 'Dave',  className: 'Knight', aspectName: 'Time',   lunarsway: 'Derse',   color: '#e00707' },
+  { name: 'Jade',  className: 'Witch',  aspectName: 'Space',  lunarsway: 'Prospit', color: '#4ac925' },
 ];
 
 const PreviewGrid = ({ theme }) => (
@@ -253,7 +253,7 @@ const PreviewGrid = ({ theme }) => (
           size={110}
           showButtons={false}
           animate={false}
-          canonCharacters={[{ lunarsway: kid.lunarsway }]}
+          canonCharacters={[{ lunarsway: kid.lunarsway, color: kid.color }]}
         />
         <div className="font-courier" style={{fontSize: '0.75rem', color: '#333'}}>{kid.name}</div>
       </div>
@@ -418,7 +418,7 @@ const SettingsPage = () => {
   const handleNavigate = path => { window.location.href = `./index.html#${path}`; };
 
   const graphSettings = ['graphXAxisLabels', 'graphYAxisLabels'];
-  const styleSettings = ['glyphRingMode', 'glyphOutlineMode'];
+  const styleSettings = ['glyphRingMode', 'glyphOutlineMode', 'glyphOutlineThickness'];
 
   return (
     <div style={{ backgroundColor: defaultTheme.bg, minHeight: '100vh' }}>
