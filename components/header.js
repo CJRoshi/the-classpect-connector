@@ -18,7 +18,7 @@ const PESTER_QUOTES_CANON = [
   { handle: 'centaursTesticle',  color: '#000056', quote: 'D --> You will cease at once' },
   { handle: 'twinArmageddons',   color: '#a1a100', quote: 'st0p texting me. these pings are l0ud as fuck.' },
   { handle: 'apocalypseArisen',  color: '#a10000', quote: 'haha wow you sure do love that logo' },
-  { handle: 'uranianUmbra',      color: '#929292', quote: "oh dear... please don't be too rough with the poor little logo? :U" },
+  { handle: 'uranianUmbra',      color: '#929292', quote: "oh dear... please don't be too roUgh with the poor little logo? :U" },
   { handle: 'tipsyGnostalgic',   color: '#ff6ff2', quote: 'lmaoooo wut r u doin stop clickin like that... ur gonna ruin your mouse' },
   { handle: 'timaeusTestified',  color: '#f2a400', quote: 'Is this really the best use of your time? Come on, now.' },
   { handle: 'golgothasTerror',   color: '#1f9400', quote: 'Gadzooks! What has gotten into you old chum?' },
