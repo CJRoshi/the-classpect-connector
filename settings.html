@@ -245,7 +245,7 @@ const PreviewGrid = ({ theme }) => (
     padding: '4px',
   }}>
     {BETA_KIDS_PREVIEW.map((kid) => (
-      <div key={kid.name} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px'}}>
+      <div key={kid.name} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', overflow: 'visible'}}>
         <ClasspectGlyph
           className={kid.className}
           aspectName={kid.aspectName}

@@ -141,8 +141,11 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
 
   return (
     <div className="space-y-6">
-      {/* Header Section — stacks vertically on mobile, side-by-side on md+ */}
-      <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 md:gap-6">
+      {/* Header Section — stacks vertically on mobile, side-by-side on md+.
+          overflow-visible so the ClasspectGlyph's ring halo at the cardinal
+          spike tips isn't clipped by an ancestor if Tailwind's defaults
+          ever change. */}
+      <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 md:gap-6 overflow-visible">
         {/* Title block */}
         <div style={{minWidth: 0}}>
           <h1 className="mb-2" style={{display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center'}}>
