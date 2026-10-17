@@ -632,15 +632,11 @@ const ClasspectGlyph = React.forwardRef(({
   const holeCyFrac     = ringGeom?.holeCyFrac  ?? 0.5;
 
   // Mask-size scaling: render the SVG so its OUTER ring content spans
-  // the container, with a tiny safety margin so the pointy spike tips
-  // (and their non-scaling-stroke halo) aren't flattened by the inner
-  // box edges at the cardinal directions. Without this margin the
-  // content fills the container exactly — any anti-aliased edge pixels
-  // or 1-CSS-pixel halo at N/S/E/W would be clipped by the mask /
-  // overflow boundary during rotation ("squishues"). All derived
-  // measurements (hole/disc size) also shrink by the same factor so
-  // the disc keeps fitting inside the ring hole.
-  const RING_SAFETY_MARGIN = 0.03;
+  // the container, with a safety margin so the pointy spike tips (and
+  // their non-scaling-stroke halo) aren't flattened by the inner box
+  // edges at the cardinal directions.
+  const RING_SAFETY_MARGIN = Math.min(0.15,
+    Math.max(0.04, (outlineThickness * 3 + 3) / Math.max(innerSize, 1)));
   const ringFillFrac = 1 - RING_SAFETY_MARGIN;
   const ringScale    = ringFillFrac / ringOuterFrac;
   const ringScalePct = (100 * ringScale).toFixed(2) + '%';
