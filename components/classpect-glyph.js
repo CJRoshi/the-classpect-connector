@@ -632,9 +632,17 @@ const ClasspectGlyph = React.forwardRef(({
   const holeCyFrac     = ringGeom?.holeCyFrac  ?? 0.5;
 
   // Mask-size scaling: render the SVG so its OUTER ring content spans
-  // the container edge-to-edge. If the ring occupies 90% of its
-  // viewBox, we render at 1/0.9 ≈ 111%.
-  const ringScale    = 1 / ringOuterFrac;
+  // the container, with a tiny safety margin so the pointy spike tips
+  // (and their non-scaling-stroke halo) aren't flattened by the inner
+  // box edges at the cardinal directions. Without this margin the
+  // content fills the container exactly — any anti-aliased edge pixels
+  // or 1-CSS-pixel halo at N/S/E/W would be clipped by the mask /
+  // overflow boundary during rotation ("squishues"). All derived
+  // measurements (hole/disc size) also shrink by the same factor so
+  // the disc keeps fitting inside the ring hole.
+  const RING_SAFETY_MARGIN = 0.03;
+  const ringFillFrac = 1 - RING_SAFETY_MARGIN;
+  const ringScale    = ringFillFrac / ringOuterFrac;
   const ringScalePct = (100 * ringScale).toFixed(2) + '%';
 
   // Mask-position: compensate for any offset between the ring's
@@ -651,9 +659,11 @@ const ClasspectGlyph = React.forwardRef(({
   // at the measured hole center (which after the mask-position fix
   // above should coincide with the container center, but computed
   // it independently as a safety belt for asymmetric rings).
-  const holeSize = innerSize * (ringHoleFrac / ringOuterFrac) * 2;
-                  // holeFrac is a half-width fraction; convert to
-                  // a diameter fraction of the rescaled ring.
+  // holeFrac is a half-width fraction; convert to a diameter fraction
+  // of the rescaled ring. The ringFillFrac term matches the safety
+  // margin applied to ringScale above so the disc shrinks in lockstep
+  // with the ring, staying centered in the ring's hole.
+  const holeSize = innerSize * (ringHoleFrac / ringOuterFrac) * 2 * ringFillFrac;
   const discSize = Math.round(holeSize * DISC_OVERSHOOT);
   const discCxPx = innerSize * ((holeCxFrac - outerCxFrac) * ringScale + 0.5);
   const discCyPx = innerSize * ((holeCyFrac - outerCyFrac) * ringScale + 0.5);
@@ -666,8 +676,13 @@ const ClasspectGlyph = React.forwardRef(({
   // Gradient goes from the ring's inner hole (dark stop) out to its
   // visible outer edge (bright stop). 
   const holeRadiusPct = (holeSize / innerSize) * 100;
+  // Gradient outer stop lands at the ring's actual outer edge (shrunk
+  // by ringFillFrac from the safety margin), not the container edge —
+  // otherwise the ring's outermost pixels would show a slightly
+  // less-than-full dark stop.
+  const outerStopPct = (100 * ringFillFrac).toFixed(2);
   const ringBackground = ringPaint.kind === 'gradient'
-    ? `radial-gradient(circle closest-side at 50% 50%, ${ringPaint.inner} ${holeRadiusPct.toFixed(2)}%, ${ringPaint.outer} 100%)`
+    ? `radial-gradient(circle closest-side at 50% 50%, ${ringPaint.inner} ${holeRadiusPct.toFixed(2)}%, ${ringPaint.outer} ${outerStopPct}%)`
     : ringPaint.color;
 
   // Rotating wrapper — carries the spin animation for BOTH the fill
@@ -814,9 +829,16 @@ const ClasspectGlyph = React.forwardRef(({
       sctx.drawImage(ringGeom.img, rx, ry, ringDrawSize, ringDrawSize);
       sctx.globalCompositeOperation = 'source-in';
       if (ringPaint.kind === 'gradient') {
+        // Gradient coordinates are ABSOLUTE canvas pixels (independent
+        // of the current transform), so shift by PAD so the center
+        // lands on the glyph's center. Outer radius lands on the ring's
+        // actual outer edge (shrunk by the safety margin), matching
+        // the DOM gradient so the edge pixels hit the full outer stop.
+        const gcx = OUT / 2 + PAD;
+        const gcy = OUT / 2 + PAD;
         const grad = sctx.createRadialGradient(
-          OUT / 2, OUT / 2, cs(holeSize / 2),
-          OUT / 2, OUT / 2, OUT / 2,
+          gcx, gcy, cs(holeSize / 2),
+          gcx, gcy, (OUT / 2) * ringFillFrac,
         );
         grad.addColorStop(0, ringPaint.inner);
         grad.addColorStop(1, ringPaint.outer);
