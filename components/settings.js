@@ -58,14 +58,15 @@ const SETTINGS_REGISTRY = {
     kind:        'enum',
     default:     'canonical',
     values:      CC_GRADIENTR_UNLOCKED
-                   ? ['canonical', 'background', 'gradient', 'gradientR', 'grayscale']
-                   : ['canonical', 'background', 'gradient', 'grayscale'],
+                   ? ['canonical', 'background', 'grayscale', 'lunarSway', 'gradient', 'gradientR']
+                   : ['canonical', 'background', 'grayscale', 'lunarSway', 'gradient'],
     valueLabels: {
       canonical:  'Canonical',
       background: 'Background',
+      grayscale:  'Grayscale',
+      lunarSway:  'Lunar Sway',
       gradient:   'Gradient',
       ...(CC_GRADIENTR_UNLOCKED ? { gradientR: 'GradientR' } : {}),
-      grayscale:  'Grayscale',
     },
     label:       'Ring color',
     description: "How the class ring is colored.",
