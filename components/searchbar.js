@@ -275,8 +275,15 @@ const SearchBar = ({ onNavigate, theme }) => {
     },
     {
       id: 'trash_of_time',
-      searchTerms: ['trash of time', 'trashoftime'],
-      url: 'https://deltarune.com/'
+      searchTerms: ['trash of time', 'trashoftime', 'duke of dawn', 'dukeofdawn'],
+      // 50/50 — Deltarune official site OR Shelby Cragg's "Duke of Dawn"
+      url: () => {
+        const urls = [
+          'https://deltarune.com/',
+          './images/special/duke-of-dawn.png'
+        ];
+        return urls[Math.floor(Math.random() * urls.length)];
+      }
     },
     {
       id: 'nic_of_time',
@@ -309,6 +316,14 @@ const SearchBar = ({ onNavigate, theme }) => {
       id: 'dave_of_guy',
       searchTerms: ['dave of guy', 'daveofguy'],
       url: "./index.html#/classpect/knight-of-time"
+    },
+    {
+      // Dave's offhand way of referring to June's Heir of Breath — same
+      // pattern as "Dave of Guy" (self-reference instead of classpect).
+      // From the pesterlog where he's narrating John's wind mission.
+      id: 'chump_of_shoosh',
+      searchTerms: ['chump of shoosh', 'chumpofshoosh'],
+      url: "./index.html#/classpect/heir-of-breath"
     },
     {
       id: 'son_of_god',

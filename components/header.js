@@ -79,6 +79,7 @@ const CC_SECRET_KEY_GROUPS = [
   ['sr_nogue_of_noid'],
   ['sr_email_of_equius'],
   ['sr_dave_of_guy'],
+  ['sr_chump_of_shoosh'],
   ['sr_son_of_god'],
   ['sr_myocdonotsteal', 'visited_oc_session'],
   ['visited_cherubs'],
