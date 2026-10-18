@@ -282,7 +282,7 @@ const SearchBar = ({ onNavigate, theme }) => {
       url: () => {
         const urls = [
           'https://deltarune.com/',
-          pathPrefix + 'images/special/duke-of-dawn.png'
+          pathPrefix + 'images/special/duke_of_dawn.png'
         ];
         return urls[Math.floor(Math.random() * urls.length)];
       }
