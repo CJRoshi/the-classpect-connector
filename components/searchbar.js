@@ -276,11 +276,13 @@ const SearchBar = ({ onNavigate, theme }) => {
     {
       id: 'trash_of_time',
       searchTerms: ['trash of time', 'trashoftime', 'duke of dawn', 'dukeofdawn'],
-      // 50/50 — Deltarune official site OR Shelby Cragg's "Duke of Dawn"
+      // 50/50 — Deltarune official site OR Shelby Cragg's "Duke of Dawn".
+      // Use pathPrefix so the image resolves from both root pages and
+      // /tag/ pages ('./' vs '../').
       url: () => {
         const urls = [
           'https://deltarune.com/',
-          './images/special/duke-of-dawn.png'
+          pathPrefix + 'images/special/duke-of-dawn.png'
         ];
         return urls[Math.floor(Math.random() * urls.length)];
       }

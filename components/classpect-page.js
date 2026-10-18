@@ -217,17 +217,23 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
                           verticalAlign: 'middle',
                         }}
                       />
-                    ) : line.link ? (
-                      <a
-                        href={line.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline"
-                        style={{ color: line.color }}
-                      >
-                        {line.text}
-                      </a>
-                    ) : (
+                    ) : line.link ? (() => {
+                      // External links (full URLs) open in a new tab;
+                      // internal links (relative/same-site) stay in
+                      // the current tab.
+                      const isExternal = /^(https?:|\/\/)/i.test(line.link);
+                      return (
+                        <a
+                          href={line.link}
+                          target={isExternal ? '_blank' : undefined}
+                          rel={isExternal ? 'noopener noreferrer' : undefined}
+                          className="underline"
+                          style={{ color: line.color }}
+                        >
+                          {line.text}
+                        </a>
+                      );
+                    })() : (
                       <span style={{ color: line.color }}>
                         {renderReactionText(line.text, line.color)}
                       </span>
@@ -271,17 +277,21 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
                                 verticalAlign: 'middle',
                               }}
                             />
-                          ) : line.link ? (
-                            <a
-                              href={line.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="underline"
-                              style={{ color: line.color }}
-                            >
-                              {line.text}
-                            </a>
-                          ) : (
+                          ) : line.link ? (() => {
+                            // External → new tab; internal → same tab.
+                            const isExternal = /^(https?:|\/\/)/i.test(line.link);
+                            return (
+                              <a
+                                href={line.link}
+                                target={isExternal ? '_blank' : undefined}
+                                rel={isExternal ? 'noopener noreferrer' : undefined}
+                                className="underline"
+                                style={{ color: line.color }}
+                              >
+                                {line.text}
+                              </a>
+                            );
+                          })() : (
                             <span style={{ color: line.color }}>
                               {renderReactionText(line.text, line.color)}
                             </span>
