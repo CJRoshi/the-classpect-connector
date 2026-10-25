@@ -1,10 +1,10 @@
 {
   "Lord": {
-    "blurb": "One who masters their Aspect, actively. As a Master class, Lords tend to exhibit influence of their aspect that reaches beyond their awareness, and are typically assisted by henchmen or minions in the use of their Aspect.",
+    "blurb": "One who expands or conquers their Aspect, actively. As a Master class, Lords tend to exhibit influence of their aspect that reaches beyond their awareness, and are typically assisted by henchmen or minions in the use or conquest of their Aspect.",
     "links": []
   },
   "Muse": {
-    "blurb": "One who masters their Aspect, passively. As a Master class, Muses often inspire others to use their Aspect on their behalf, and rarely act directly with their Aspect. They appear to have the strongest direct connection to their Aspect out of all the classes.",
+    "blurb": "One who expands or influences their Aspect, passively. As a Master class, Muses often inspire others to use their Aspect on their behalf, and rarely act directly with their Aspect. They appear to have the strongest direct connection to their Aspect out of all the classes.",
     "links": []
   },
   "Witch": {
