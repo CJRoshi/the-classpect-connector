@@ -66,7 +66,7 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
   // Easter egg: after visiting the Beyond Canon tag page OR the BC
   // Predictions page, Jade sits outside the main content box on the
   // Witch of Space classpect page.
-  const JADE_FACING_MS = 4000;
+  const JADE_FACING_MS = 4500;
   const isJadeContext =
     className === 'Witch' && aspectName === 'Space'
     && (unlockedSet.has('visited_beyond_canon') || unlockedSet.has('visited_predictions'));
