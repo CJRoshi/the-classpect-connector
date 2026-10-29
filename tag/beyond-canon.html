@@ -262,6 +262,18 @@ const BeyondCanonPage = () => {
   const [chars, setChars] = React.useState([]);
   const [loaded, setLoaded] = React.useState(false);
 
+  // Unlock trigger — records that the user has read the BC tag page,
+  // so other pages can gate on it.
+  React.useEffect(() => {
+    try {
+      const existing = JSON.parse(localStorage.getItem('cc_unlocks') || '[]');
+      if (!existing.includes('visited_beyond_canon')) {
+        localStorage.setItem('cc_unlocks',
+          JSON.stringify([...existing, 'visited_beyond_canon']));
+      }
+    } catch {}
+  }, []);
+
   React.useEffect(() => {
     fetch('../data/characters.json')
       .then(r => r.json())

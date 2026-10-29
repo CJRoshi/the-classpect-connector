@@ -62,6 +62,41 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
     } catch { return new Set(); }
   });
 
+  // ── Jade peek (Witch of Space + BC visit) ────────────────────────────────
+  // Easter egg: after visiting the Beyond Canon tag page OR the BC
+  // Predictions page, Jade sits outside the main content box on the
+  // Witch of Space classpect page.
+  const JADE_FACING_MS = 4000;
+  const isJadeContext =
+    className === 'Witch' && aspectName === 'Space'
+    && (unlockedSet.has('visited_beyond_canon') || unlockedSet.has('visited_predictions'));
+  // Only show Jade when the viewport is wide enough to fit her
+  // comfortably next to the max-w-4xl content box (896px) with some
+  // breathing room on each side.
+  const JADE_MIN_VW = 1280;
+  const [isDesktop, setIsDesktop] = React.useState(() =>
+    typeof window !== 'undefined' && window.innerWidth >= JADE_MIN_VW
+  );
+  React.useEffect(() => {
+    const onResize = () => setIsDesktop(window.innerWidth >= JADE_MIN_VW);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  const [jadeFacing, setJadeFacing] = React.useState(false);
+  const jadeTimerRef = React.useRef(null);
+  const handleJadeClick = () => {
+    setJadeFacing(true);
+    if (jadeTimerRef.current) clearTimeout(jadeTimerRef.current);
+    jadeTimerRef.current = setTimeout(() => {
+      setJadeFacing(false);
+      jadeTimerRef.current = null;
+    }, JADE_FACING_MS);
+  };
+  React.useEffect(() => () => {
+    if (jadeTimerRef.current) clearTimeout(jadeTimerRef.current);
+  }, []);
+  const jadeActive = isJadeContext && isDesktop;
+
   // Polarity mode — subscribes to the sitewide sign-convention setting.
   const [polarity, setPolarity] = React.useState(() => Settings.get('polarityMode'));
   React.useEffect(() => {
@@ -141,6 +176,30 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
 
   return (
     <div className="space-y-6">
+      {/* Jade peek */}
+      {jadeActive && (
+        <img
+          src={`./images/special/jade_bc_${jadeFacing ? 'facing' : 'away'}.gif`}
+          alt={jadeFacing ? "Jade: what???" : "Jade: ..."}
+          title={jadeFacing ? "what???" : "..."}
+          onClick={handleJadeClick}
+          style={{
+            position: 'fixed',
+            // Sit just left of the max-w-4xl content box.
+            right: 'calc(50% + 28rem + 20px)',
+            bottom: '18%',
+            width: '180px',
+            height: 'auto',
+            cursor: 'pointer',
+            zIndex: 20,
+            userSelect: 'none',
+            pointerEvents: 'auto',
+            imageRendering: 'auto',
+          }}
+          draggable={false}
+        />
+      )}
+
       {/* Header Section — stacks vertically on mobile, side-by-side on md+.
           overflow-visible so the ClasspectGlyph's ring halo at the cardinal
           spike tips isn't clipped by an ancestor if Tailwind's defaults
@@ -201,7 +260,15 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
 
               {ch.reaction && (
                 <div className="whitespace-pre-wrap font-bold">
-                  {ch.reaction.map((line, idx) => (
+                  {ch.reaction.map((line, idx) => {
+                    // Jade peek: when Jade's overlay is active (BC
+                    // visited + desktop), swap her reaction text to
+                    // "..." (looking away) or "what???" (facing you)
+                    // to match her sprite.
+                    const text = (jadeActive && ch.name === 'Jade Harley')
+                      ? (jadeFacing ? 'what???' : '...')
+                      : line.text;
+                    return (
                   <div key={idx}>
                     {line.image ? (
                       /* Image quote (e.g. Mizzlebip's pleading emoji).
@@ -230,16 +297,17 @@ const ClasspectPage = ({className, aspectName, onNavigate, theme})=>{
                           className="underline"
                           style={{ color: line.color }}
                         >
-                          {line.text}
+                          {text}
                         </a>
                       );
                     })() : (
                       <span style={{ color: line.color }}>
-                        {renderReactionText(line.text, line.color)}
+                        {renderReactionText(text, line.color)}
                       </span>
                     )}
                   </div>
-                ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
