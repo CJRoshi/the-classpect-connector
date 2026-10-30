@@ -96,6 +96,14 @@ const SETTINGS_REGISTRY = {
     label:       'Outline thickness',
     description: "Stroke width used by the Outline above.",
   },
+  imageExportFormat: {
+    kind:        'enum',
+    default:     'png',
+    values:      ['png', 'webp', 'jpg', 'svg'],
+    valueLabels: { png: 'PNG', webp: 'WebP', jpg: 'JPG', svg: 'SVG' },
+    label:       'Image format',
+    description: "File format used when you Copy or Save a glyph/graph.",
+  },
 };
 
 

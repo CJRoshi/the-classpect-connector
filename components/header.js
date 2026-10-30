@@ -457,14 +457,14 @@ const Header = ({ onNavigate, theme }) => {
 
     // Use regular logo for bright aspects
     if (currentAspect && regularLogoAspects.includes(currentAspect)) {
-      return pathPrefix + 'images/special/CCLogoRegular.png';
+      return pathPrefix + 'images/logos/connector/regular.png';
     }
 
     // Otherwise use dark/light based on theme
     if (theme?.isDark) {
-      return pathPrefix + 'images/special/CCLogoLight.png';
+      return pathPrefix + 'images/logos/connector/light.png';
     } else {
-      return pathPrefix + 'images/special/CCLogoDark.png';
+      return pathPrefix + 'images/logos/connector/dark.png';
     }
   };
 
@@ -484,12 +484,24 @@ const Header = ({ onNavigate, theme }) => {
 
   const frafStyle = {
     backgroundColor: 'rgba(0,0,0,0.4)',
+    // Per-letter colors below override this; keep the base color as a
+    // last-resort fallback.
     color: '#00e371',
     textDecoration: 'none',
     cursor: 'pointer',
     fontSize: '1rem',
     borderRadius: '4px',
   };
+  // Canonical FRAF wordmark.
+  const FrafWordmark = ({ trailing }) => (
+    <>
+      <span style={{ color: '#fe140d' }}>F</span>
+      <span style={{ color: '#14ff08' }}>R</span>
+      <span style={{ color: '#ffaf0d' }}>A</span>
+      <span style={{ color: '#ffff0e' }}>F</span>
+      {trailing}
+    </>
+  );
 
   /* Scryer pill. */
   const scryStyle = {
@@ -507,6 +519,7 @@ const Header = ({ onNavigate, theme }) => {
     { label: 'FAQ', href: pathPrefix + 'faq.html' },
     { label: 'Theory', href: pathPrefix + 'theory.html' },
     { label: 'Rungs', href: pathPrefix + 'rungs.html' },
+    { label: 'Resources', href: pathPrefix + 'resources.html' },
     { label: 'Credits', href: pathPrefix + 'credits.html' },
   ];
 
@@ -567,17 +580,38 @@ const Header = ({ onNavigate, theme }) => {
           <a
             href="#/"
             onClick={handleHomeClick}
-            className="font-typostuck-header"
+            className="cc-site-title"
             style={{
               color: theme?.textColor || '#000',
               textDecoration: 'none',
               cursor: 'pointer',
               overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
+              minWidth: 0,
             }}
           >
-            The Classpect Connector
+            {/* Self-contained inline <style>. */}
+            <style>{`
+              .cc-site-title { display: inline-flex; flex-direction: column; justify-content: center; line-height: 1.05; }
+              .cc-site-title .cc-site-title-full  { display: inline; }
+              .cc-site-title .cc-site-title-stack { display: none; }
+              @media (max-width: 720px) {
+                .cc-site-title .cc-site-title-full  { display: none !important; }
+                .cc-site-title .cc-site-title-stack {
+                  display: flex !important;
+                  flex-direction: column;
+                  font-family: 'Typostuck', 'Courier New', monospace;
+                  font-size: 1.05rem;
+                  line-height: 1.1;
+                }
+                .cc-site-title .cc-site-title-stack .cc-site-title-top { padding-left: 0; }
+                .cc-site-title .cc-site-title-stack .cc-site-title-bot { padding-left: 1.1em; }
+              }
+            `}</style>
+            <span className="cc-site-title-full font-typostuck-header">The Classpect Connector</span>
+            <span className="cc-site-title-stack">
+              <span className="cc-site-title-top">Classpect</span>
+              <span className="cc-site-title-bot">Connector</span>
+            </span>
           </a>
         </div>
 
@@ -605,13 +639,13 @@ const Header = ({ onNavigate, theme }) => {
             Scryer
           </a>
           <a
-            href="https://www.fruityrumpus.com/forums/t/classpecting-with-graphs-rotations-and-groups"
+            href="https://www.fruityrumpus.com/"
             target="_blank"
             rel="noopener noreferrer"
             className="font-typostuck px-3 py-2 rounded hover:opacity-80"
             style={frafStyle}
           >
-            FRAFpost
+            <FrafWordmark/>
           </a>
           {/* Settings gear. */}
           <a
@@ -706,7 +740,7 @@ const Header = ({ onNavigate, theme }) => {
               Scryer ↗
             </a>
             <a
-              href="https://www.fruityrumpus.com/forums/t/classpecting-with-graphs-rotations-and-groups"
+              href="https://www.fruityrumpus.com/"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMenuOpen(false)}
@@ -720,7 +754,7 @@ const Header = ({ onNavigate, theme }) => {
                 fontSize: '1.1rem',
               }}
             >
-              FRAFpost ↗
+              <FrafWordmark trailing=" ↗"/>
             </a>
           </div>
         </div>

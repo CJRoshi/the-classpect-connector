@@ -16,6 +16,28 @@
   .homestuck-command-dark { font-size: 1rem !important; }
 }
 
+/* ─── Header site-title — collapsible stacked form ──── */
+.cc-site-title {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.05;
+}
+.cc-site-title-full  { display: inline; }
+.cc-site-title-stack { display: none; }
+@media (max-width: 720px) {
+  .cc-site-title-full  { display: none; }
+  .cc-site-title-stack {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Typostuck', 'Courier New', monospace;
+    font-size: 1.05rem;
+    line-height: 1.1;
+  }
+  .cc-site-title-stack .cc-site-title-top { padding-left: 0; }
+  .cc-site-title-stack .cc-site-title-bot { padding-left: 1.1em; }
+}
+
 /* ─── Touch-friendly tap targets ────────────────────── */
 @media (max-width: 640px) {
   /* Ensure clickable links have at least 44px touch target */

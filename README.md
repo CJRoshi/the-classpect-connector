@@ -8,7 +8,7 @@ Inspired by *Homestuck* by Andrew Hussie.
 
 ## Most Recent Updates
 
-Fresh Blood (10/13/2026):
+Fresh Blood (10/13/2026), Hotfix 1 (10/30/2026):
 
 - Recentered the Blood emblem inside its disc (the gash now sits at the disc's center instead of the bbox center)
 - More "pester" messages.
@@ -36,7 +36,7 @@ SEO Suffering (3/12/2026):
 
 ### Hotfixes
 
-- Hotfitx 1 (10/13/2026) -- Visual Tweaks
+- Hotfitx 1 (10/30/2026) -- Image Format Expansion + Resources page
 - Hotfix 2 (Planned) -- Merch Merch Merch
 
 ### Past Updates

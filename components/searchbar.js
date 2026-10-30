@@ -215,6 +215,18 @@ const SearchBar = ({ onNavigate, theme }) => {
       ],
       isExternal: true
     });
+    pages.push({
+      // Reference-only — searchable, but excluded from the Random
+      // button pool.
+      type: 'reference',
+      display: 'Resources',
+      path: './resources.html',
+      searchTerms: [
+        'resources', 'assets', 'download', 'downloads', 'icons',
+        'symbols', 'logos', 'figures', 'moons', 'rings', 'swatches',
+      ],
+      isExternal: true
+    });
     // Per-rung deep links — typing "rung 7" jumps straight to that
     // rung's section on the Rungs page.
     if (typeof RUNG_NAMES !== 'undefined') {
@@ -470,11 +482,11 @@ const SearchBar = ({ onNavigate, theme }) => {
 
   // Handle random page
   const handleRandom = () => {
-    // Random from classes, aspects, classpects, prospit, derse —
-    // per-rung deep-links (type: 'rung') are filtered out because
-    // there are 26 of them and they pace-break when you hit Random
-    // looking for a new classpect or tag page.
-    const randomOptions = allPages.filter(p => p.type !== 'rung');
+    // Random from classes, aspects, classpects, prospit, derse, tag
+    // pages. We skip:
+    //   - 'rung'       — 26 per-rung deep links drown out the rest.
+    //   - 'reference'  — asset indexes (Resources) aren't fun landings.
+    const randomOptions = allPages.filter(p => p.type !== 'rung' && p.type !== 'reference');
     const random = randomOptions[Math.floor(Math.random() * randomOptions.length)];
     
     if (random.isExternal) {

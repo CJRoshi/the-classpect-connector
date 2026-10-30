@@ -19,15 +19,29 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
   const [yLabelStyle, setYLabelStyle] = useState(
     () => (typeof Settings !== 'undefined' ? Settings.get('graphYAxisLabels') : 'icon')
   );
+  // Also subscribe to the image-format setting so Save button labels
+  // reflect the user's chosen format (PNG / WebP / JPG / SVG).
+  const [imageFmtSetting, setImageFmtSetting] = useState(
+    () => (typeof Settings !== 'undefined' ? Settings.get('imageExportFormat') : 'png')
+  );
   React.useEffect(() => {
     const onChange = (e) => {
       if (!e.detail || typeof Settings === 'undefined') return;
       if (e.detail.name === 'graphXAxisLabels') setXLabelStyle(Settings.get('graphXAxisLabels'));
       if (e.detail.name === 'graphYAxisLabels') setYLabelStyle(Settings.get('graphYAxisLabels'));
+      if (e.detail.name === 'imageExportFormat') setImageFmtSetting(Settings.get('imageExportFormat'));
     };
     window.addEventListener('cc-setting-change', onChange);
     return () => window.removeEventListener('cc-setting-change', onChange);
   }, []);
+  const saveLabel = (() => {
+    switch (imageFmtSetting) {
+      case 'webp': return 'WebP';
+      case 'jpg':  return 'JPG';
+      case 'svg':  return 'SVG';
+      default:     return 'PNG';
+    }
+  })();
   // Default list open on mobile so small-screen users don't need to squint at a tiny graph
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
   const [showList, setShowList] = useState(isMobile);
@@ -175,33 +189,50 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
    * Render the SVG to a canvas and return a Promise<Blob>.
    * bgColor: the background fill to apply before drawing.
    */
-  const svgToCanvas = async (svgEl, bgColor) => {
-    return new Promise(async (resolve, reject) => {
-      const cloned = await prepareSvgForExport(svgEl);
-      const svgStr = new XMLSerializer().serializeToString(cloned);
+  // Honor the user's image-format setting.
+  const getExportFormat = () => {
+    let f;
+    try { f = (typeof Settings !== 'undefined' ? Settings.get('imageExportFormat') : 'png') || 'png'; }
+    catch { f = 'png'; }
+    switch (f) {
+      case 'webp': return { ext: 'webp', mime: 'image/webp' };
+      case 'jpg':  return { ext: 'jpg',  mime: 'image/jpeg' };
+      case 'svg':  return { ext: 'svg',  mime: 'image/svg+xml' };
+      default:     return { ext: 'png',  mime: 'image/png'  };
+    }
+  };
+
+  const svgToBlob = async (svgEl, bgColor, mime) => {
+    const cloned = await prepareSvgForExport(svgEl);
+    const svgStr = new XMLSerializer().serializeToString(cloned);
+    if (mime === 'image/svg+xml') {
+      return new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+    }
+    return new Promise((resolve, reject) => {
       const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        // Fixed export width; scale SVG to fit so output size never
-        // depends on the device's rendered SVG size.
         canvas.width = 1024;
         canvas.height = Math.round(1024 * 430 / 550);
         const ctx = canvas.getContext('2d');
-        // Fill background
-        ctx.fillStyle = bgColor || (theme?.isDark ? '#0d0d0d' : '#e8e8e8');
+        // JPEG has no alpha — force an opaque background. Other formats
+        // get the theme-aware fill (or caller override).
+        ctx.fillStyle = mime === 'image/jpeg'
+          ? '#ffffff'
+          : (bgColor || (theme?.isDark ? '#0d0d0d' : '#e8e8e8'));
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         URL.revokeObjectURL(url);
-        canvas.toBlob(resolve, 'image/png');
+        canvas.toBlob(resolve, mime, mime === 'image/jpeg' ? 0.92 : undefined);
       };
       img.onerror = reject;
       img.src = url;
     });
   };
 
-  /** Download PNG to device */
+  /** Download image to device (format from Settings). */
   const handleSaveImage = async () => {
     const svg = svgRef.current;
     if (!svg) {
@@ -211,11 +242,12 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
     }
     setExportStatus('saving');
     try {
-      const blob = await svgToCanvas(svg);
+      const { ext, mime } = getExportFormat();
+      const blob = await svgToBlob(svg, null, mime);
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = getFilename('png');
+      a.download = getFilename(ext);
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -228,7 +260,8 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
     setTimeout(() => setExportStatus(null), 2500);
   };
 
-  /** Copy PNG to clipboard */
+  /** Copy image to clipboard (format from Settings; SVG falls back to
+   *  PNG for the clipboard payload since browsers don't accept image/svg+xml). */
   const handleCopyImage = async () => {
     const svg = svgRef.current;
     if (!svg) {
@@ -243,10 +276,15 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
     }
     setExportStatus('copying');
     try {
-      const blob = await svgToCanvas(svg);
-      await navigator.clipboard.write([
-        new ClipboardItem({ 'image/png': blob })
-      ]);
+      let { mime } = getExportFormat();
+      if (mime === 'image/svg+xml') mime = 'image/png';
+      const blob = await svgToBlob(svg, null, mime);
+      try {
+        await navigator.clipboard.write([new ClipboardItem({ [mime]: blob })]);
+      } catch (e) {
+        const pngBlob = await svgToBlob(svg, null, 'image/png');
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob })]);
+      }
       setExportStatus('copied');
     } catch (err) {
       console.error('Copy failed:', err);
@@ -332,7 +370,7 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
           <button
             onClick={handleSaveImage}
             disabled={!!exportStatus}
-            title={`Save graph as PNG\n(${getFilename('png')})`}
+            title={`Save graph as ${saveLabel}\n(${getFilename(saveLabel.toLowerCase())})`}
             className="flex items-center gap-1 px-2 py-1 rounded text-xs hover:opacity-80"
             style={{
               backgroundColor: 'rgba(0,0,0,0.15)',
@@ -348,7 +386,7 @@ const RotationGraph = ({ className, aspectName, rotations, reflection, onNavigat
               <path d="M12 3v12M8 11l4 4 4-4" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2" strokeLinecap="round"/>
             </svg>
-            Save PNG
+            Save {saveLabel}
           </button>
 
           <button

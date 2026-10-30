@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resources - The Classpect Connector</title>
+  <meta name="description" content="Downloadable assets used across The Classpect Connector and The Session Scryer: class symbols, aspect symbols, moon icons, class ring SVGs, site logos, figures, and a one-click bulk download of every classpect glyph." />
+  <link rel="canonical" href="https://cjroshi.github.io/the-classpect-connector/resources.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Resources - The Classpect Connector" />
+  <meta property="og:description" content="Downloadable assets used across The Classpect Connector and The Session Scryer." />
+  <meta property="og:url" content="https://cjroshi.github.io/the-classpect-connector/resources.html" />
+  <meta property="og:image" content="https://cjroshi.github.io/the-classpect-connector/images/logos/connector/regular.png" />
+  <meta property="og:site_name" content="The Classpect Connector" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Resources - The Classpect Connector" />
+  <meta name="twitter:description" content="Assets used across The Classpect Connector and The Session Scryer." />
+  <meta name="twitter:image" content="https://cjroshi.github.io/the-classpect-connector/images/logos/connector/regular.png" />
+  <link rel="icon" type="image/png" href="./images/logos/connector/regular.png" />
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <!-- JSZip for the bulk Classpects download -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <link rel="stylesheet" href="./components/mobile.css">
+
+  <!-- Shared Components -->
+  <script type="text/babel" src="./components/constants.js"></script>
+  <script type="text/babel" src="./components/settings.js"></script>
+  <script type="text/babel" src="./components/utility-functions.js"></script>
+  <script type="text/babel" src="./components/header.js"></script>
+  <script type="text/babel" src="./components/footer.js"></script>
+  <script type="text/babel" src="./components/classpect-glyph.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Typostuck';
+      src: url('./fonts/TYPOSTUCK.ttf') format('truetype');
+    }
+    .font-courier { font-family: 'Courier New', monospace; }
+    .font-courier-bold { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.25rem;
+      font-weight: normal;
+    }
+    .font-typostuck-title {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 2.5rem;
+      font-weight: normal;
+    }
+    .font-typostuck-header {
+      font-family: 'Typostuck', 'Courier New', monospace;
+      font-size: 1.75rem;
+      font-weight: normal;
+    }
+
+    /* Collapsible section — inspired by flaringk/hs-hexes.
+       Click the header bar to toggle the body. */
+    .res-section {
+      border: 2px solid #a0a0a0;
+      border-radius: 6px;
+      background: #ebebeb;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+    .res-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: #c4c4c4;
+      cursor: pointer;
+      user-select: none;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-bottom: 1px solid #a0a0a0;
+    }
+    .res-section-head:hover { background: #b8b8b8; }
+    .res-section-head .res-arrow {
+      transition: transform 0.15s ease;
+      font-size: 1.2rem;
+      opacity: 0.75;
+    }
+    .res-section.open .res-arrow { transform: rotate(90deg); }
+    .res-section-body { padding: 14px 16px 18px; display: none; }
+    .res-section.open .res-section-body { display: block; }
+
+    /* Asset grid tiles. */
+    .res-grid {
+      display: grid;
+      /* min(140px, 100%) so tiny viewports fall back to a single
+         full-width column instead of overflowing the content box. */
+      grid-template-columns: repeat(auto-fill, minmax(min(140px, 100%), 1fr));
+      gap: 12px;
+    }
+    .res-tile {
+      background: #ffffff;
+      border: 1px solid #c0c0c0;
+      border-radius: 4px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+      min-width: 0;     /* allow long labels to shrink / wrap */
+      overflow: hidden;
+    }
+    .res-tile .thumb {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      /* Darker checker so light-filled assets (Hope, Space, white
+         halos) stay legible against the swatch background. */
+      background:
+        linear-gradient(45deg, #808080 25%, transparent 25%, transparent 75%, #808080 75%),
+        linear-gradient(45deg, #808080 25%, transparent 25%, transparent 75%, #808080 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 8px 8px;
+      background-color: #b0b0b0;
+      border: 1px solid #707070;
+      border-radius: 3px;
+      padding: 6px;
+    }
+    .res-tile .label {
+      font-family: 'Courier New', monospace;
+      font-size: 0.78rem;
+      line-height: 1.2;
+      min-height: 2.4em;
+    }
+    .res-tile .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+    }
+    .res-btn {
+      font-family: 'Courier New', monospace;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border: 1px solid #999;
+      background: #f0f0f0;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .res-btn:hover { background: #e0e0e0; }
+    .res-btn.copied { background: #d0f0d0; }
+
+    /* Figure tiles are landscape, show full-width. min() guard means
+       narrow viewports collapse to one column instead of overflowing. */
+    .res-figures-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: 12px;
+    }
+    .res-fig-tile {
+      background: #ffffff;
+      border: 1px solid #c0c0c0;
+      border-radius: 4px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;      /* allow children (including long labels) to shrink */
+      overflow: hidden;  /* belt-and-suspenders if an image misreports size */
+    }
+    .res-fig-tile img {
+      max-width: 100%;
+      width: 100%;
+      height: auto;
+      max-height: 240px;
+      border: 1px solid #e0e0e0;
+      border-radius: 3px;
+      object-fit: contain;
+      display: block;
+    }
+    .res-fig-tile .label {
+      /* Long figure names shouldn't force the tile wider than its
+         grid cell — wrap, don't truncate. */
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      max-width: 100%;
+    }
+
+    /* Color swatches. */
+    .res-swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+    }
+    .res-swatch {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      background: #fff;
+      border: 1px solid #c0c0c0;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+    }
+    .res-swatch:hover { background: #f0f0f0; }
+    .res-swatch .chip {
+      width: 24px; height: 24px;
+      border-radius: 3px;
+      border: 1px solid #000;
+      flex-shrink: 0;
+    }
+    .res-swatch.copied .hex { color: #0a7f0a; font-weight: bold; }
+
+    /* Progress strip for ZIP build. */
+    .res-progress {
+      height: 10px;
+      background: #d4d4d4;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .res-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #0a7f0a, #6ad46a);
+      transition: width 0.1s linear;
+    }
+
+    .res-intro {
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: #4b5563;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const defaultTheme = {
+  bg: "#626262",
+  contentBg: "#d0d0d0",
+  textColor: "#000000",
+  accentBg: "#a0a0a0",
+  isDark: false,
+};
+
+/* -------------------------------------------------------------------
+   ASSET REGISTRIES
+   Each registry entry is self-describing: {name, src, ext}.
+   ------------------------------------------------------------------- */
+const ASPECT_ORDER = Object.keys(aspectsNumeric);        // Hope → Space
+const CLASS_ORDER  = Object.keys(classesNumeric);        // Lord → Muse
+
+const SITE_ROOT = './';
+
+// Canonical glyph palette
+const SPRITE_FG_COLORS = {
+  breath: '#47dff9', blood:  '#ba1016', doom:  '#000000', heart:  '#bd1864',
+  hope:   '#fdfdfd', life:   '#72eb34', light: '#f6fa4e', mind:   '#06ffc9',
+  rage:   '#9c4dad', space:  '#ffffff', time:  '#ff2106', void:   '#001957',
+};
+const SPRITE_BG_COLORS = {
+  breath: '#4379e6', blood:  '#3e1601', doom:  '#306800', heart:  '#55142a',
+  hope:   '#ffde55', life:   '#a49787', light: '#f0840c', mind:   '#00923d',
+  rage:   '#520c61', space:  '#000000', time:  '#b70d0e', void:   '#104ea2',
+};
+
+/* Figure files hand-picked from images/figures/ — the ones the Connector
+   writes about in theory.html / faq.html, plus the icon_lineup_* set. */
+const FIGURE_FILES = [
+  { file: 'activityscale_extended.png', label: 'Activity Scale (extended)' },
+  { file: 'antipairs.png',               label: 'Antipairs' },
+  { file: 'antipairs_noconnections.png', label: 'Antipairs (no connections)' },
+  { file: 'normalpairs.png',             label: 'Normal pairs' },
+  { file: 'quasipairs.png',              label: 'Quasipairs' },
+  { file: 'icon_lineup_classes_no-bg.png',   label: 'Class lineup (no bg)' },
+  { file: 'icon_lineup_classes_bg.png',      label: 'Class lineup (bg)' },
+  { file: 'icon_lineup_aspects_no-bg.png',   label: 'Aspect lineup (no bg)' },
+  { file: 'icon_lineup_aspects_with-bg.png', label: 'Aspect lineup (with bg)' },
+];
+
+const CONNECTOR_LOGOS = [
+  { file: 'regular.png',   label: 'Regular' },
+  { file: 'dark.png',      label: 'Dark theme' },
+  { file: 'light.png',     label: 'Light theme' },
+  { file: 'epilogues.png', label: 'Epilogues' },
+];
+const SCRYER_LOGOS = [
+  { file: 'regular.png', label: 'Regular' },
+  { file: 'bright.png',  label: 'Bright theme' },
+  { file: 'dark.png',    label: 'Dark theme' },
+];
+
+const MOON_FILES = [
+  { label: 'Prospit',          file: 'moons/prospit.png' },
+  { label: 'Prospit (no bg)',  file: 'moons/prospit_no-bg.png' },
+  { label: 'Derse',            file: 'moons/derse.png' },
+  { label: 'Derse (no bg)',    file: 'moons/derse_no-bg.png' },
+  { label: 'Dual (no bg)',     file: 'moons/dual_no-bg.png' },
+];
+
+/* -------------------------------------------------------------------
+   DOWNLOAD / COPY HELPERS — always use the source file's native format.
+   ------------------------------------------------------------------- */
+const triggerDownload = (url, filename) => {
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+};
+const copyImageToClipboard = async (url) => {
+  // Always copy an IMAGE to the clipboard, never raw text.
+  const resp = await fetch(url);
+  const blob = await resp.blob();
+  const rasterizeToPng = async (sourceBlob) => {
+    const objUrl = URL.createObjectURL(sourceBlob);
+    try {
+      const img = new Image();
+      await new Promise((res, rej) => {
+        img.onload  = res;
+        img.onerror = () => rej(new Error('image decode failed'));
+        img.src = objUrl;
+      });
+      // SVGs loaded via <img> may report 0 naturalWidth if they lack
+      // explicit width/height. Fall back to a reasonable default so
+      // the canvas has pixels to draw into.
+      const w = img.naturalWidth  || 1024;
+      const h = img.naturalHeight || 1024;
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      return await new Promise((r) => c.toBlob(r, 'image/png'));
+    } finally {
+      URL.revokeObjectURL(objUrl);
+    }
+  };
+  if (blob.type.includes('svg')) {
+    const pngBlob = await rasterizeToPng(blob);
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob })]);
+    return 'svg-as-png';
+  }
+  try {
+    await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+    return 'image';
+  } catch (e) {
+    const pngBlob = await rasterizeToPng(blob);
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob })]);
+    return 'image-png-fallback';
+  }
+};
+
+/* -------------------------------------------------------------------
+   SMALL UI PIECES
+   ------------------------------------------------------------------- */
+const AssetTile = ({ thumbUrl, label, downloads = [] }) => {
+  // `downloads` is [{ ext, src, filename }, ...]. One Save button per
+  // extension; a single Copy button that always targets the PNG source
+  // when one exists.
+  const [copied, setCopied] = React.useState(false);
+  const copySrc = downloads.find((d) => d.ext === 'png') || downloads[0];
+  const handleCopy = async () => {
+    if (!copySrc) return;
+    try {
+      await copyImageToClipboard(copySrc.src);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
+    } catch (e) {
+      console.error('copy failed', e);
+      alert('Copy failed — your browser may not allow image clipboard writes for this file type.');
+    }
+  };
+  return (
+    <div className="res-tile">
+      <img className="thumb" src={thumbUrl} alt={label} loading="lazy"/>
+      <div className="label">{label}</div>
+      <div className="row">
+        {downloads.map((d) => (
+          <button key={d.ext}
+                  className="res-btn"
+                  onClick={() => triggerDownload(d.src, d.filename)}
+                  title={`Save ${d.filename}`}>
+            {d.ext.toUpperCase()}
+          </button>
+        ))}
+        {copySrc && (
+          <button className={'res-btn' + (copied ? ' copied' : '')}
+                  onClick={handleCopy}
+                  title={`Copy image to clipboard (as PNG)`}>
+            {copied ? '✓' : 'Copy'}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const Section = ({ id, title, defaultOpen = false, children }) => {
+  const [open, setOpen] = React.useState(defaultOpen);
+  return (
+    <div id={id} className={'res-section' + (open ? ' open' : '')}>
+      <div className="res-section-head" onClick={() => setOpen(o => !o)}>
+        <span>{title}</span>
+        <span className="res-arrow">›</span>
+      </div>
+      <div className="res-section-body">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+/* -------------------------------------------------------------------
+   SECTIONS
+   ------------------------------------------------------------------- */
+const AspectsSection = () => (
+  <>
+    <div className="res-grid">
+      {ASPECT_ORDER.map((asp) => {
+        const low = asp.toLowerCase();
+        const noBgSvg = `${SITE_ROOT}images/aspects/no-bg/${low}.svg`;
+        const noBgPng = `${SITE_ROOT}images/aspects/no-bg/${low}.png`;
+        const bgSvg   = `${SITE_ROOT}images/aspects/with-bg/${low}bg.svg`;
+        const bgPng   = `${SITE_ROOT}images/aspects/with-bg/${low}bg.png`;
+        return (
+          <React.Fragment key={asp}>
+            <AssetTile
+              thumbUrl={noBgPng}
+              label={`${asp} (no bg)`}
+              downloads={[
+                { ext: 'svg', src: noBgSvg, filename: `${low}.svg` },
+                { ext: 'png', src: noBgPng, filename: `${low}.png` },
+              ]}
+            />
+            <AssetTile
+              thumbUrl={bgPng}
+              label={`${asp} (bg)`}
+              downloads={[
+                { ext: 'svg', src: bgSvg, filename: `${low}bg.svg` },
+                { ext: 'png', src: bgPng, filename: `${low}bg.png` },
+              ]}
+            />
+          </React.Fragment>
+        );
+      })}
+    </div>
+  </>
+);
+
+const ClassesSection = () => (
+  <>
+    <div className="res-grid">
+      {CLASS_ORDER.map((cls) => {
+        const low = cls.toLowerCase();
+        const nb = (ext) => `${SITE_ROOT}images/classes/no-bg/${low}.${ext}`;
+        const bg = (ext) => `${SITE_ROOT}images/classes/bg/${low}.${ext}`;
+        const ol = (ext) => `${SITE_ROOT}images/classes/outline/${low}.${ext}`;
+        return (
+          <React.Fragment key={cls}>
+            <AssetTile
+              thumbUrl={nb('png')}
+              label={`${cls} (no bg)`}
+              downloads={[
+                { ext: 'svg', src: nb('svg'), filename: `${low}.svg` },
+                { ext: 'png', src: nb('png'), filename: `${low}.png` },
+              ]}
+            />
+            <AssetTile
+              thumbUrl={bg('png')}
+              label={`${cls} (bg)`}
+              downloads={[
+                { ext: 'svg', src: bg('svg'), filename: `${low}-bg.svg` },
+                { ext: 'png', src: bg('png'), filename: `${low}-bg.png` },
+              ]}
+            />
+            <AssetTile
+              thumbUrl={ol('png')}
+              label={`${cls} (outline)`}
+              downloads={[
+                { ext: 'svg', src: ol('svg'), filename: `${low}-outline.svg` },
+                { ext: 'png', src: ol('png'), filename: `${low}-outline.png` },
+              ]}
+            />
+          </React.Fragment>
+        );
+      })}
+    </div>
+  </>
+);
+
+const RingsSection = () => (
+  <>
+    <div className="res-grid">
+      {CLASS_ORDER.map((cls) => {
+        const low = cls.toLowerCase();
+        const src = `${SITE_ROOT}images/classes/rings/${low}.svg`;
+        return (
+          <AssetTile key={cls}
+            thumbUrl={src}
+            label={`${cls} ring`}
+            downloads={[{ ext: 'svg', src, filename: `${low}-ring.svg` }]}
+          />
+        );
+      })}
+    </div>
+  </>
+);
+
+const MoonsSection = () => (
+  <>
+    <div className="res-grid">
+      {MOON_FILES.map((m) => {
+        const src = `${SITE_ROOT}images/${m.file}`;
+        return (
+          <AssetTile key={m.file}
+            thumbUrl={src}
+            label={m.label}
+            downloads={[{ ext: 'png', src, filename: m.file.split('/').pop() }]}
+          />
+        );
+      })}
+    </div>
+  </>
+);
+
+const LogosSection = () => (
+  <>
+    <div style={{ marginBottom: 14 }}>
+      <h3 className="font-courier-bold mb-2" style={{ fontSize: '0.95rem' }}>The Classpect Connector</h3>
+      <div className="res-grid">
+        {CONNECTOR_LOGOS.map((l) => {
+          const src = `${SITE_ROOT}images/logos/connector/${l.file}`;
+          return (
+            <AssetTile key={l.file}
+              thumbUrl={src}
+              label={l.label}
+              downloads={[{ ext: 'png', src, filename: `connector-${l.file}` }]}
+            />
+          );
+        })}
+      </div>
+    </div>
+    <div>
+      <h3 className="font-courier-bold mb-2" style={{ fontSize: '0.95rem' }}>The Session Scryer</h3>
+      <div className="res-grid">
+        {SCRYER_LOGOS.map((l) => {
+          const src = `${SITE_ROOT}images/logos/scryer/${l.file}`;
+          return (
+            <AssetTile key={l.file}
+              thumbUrl={src}
+              label={l.label}
+              downloads={[{ ext: 'png', src, filename: `scryer-${l.file}` }]}
+            />
+          );
+        })}
+      </div>
+    </div>
+  </>
+);
+
+const FiguresSection = () => (
+  <>
+    <div className="res-figures-grid">
+      {FIGURE_FILES.map((f) => {
+        const src = `${SITE_ROOT}images/figures/${f.file}`;
+        const ext = f.file.split('.').pop();
+        return (
+          <div key={f.file} className="res-fig-tile">
+            <img src={src} alt={f.label} loading="lazy"/>
+            <div className="label" style={{ fontFamily: "'Courier New', monospace", fontSize: '0.85rem', textAlign: 'center' }}>{f.label}</div>
+            <div className="row" style={{ display: 'flex', gap: 6 }}>
+              <button className="res-btn"
+                      onClick={() => triggerDownload(src, f.file)}
+                      title={`Save ${f.file}`}>
+                {ext.toUpperCase()}
+              </button>
+              <CopyFigureBtn src={src} filename={f.file}/>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </>
+);
+const CopyFigureBtn = ({ src, filename }) => {
+  const [copied, setCopied] = React.useState(false);
+  const click = async () => {
+    try {
+      await copyImageToClipboard(src);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
+    } catch (e) {
+      console.error(e);
+      alert('Copy failed — your browser may not allow image clipboard writes for this file type.');
+    }
+  };
+  return (
+    <button className={'res-btn' + (copied ? ' copied' : '')} onClick={click}>
+      {copied ? '✓' : 'Copy'}
+    </button>
+  );
+};
+
+/* FG / BG swatch tile — click either half of the tile to copy its own
+   hex. Visually: outer rect = BG color, inner badge = FG color. */
+const FgBgSwatch = ({ aspect, fg, bg, onCopy, copiedWhich }) => {
+  const fgCopied = copiedWhich === 'fg';
+  const bgCopied = copiedWhich === 'bg';
+  // Pick label text color based on the FG color's luminance so the
+  // aspect name stays readable regardless of which hue dominates.
+  const luma = (hex) => {
+    const n = parseInt(hex.slice(1), 16);
+    const r = (n >> 16) & 0xff, g = (n >> 8) & 0xff, b = n & 0xff;
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  };
+  const fgText = luma(fg) > 0.55 ? '#111' : '#fff';
+  const bgText = luma(bg) > 0.55 ? '#111' : '#fff';
+  return (
+    <div
+      className="res-fgbg-tile"
+      style={{
+        display: 'flex', flexDirection: 'column', alignItems: 'stretch',
+        border: '2px solid #000', borderRadius: 6, overflow: 'hidden',
+        background: bg, color: bgText,
+        fontFamily: "'Courier New', monospace", fontSize: '0.78rem',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+      }}
+      title="Click a swatch to copy its hex"
+    >
+      {/* Inner FG badge */}
+      <div
+        onClick={(e) => { e.stopPropagation(); onCopy(aspect, 'fg', fg); }}
+        style={{
+          margin: '10px 10px 6px', padding: '8px 6px',
+          background: fg, color: fgText,
+          borderRadius: 4, textAlign: 'center',
+          cursor: 'pointer', lineHeight: 1.25,
+          outline: fgCopied ? '2px solid #0f0' : 'none',
+        }}
+      >
+        <div style={{ fontWeight: 'bold' }}>{aspect}</div>
+        <div style={{ opacity: 0.95 }}>{fgCopied ? '✓ copied' : fg}</div>
+      </div>
+      {/* Outer BG hex label */}
+      <div
+        onClick={(e) => { e.stopPropagation(); onCopy(aspect, 'bg', bg); }}
+        style={{
+          padding: '4px 8px 8px', textAlign: 'center',
+          cursor: 'pointer',
+          textShadow: bgText === '#fff' ? '0 1px 1px rgba(0,0,0,0.5)' : 'none',
+        }}
+      >
+        {bgCopied ? '✓ copied' : bg}
+      </div>
+    </div>
+  );
+};
+
+const AspectColorsSection = () => {
+  // Map from "aspect|which" → true for the swatch most recently copied,
+  // auto-cleared after 1.2s. Only ONE swatch highlights at a time so
+  // the user sees a clear confirmation on the last click.
+  const [copied, setCopied] = React.useState(null);  // { aspect, which }
+  const copy = async (aspect, which, hex) => {
+    try {
+      await navigator.clipboard.writeText(hex);
+      setCopied({ aspect, which });
+      setTimeout(() => setCopied((c) => (c && c.aspect === aspect && c.which === which) ? null : c), 1200);
+    } catch (e) { console.error(e); }
+  };
+  const Palette = ({ fgTable, bgTable }) => (
+    <div>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+          gap: 10,
+        }}
+      >
+        {ASPECT_ORDER.map((asp) => {
+          const low = asp.toLowerCase();
+          const which = copied && copied.aspect === asp ? copied.which : null;
+          return (
+            <FgBgSwatch key={asp}
+              aspect={asp}
+              fg={fgTable[low]}
+              bg={bgTable[low]}
+              onCopy={copy}
+              copiedWhich={which}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+  return (
+    <Palette
+      fgTable={SPRITE_FG_COLORS}
+      bgTable={SPRITE_BG_COLORS}
+    />
+  );
+};
+
+/* -------------------------------------------------------------------
+   CLASSPECTS BULK DOWNLOAD
+   Mounts 168 ClasspectGlyph instances hidden off-screen, waits for
+   each to be ready, then composes a static image per glyph (honoring
+   the current ring / outline / thickness / image-format settings) and
+   bundles the result as a ZIP.
+   ------------------------------------------------------------------- */
+const ALL_PAIRS = (() => {
+  const out = [];
+  for (const cls of CLASS_ORDER) for (const asp of ASPECT_ORDER) {
+    out.push({ cls, asp });
+  }
+  return out;
+})();
+
+const ClasspectsSection = () => {
+  // Track the image-format setting so the user can preview the current
+  // extension/format label before clicking Download.
+  const [fmt, setFmt] = React.useState(() => Settings.get('imageExportFormat'));
+  React.useEffect(() => {
+    const onCh = (ev) => {
+      if (ev.detail?.name === 'imageExportFormat') setFmt(Settings.get('imageExportFormat'));
+    };
+    window.addEventListener('cc-setting-change', onCh);
+    return () => window.removeEventListener('cc-setting-change', onCh);
+  }, []);
+  const fmtLabel = fmt === 'webp' ? 'WebP'
+                 : fmt === 'jpg'  ? 'JPG'
+                 : fmt === 'svg'  ? 'SVG'
+                 :                  'PNG';
+  const fmtExt   = fmt === 'webp' ? 'webp'
+                 : fmt === 'jpg'  ? 'jpg'
+                 : fmt === 'svg'  ? 'svg'
+                 :                  'png';
+
+  const [status, setStatus] = React.useState(null);  // null | 'rendering' | 'zipping' | 'done' | 'error'
+  const [progress, setProgress] = React.useState({ done: 0, total: ALL_PAIRS.length });
+  const [building, setBuilding] = React.useState(false);
+  const refs = React.useRef({});
+
+  // Wait until every mounted ClasspectGlyph reports isReady() === true.
+  const waitAllReady = async () => {
+    const tStart = Date.now();
+    while (Date.now() - tStart < 20000) {
+      let allOk = true;
+      for (const { cls, asp } of ALL_PAIRS) {
+        const r = refs.current[`${cls}|${asp}`];
+        if (!r || typeof r.isReady !== 'function' || !r.isReady()) { allOk = false; break; }
+      }
+      if (allOk) return true;
+      await new Promise((res) => setTimeout(res, 100));
+    }
+    return false;
+  };
+
+  const handleBuild = async () => {
+    setBuilding(true);
+    setStatus('rendering');
+    setProgress({ done: 0, total: ALL_PAIRS.length });
+    // Yield one tick so the hidden glyph grid gets mounted.
+    await new Promise((r) => setTimeout(r, 0));
+    const ready = await waitAllReady();
+    if (!ready) {
+      setStatus('error');
+      setBuilding(false);
+      return;
+    }
+    setStatus('zipping');
+    const zip = new JSZip();
+    const used = new Set();
+    let done = 0;
+    for (const { cls, asp } of ALL_PAIRS) {
+      const ref = refs.current[`${cls}|${asp}`];
+      try {
+        const blob = fmt === 'svg' && typeof ref.composeStaticSvg === 'function'
+          ? await ref.composeStaticSvg(1024)
+          : await ref.composeStaticPng(1024);
+        if (blob) {
+          let fname = `${cls.toLowerCase()}-of-${asp.toLowerCase()}.${fmtExt}`;
+          let n = 2;
+          while (used.has(fname)) fname = `${cls.toLowerCase()}-of-${asp.toLowerCase()}-${n++}.${fmtExt}`;
+          used.add(fname);
+          zip.file(fname, blob);
+        }
+      } catch (e) {
+        console.warn(`compose failed for ${cls}/${asp}:`, e);
+      }
+      done += 1;
+      setProgress({ done, total: ALL_PAIRS.length });
+      // Give the browser a chance to paint the progress bar.
+      if (done % 8 === 0) await new Promise((r) => setTimeout(r, 0));
+    }
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    triggerDownload(URL.createObjectURL(zipBlob), `classpect-glyphs-${fmtExt}.zip`);
+    setStatus('done');
+    setBuilding(false);
+    setTimeout(() => { setStatus(null); setBuilding(false); }, 2000);
+  };
+
+  return (
+    <>
+      <p className="res-intro">
+        All 168 classpects in a ZIP archive. Uses your current glyph settings; format: <b>{fmtLabel}</b>.
+      </p>
+      <button className="res-btn"
+              style={{ fontSize: '0.9rem', padding: '8px 16px' }}
+              disabled={building}
+              onClick={handleBuild}>
+        {building
+          ? (status === 'rendering' ? 'Rendering…' : status === 'zipping' ? `Composing ${progress.done}/${progress.total}…` : 'Working…')
+          : `Download (ZIP, ${fmtExt.toUpperCase()})`}
+      </button>
+      {status === 'error' && (
+        <div style={{ color: '#a10000', marginTop: 8, fontFamily: "'Courier New', monospace", fontSize: '0.85rem' }}>
+          Timed out while loading the glyph assets. Try again — if it keeps happening, check the browser console.
+        </div>
+      )}
+      {building && (
+        <div className="res-progress">
+          <div className="res-progress-bar" style={{ width: `${Math.round((progress.done / progress.total) * 100)}%` }}/>
+        </div>
+      )}
+      {/* Hidden grid of all 168 glyphs — only mounted while building so
+          we don't pay the asset-fetch cost on every page view. */}
+      {building && (
+        <div style={{
+          position: 'fixed', left: '-99999px', top: '-99999px',
+          width: 1, height: 1, overflow: 'hidden', visibility: 'hidden',
+          pointerEvents: 'none',
+        }}>
+          {ALL_PAIRS.map(({ cls, asp }) => (
+            <ClasspectGlyph
+              key={`${cls}|${asp}`}
+              ref={(r) => { refs.current[`${cls}|${asp}`] = r; }}
+              className={cls}
+              aspectName={asp}
+              theme={defaultTheme}
+              size={240}
+              showButtons={false}
+              animate={false}
+            />
+          ))}
+        </div>
+      )}
+    </>
+  );
+};
+
+/* -------------------------------------------------------------------
+   PAGE
+   ------------------------------------------------------------------- */
+const ResourcesPage = () => (
+  <div className="space-y-6">
+    <h1 className="font-typostuck-title mb-2 text-center">Resources</h1>
+
+    <Section id="classpects" title="Classpect glyphs (bulk ZIP)"   defaultOpen={true}><ClasspectsSection/></Section>
+    <Section id="aspects"    title="Aspect symbols"                defaultOpen={true}><AspectsSection/>   </Section>
+    <Section id="classes"    title="Class symbols"                 defaultOpen={true}><ClassesSection/>   </Section>
+    <Section id="rings"      title="Class ring silhouettes (SVG)"  defaultOpen={true}><RingsSection/>     </Section>
+    <Section id="moons"      title="Moon icons"                    defaultOpen={true}><MoonsSection/>    </Section>
+    <Section id="logos"      title="Site logos"                    defaultOpen={true}><LogosSection/>    </Section>
+    <Section id="figures"    title="Figures"                       defaultOpen={true}><FiguresSection/>  </Section>
+    <Section id="colors"     title="Aspect colors"                 defaultOpen={true}><AspectColorsSection/></Section>
+  </div>
+);
+
+const App = () => {
+  const handleNavigate = (path) => {
+    window.location.href = `./index.html#${path}`;
+  };
+  return (
+    <div style={{ backgroundColor: defaultTheme.bg, minHeight: '100vh' }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme} />
+      <div className="px-3 sm:px-6 pb-6">
+        <div className="max-w-5xl mx-auto">
+          <div style={{
+            backgroundColor: defaultTheme.contentBg,
+            color: defaultTheme.textColor,
+            padding: '24px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+            border: `2px solid ${defaultTheme.accentBg}`,
+          }}>
+            <ResourcesPage/>
+          </div>
+          <Footer theme={defaultTheme}/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
