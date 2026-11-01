@@ -227,6 +227,67 @@ const SearchBar = ({ onNavigate, theme }) => {
       ],
       isExternal: true
     });
+    pages.push({
+      type: 'reference',
+      display: 'Playground',
+      path: './playground.html',
+      searchTerms: [
+        'playground', 'exotic', 'custom', 'compose', 'composer',
+        'multi', 'multiclass', 'multi-class', 'vacillation',
+        'split aspect', 'split', 'blend', 'builder', 'sandbox',
+      ],
+      isExternal: true
+    });
+    pages.push({
+      type: 'reference',
+      display: 'Hints',
+      path: './hints.html',
+      searchTerms: [
+        'hints', 'help', 'help desk', 'terezi', 'secrets help',
+        'stuck', 'secret help', 'tips',
+      ],
+      isExternal: true
+    });
+    pages.push({
+      type: 'reference',
+      display: 'Theory',
+      path: './theory.html',
+      searchTerms: [
+        'theory', 'theories', 'classpect theory', 'meta',
+        'discussion', 'speculation', 'essay', 'essays',
+      ],
+      isExternal: true
+    });
+    pages.push({
+      type: 'reference',
+      display: 'FAQ',
+      path: './faq.html',
+      searchTerms: [
+        'faq', 'questions', 'frequently asked', 'help',
+        'about classpect', 'how does', 'why',
+      ],
+      isExternal: true
+    });
+    pages.push({
+      type: 'reference',
+      display: 'About',
+      path: './about.html',
+      searchTerms: [
+        'about', 'about page', 'what is this', 'what is this site',
+        'classpect connector', 'site info', 'the connector',
+      ],
+      isExternal: true
+    });
+    pages.push({
+      type: 'reference',
+      display: 'Credits',
+      path: './credits.html',
+      searchTerms: [
+        'credits', 'thanks', 'contributors', 'acknowledgements',
+        'who made this', 'authors', 'creator',
+      ],
+      isExternal: true
+    });
     // Per-rung deep links — typing "rung 7" jumps straight to that
     // rung's section on the Rungs page.
     if (typeof RUNG_NAMES !== 'undefined') {
@@ -332,9 +393,7 @@ const SearchBar = ({ onNavigate, theme }) => {
       url: "./index.html#/classpect/knight-of-time"
     },
     {
-      // Dave's offhand way of referring to June's Heir of Breath — same
-      // pattern as "Dave of Guy" (self-reference instead of classpect).
-      // From the pesterlog where he's narrating John's wind mission.
+      // Dave's offhand way of referring to June as the Heir of Breath.
       id: 'chump_of_shoosh',
       searchTerms: ['chump of shoosh', 'chumpofshoosh'],
       url: "./index.html#/classpect/heir-of-breath"

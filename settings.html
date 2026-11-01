@@ -440,6 +440,54 @@ const SecretsTracker = () => {
   );
 };
 
+/* PLAYGROUND REWARD CARD */
+const PlaygroundReward = () => {
+  const [found, setFound] = React.useState(() => {
+    try {
+      const set = new Set(JSON.parse(localStorage.getItem('cc_unlocks') || '[]'));
+      return SECRET_REGISTRY.filter(s => s.keys.some(k => set.has(k))).length;
+    } catch { return 0; }
+  });
+  React.useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key !== 'cc_unlocks') return;
+      try {
+        const set = new Set(JSON.parse(e.newValue || '[]'));
+        setFound(SECRET_REGISTRY.filter(s => s.keys.some(k => set.has(k))).length);
+      } catch {}
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+  const total  = SECRET_REGISTRY.length;
+  const need   = Math.ceil(total / 2);
+  const live   = found >= need;
+  const remain = Math.max(0, need - found);
+  return (
+    <div className="font-courier" style={{
+      marginTop: '18px',
+      padding: '12px 14px',
+      border: '1px solid ' + (live ? '#2e8b2e' : 'rgba(0,0,0,0.15)'),
+      background: live ? '#e8f6e8' : 'rgba(0,0,0,0.04)',
+      borderRadius: '6px',
+      fontSize: '0.88rem',
+    }}>
+      <div style={{ fontWeight: 'bold', marginBottom: 4 }}>
+        {live ? 'Reward: New Page!' : 'Reward: ??????'}
+      </div>
+      {live ? (
+        <div>
+          <a href="./playground.html" style={{ textDecoration: 'underline' }}>Glyph Designer Playground →</a>
+        </div>
+      ) : (
+        <div style={{ color: '#4b5563' }}>
+          Find {remain} more secret{remain === 1 ? '' : 's'} to unlock.
+        </div>
+      )}
+    </div>
+  );
+};
+
 const SettingsPage = () => {
   const handleNavigate = path => { window.location.href = `./index.html#${path}`; };
 
@@ -474,10 +522,6 @@ const SettingsPage = () => {
             </div>
 
             <h2 className="font-typostuck-header mb-3">Polarity</h2>
-            {/* Wrap in a div so the single setting-row becomes
-                :last-child of its parent — kills its own bottom border
-                so only the section-divider below shows, not a doubled
-                pair of horizontal rules. */}
             <div>
               <EnumSetting name="polarityMode" spec={Settings.registry.polarityMode}/>
             </div>
@@ -515,8 +559,23 @@ const SettingsPage = () => {
 
             <hr className="section-divider"/>
 
-            <h2 className="font-typostuck-header mb-3">Secrets</h2>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '12px',
+            }}>
+              <h2 className="font-typostuck-header" style={{ margin: 0 }}>Secrets</h2>
+              <a href="./hints.html"
+                 title="Need a nudge? Talk to Terezi."
+                 style={{ display: 'inline-flex', opacity: 0.75 }}>
+                <img src="./images/tags/libra.png"
+                     alt="Hints"
+                     style={{ width: 28, height: 28, display: 'block' }}/>
+              </a>
+            </div>
             <SecretsTracker/>
+            <PlaygroundReward/>
 
           </div>
           <Footer theme={defaultTheme}/>

@@ -93,6 +93,29 @@ function syncGradientRUnlock() {
     else          localStorage.removeItem('cc_gradientR_unlocked');
   } catch {}
 }
+// Shared helpers for other pages that gate behind secret progress.
+// `ccSecretProgress()` returns { found, total, groups } and
+// `ccPlaygroundUnlocked()` is true once at least half the secret
+// groups have been found.
+function ccSecretProgress() {
+  let set = new Set();
+  try { set = new Set(JSON.parse(localStorage.getItem('cc_unlocks') || '[]')); } catch {}
+  const groups = CC_SECRET_KEY_GROUPS.map(g => ({
+    keys: g,
+    found: g.some(k => set.has(k)),
+  }));
+  const found = groups.filter(g => g.found).length;
+  return { found, total: groups.length, groups };
+}
+function ccPlaygroundUnlocked() {
+  const { found, total } = ccSecretProgress();
+  return found >= Math.ceil(total / 2);
+}
+if (typeof window !== 'undefined') {
+  window.ccSecretProgress     = ccSecretProgress;
+  window.ccPlaygroundUnlocked = ccPlaygroundUnlocked;
+  window.CC_SECRET_KEY_GROUPS = CC_SECRET_KEY_GROUPS;
+}
 syncGradientRUnlock();
 if (typeof window !== 'undefined') {
   window.addEventListener('storage', (e) => {
@@ -520,6 +543,7 @@ const Header = ({ onNavigate, theme }) => {
     { label: 'Theory', href: pathPrefix + 'theory.html' },
     { label: 'Rungs', href: pathPrefix + 'rungs.html' },
     { label: 'Resources', href: pathPrefix + 'resources.html' },
+    // Playground is intentionally omitted — it unlocks at 50% secret collection.
     { label: 'Credits', href: pathPrefix + 'credits.html' },
   ];
 

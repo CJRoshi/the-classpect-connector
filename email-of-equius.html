@@ -17,7 +17,20 @@
   <meta name="twitter:description" content="????????????" />
   <meta name="twitter:image" content="https://cjroshi.github.io/the-classpect-connector/images/logos/connector/regular.png" />
   <link rel="icon" type="image/png" href="./images/logos/connector/regular.png" />
-  
+
+  <!-- Record the visit into cc_unlocks -->
+  <script>
+    (function () {
+      try {
+        var existing = JSON.parse(localStorage.getItem('cc_unlocks') || '[]');
+        if (!existing.includes('sr_email_of_equius')) {
+          existing.push('sr_email_of_equius');
+          localStorage.setItem('cc_unlocks', JSON.stringify(existing));
+        }
+      } catch (e) {}
+    })();
+  </script>
+
   <style>
     @font-face {
       font-family: 'Typostuck';

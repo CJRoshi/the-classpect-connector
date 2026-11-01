@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hints — The Classpect Connector</title>
+  <meta name="description" content="Terezi's secret help desk." />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/png" href="./images/logos/connector/regular.png" />
+
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <link rel="stylesheet" href="./components/mobile.css">
+
+  <script type="text/babel" src="./components/constants.js"></script>
+  <script type="text/babel" src="./components/settings.js"></script>
+  <script type="text/babel" src="./components/utility-functions.js"></script>
+  <script type="text/babel" src="./components/header.js"></script>
+  <script type="text/babel" src="./components/footer.js"></script>
+
+  <style>
+    @font-face { font-family: 'Typostuck'; src: url('./fonts/TYPOSTUCK.ttf') format('truetype'); }
+    .font-courier          { font-family: 'Courier New', monospace; }
+    .font-courier-bold     { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck        { font-family: 'Typostuck', 'Courier New', monospace; font-size: 1.25rem; }
+    .font-typostuck-title  { font-family: 'Typostuck', 'Courier New', monospace; font-size: 2.5rem; }
+    .font-typostuck-header { font-family: 'Typostuck', 'Courier New', monospace; font-size: 1.75rem; }
+
+    /* --- Hint stage --- */
+    .hint-stage {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 0 10px;
+    }
+    /* The art row holds the libra and the speech-bubble art. */
+    .hint-art {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .hint-libra {
+      width: 100%;
+      max-width: 360px;
+      aspect-ratio: 1 / 1;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hint-libra img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+    /* Speech-bubble art — pinned to the content-box edges. */
+    .hint-sidebubble {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 260px;
+      max-width: 42%;
+      pointer-events: none;
+      transition: opacity 160ms ease;
+    }
+    .hint-sidebubble img { width: 100%; height: auto; display: block; }
+    .hint-sidebubble.dave { left:  -20px; }
+    .hint-sidebubble.rose { right: -20px; }
+    .hint-sidebubble.inactive { opacity: 0; }
+
+    /* Shared text box — matches the regular site look. */
+    .hint-bubble {
+      background: #d0d0d0;
+      color: #000;
+      border: 1px solid #888;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      min-height: 84px;
+      width: 100%;
+      max-width: 640px;
+    }
+    .hint-speaker {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.75;
+      margin-bottom: 5px;
+    }
+    .hint-text { white-space: pre-wrap; }
+
+    /* Character color pills applied per-speaker. */
+    .hint-bubble.terezi { border-color: #008282; }
+    .hint-bubble.terezi .hint-text,
+    .hint-bubble.terezi .hint-speaker { color: #008282; }
+    .hint-bubble.dave   { border-color: #e00707; }
+    .hint-bubble.dave   .hint-text,
+    .hint-bubble.dave   .hint-speaker { color: #e00707; }
+    .hint-bubble.rose   { border-color: #b536da; }
+    .hint-bubble.rose   .hint-text,
+    .hint-bubble.rose   .hint-speaker { color: #b536da; }
+
+    .hint-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 0 4px;
+    }
+    /* MSPA-style "==>" advance link */
+    .hint-advance {
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      font-size: 1.6rem;
+      color: #0000ee;
+      text-decoration: underline;
+      cursor: pointer;
+      user-select: none;
+      letter-spacing: 2px;
+    }
+    .hint-advance:hover { color: #cc0000; }
+    .hint-advance.disabled {
+      cursor: default;
+      pointer-events: none;
+      text-decoration: none;
+    }
+    /* Pesterlog-style closing stamp */
+    .hint-closing {
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      font-size: 0.95rem;
+      color: #000;
+      padding-top: 2px;
+    }
+    .hint-closing .is { color: #060935; }   /* intrepidScryer stygian blue */
+    .hint-closing .gc { color: #008282; }   /* gallowsCalibrator teal */
+
+    /* Mobile CSS */
+    @media (max-width: 720px) {
+      .hint-sidebubble { width: 210px; max-width: 60%; }
+      .hint-sidebubble.dave { left:  -20px; }
+      .hint-sidebubble.rose { right: -20px; }
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const defaultTheme = {
+  bg: "#626262", contentBg: "#d0d0d0",
+  textColor: "#000000", accentBg: "#a0a0a0", isDark: false,
+};
+
+/* --------------------------------------------------------------
+   SPEAKERS
+   -------------------------------------------------------------- */
+const SPEAKERS = {
+  terezi: { label: 'TEREZI', bubbleImg: null                                      },
+  dave:   { label: 'DAVE',   bubbleImg: './images/special/davespeechbubble.png'   },
+  rose:   { label: 'ROSE',   bubbleImg: './images/special/rosespeechbubble.png'   },
+};
+
+/* --------------------------------------------------------------
+   HINT SCRIPTS
+   -------------------------------------------------------------- */
+const HINTS_BY_SECRET = {
+  'sr_mutt_of_slop':           [
+    { speaker: 'terezi', text: 'HMM.'},
+    { speaker: 'rose',   text: 'Terezi, let me ask you a question.' },
+    { speaker: 'rose',   text: 'Would you rather have one million boondollars, or a dog that doubles in age every second?'},
+    { speaker: 'terezi', text: 'ROS3'},
+    { speaker: 'terezi', text: 'TH4T M1GHT B3 TH3 WORST QU3ST1ON 1\'V3 3V3R H34RD >:[' },
+    { speaker: 'rose',   text: 'It is a pretty sucky question. But I promise it\'s relevant to the hint at hand.' },
+    { speaker: 'terezi', text: 'W3LL, Y34H. DURRRRRR' },
+    { speaker: 'terezi', text: '1F 1 D1DN\'T KNOW B3TT3R 1 WOULD 1MAG1N3 TH4T TH3 B4RKB34ST TURNS 1NTO B4RKBE4ST SLUDG3.' },
+    { speaker: 'rose',   text: 'Or slop. You could call it slop.' },
+    { speaker: 'terezi', text: 'Y3AH WH4T3V3R. POOR MUTT M4D3 OF SLUDG3.'},
+    { speaker: 'terezi', text: 'C4N W3 MOV3 ON? TH1S H1NT 1S BUMM1NG M3 OUT.'},
+  ],
+  'sr_waste_of_space':         [
+    { speaker: 'terezi', text: 'TH1S ON3 1S 4 L1TTL3 OBSCUR3 1F YOU 4R3N\'T 4 B4LON3YSCHOL4R...'},
+    { speaker: 'terezi', text: 'BUT 1 C4N 3XPL41N 1T 34S1LY!'}, 
+    { speaker: 'terezi', text: 'TH1S 1S TH3 OUTF1T FOR TH3 OR4NG3 P3RSON WHO K1LL3D MR. V4N1LL4 M1LKSH4K3!'},
+    { speaker: 'terezi', text: 'TH3Y R3ALLY LIK3D COPY1NG K4N4YA\'S LOOK.'},
+    { speaker: 'terezi', text: 'TH4T\'S ON3 SOLUT1ON.'},
+    { speaker: 'terezi', text: 'TH3 OTH3R 1S TH4T... 4PP4R3NTLY TH31R L1PS W3R3 S41D TO B3 W31RDLY 4TTR4CT1V3?' },
+    { speaker: 'terezi', text: 'B34TS M3! 4NYW4Y TH4T\'S TWO SOLUT1ONS H4V1NG TO DO W1TH TH3 OR4NG3 P3RSON!!!'},
+  ],
+  'sr_douche_of_tears':        [
+    { speaker: 'terezi', text: 'D4V3, DO YOU W4NT TO H3LP W1TH TH1S ON3?'},
+    { speaker: 'dave',   text: 'do i have a choice'},
+    { speaker: 'terezi', text: 'NO! G3T YOUR BUTT OV3R H3R3 4ND STOP B31NG 4 DOUCH3!'},
+    { speaker: 'dave',   text: 'oh word was that part of the hint'},
+    { speaker: 'terezi', text: 'S1111111GH'},
+    { speaker: 'terezi', text: 'Y3S D4V3 TH4T W4S P4RT OF TH3 H1NT.'},
+    { speaker: 'dave',   text: 'oh wait is this secret about that douche in gamebro'},
+    { speaker: 'terezi', text: '1\'M GO1NG TO CRY.'},
+    { speaker: 'dave',   text: 'ok sorry'},
+  ],
+  'sr_gent_of_piss':           [
+    { speaker: 'terezi', text: '1 H4V3 STUD13D M4NY M4NU4LS ON HUM4N ET1QU3TT3, 4ND TH1S N4M3 FR3QU3NTLY 4PP34RS 1N TH3M.' },
+    { speaker: 'terezi', text: 'USU4LLY 1N R3F3R3NC3 TO QUOT3, "D4PP3R YOUNG L4DS", UNQUOT3.' },
+    { speaker: 'terezi', text: 'TH3Y DON\'T SOUND SO "G3NTL3" TO M3!' },
+    { speaker: 'terezi', text: '1 TH1NK TH3Y WOULD P1SS TH31R P4NTS 1F 1 BROK3 1NTO ON3 OF TH31R E4RTH HUM4N P4RT13S W1TH 4 SWORD!!!'},
+    { speaker: 'terezi', text: '4NYW4YS, TH1S S3CR3T H4S SOM3TH1NG TO DO W1TH TH3 4FOR3M3NT1ON3D "YOUNG L4D"S. GOOD LUCK >:]'},
+  ],
+  'sr_trash_of_time':          [
+    { speaker: 'terezi', text: '1\'M NOT SUR3 HOW 1 W4NT TO 3XPL4IN TH1S ON3!'},
+    { speaker: 'terezi', text: 'B3FOR3 TH1S MUS1C4L F3LLOW B3C4M3 4 B1G SHOT SYLPH OF SPAC3...'},
+    { speaker: 'terezi', text: 'TH3 B4LONEYSCHOL4RS C4LL3D H1M 4 H3RO OF T1M3! BUT 1T OBV1OUSLY W4SN\'T 4 NORM4L CL4SS!'},
+    { speaker: 'rose',   text: 'More experienced scholars of the fox might know of a different classpect for him.'}, 
+    { speaker: 'rose',   text: 'This outfit had a cheap mockery of morning light printed on it.'},
+    { speaker: 'terezi', text: 'GOOD LUCK W1TH TH1S ON3! 1T\'S 4 L1TTL3 OBSCUR3 >:]'},
+  ],
+  'sr_nic_of_time':            [
+    { speaker: 'terezi', text: 'TH1S ON3 SHOULD B3 34SY!' },
+    { speaker: 'terezi', text: 'FOR 4BSOLUT3LY NO PO1NTS... WHO W4S TH3 L4M3 34RTH 4CTOR TH4T JUN3 1NTRODUC3D VR1SK4 TO?!'},
+    { speaker: 'terezi', text: '4ND, 4S 4 BONUS... TH1S 4CTOR\'S F1RST N4ME C4N B3 US3D 1N SOM3 COMMON WORDPL4Y!'},
+    { speaker: 'terezi', text: 'TH3 FULL 1D1OM 1S TH3 S3CR3T!' },
+  ],
+  'sr_champion_of_pulchritude':[
+    { speaker: 'terezi', text: 'TH1S 1S ON3 1 H4V3N\'T H34RD 1N 4 WH1L3. SOUNDS L1K3 4 THROWB4CK.' },
+    { speaker: 'rose',   text: 'Indeed.' },
+    { speaker: 'rose',   text: 'This particular heroic title predates our adventures.' },
+    { speaker: 'rose',   text: 'You might find it in the last few pages of one of June or Jane\'s favorite works.' },
+    { speaker: 'terezi', text: 'SOUNDS L1K3 4 D3L1C1OUS H1NT FOR OUR L1TTL3 SCRY3R.' },
+    { speaker: 'rose',   text: 'They do call me a champion hint-giver.' },
+  ],
+  'sr_nogue_of_noid':          [
+    { speaker: 'terezi', text: 'OH WH4T TH3 H3LL 1S TH1S???'},
+    { speaker: 'rose',   text: 'Shall I elucidate our scryers on this one, Terezi?'},
+    { speaker: 'rose',   text: 'Unless a certain Strider wants to handle it?'},
+    { speaker: 'dave',   text: 'is it me am i certain strider'},
+    { speaker: 'rose',   text: 'Yes, Dave.'},
+    { speaker: 'rose',   text: 'You are the Strider in question.'},
+    { speaker: 'dave',   text: 'oh word ok'},
+    { speaker: 'dave',   text: 'so the hint is'},
+    { speaker: 'dave',   text: 'get this right'},
+    { speaker: 'dave',   text: 'imagine roxy'},
+    { speaker: 'dave',   text: 'but not'},
+    { speaker: 'dave',   text: 'some kind of noxy'},
+    { speaker: 'rose',   text: 'In case it\'s not clear, Dave is suggesting that you, the scryer, do some letter replacement on Roxy\'s title.'},
+    { speaker: 'terezi', text: 'BL4R!'},
+  ],
+  'sr_email_of_equius':        [
+    { speaker: 'terezi', text: 'HMM... TH1S S3CR3T 1S SURROUND3D BY A POCK3T OF D4RKNESS!'},
+    { speaker: 'terezi', text: 'NOT THAT 1T M4TT3RS TO M3! 1\'M BL1ND, R3M3MB3R?' },
+    { speaker: 'terezi', text: '1N 4NY CASE, THIS S3CR3T H4S TO DO W1TH TH3 MOST MYST3R1OUS M3MB3R OF OUR T3AM...'},
+    { speaker: 'terezi', text: 'P3RH4PS YOU COULD CH3CK OUT H1S PAG3 FOR CLU3S >:]'},
+    { speaker: 'terezi', text: 'OR B3TT3R YET'},
+    { speaker: 'terezi', text: 'TRY 4ND S3ND H1M 4N 3M41L! (H3H3H3H3)'},
+  ],
+  'sr_dave_of_guy':            [
+    { speaker: 'terezi', text: 'H3Y D4V3'},
+    { speaker: 'terezi', text: '1S TH1S R34L OR 4R3 YOU FUCK1NG W1TH M3?' },
+    { speaker: 'dave',   text: 'yeah its real' },
+    { speaker: 'dave',   text: 'its real because its my fault' },
+    { speaker: 'dave',   text: 'its something i called myself in a fit of rage against my immutable fate or whatever' },
+    { speaker: 'dave',   text: 'youll find this one quickly it has my name in it' },
+    { speaker: 'terezi', text: 'D1D YOU 3V3R S4Y TH1S TO M3?' },
+    { speaker: 'dave',   text: 'nope' },
+    { speaker: 'terezi', text: 'OK4Y TH3N!'},
+  ],
+  'sr_chump_of_shoosh': [
+    { speaker: 'terezi', text: '>:? OK WH4T 4M 1 R34D1NG H3R3? NO ON3 H4S 3V3R M3NT1ON3D TH1S TO M3!' },
+    { speaker: 'dave',   text: 'oh yeah im the perp here too' },
+    { speaker: 'dave',   text: 'ok so your hint for this one is that its something i called june one time' },
+    { speaker: 'dave',   text: 'good luck junior' },
+    { speaker: 'terezi', text: 'R34LLY, D4V3? UUUUGH.' },
+  ],
+  'sr_son_of_god':             [
+    { speaker: 'terezi', text: 'OH TH1S 1S 4 FUN ON3 >:]'},
+    { speaker: 'terezi', text: 'TH1S S3CR3T H4S SOM3TH1NG TO DO W1TH 34RTH HUM4N J3GUS!'},
+    { speaker: 'terezi', text: 'TH3Y SAY H3 1S 4 M4N OF M4NY 3P1TH3TS...'},
+    { speaker: 'terezi', text: 'SOM3TIM3S H3 1S C4LLED 4 "SON", OTH3R T1M3S 4 "PR1NC3".'},
+    { speaker: 'terezi', text: '1F TH3 N4M3 YOU TH1NK OF LOOKS L1K3 4 CL4SSP3CT TH3N 1T SHOULD WORK >:]'},
+  ],
+  'sr_myocdonotsteal':         [
+    { speaker: 'terezi', text: 'GROSS! TH1S S3CR3T SM3LLS OF S4CCH4R1N3 S3LF-1NDULG3NC3!!'},
+    { speaker: 'terezi', text: 'HOW COULD 4NYON3 GU3SS TH1S F41RLY???'},
+    { speaker: 'rose',   text: 'May I?'},
+    { speaker: 'rose',   text: 'I won\'t tell you the full name of the adventure, but I have surmised this much.'},
+    { speaker: 'rose',   text: 'The shortest search term for this one happens to be an abbreviation for a fighting style.'},
+    { speaker: 'rose',   text: 'These martial arts appeared in the Metal Gear series.'},
+    { speaker: 'terezi', text: 'S1NC3 WH3N DO YOU PL4Y M3TAL G34R???'},
+    { speaker: 'rose',   text: 'It was his fault.'},
+    { speaker: 'dave',   text: 'yeah i did a longplay of the game while rose broke it down philosophyways'},
+    { speaker: 'dave',   text: 'you shouldve been there'},
+    { speaker: 'terezi', text: 'OK TH1S T4NG3NT 1S GO1NG ON TOO LONG!'},
+    { speaker: 'terezi', text: '*TH3 M1GHTY PROGNOST1CATOR D1SM1SS3S H3R TWO COCONSP1R4TORS W1TH 4 WHOOSH!!*'},
+  ],
+  'visited_cherubs':           [
+    { speaker: 'terezi', text: 'D1D YOU KNOW YOU C4N 4CTUALLY CL1CK MOST T4GS TO GO TO A T4G PAGE?'},
+    { speaker: 'terezi', text: 'TH3R3\'S 4 T4G P4G3 FOR D3AR, SW33T C4LL13!'},
+    { speaker: 'terezi', text: 'BUT 1T H1D3S 4 S3CR3T!'},
+    { speaker: 'terezi', text: 'TH4T\'S 4LL 1\'LL S4Y >:]'},
+  ],
+  'logo_spammed':              [
+    { speaker: 'terezi', text: 'TH1S 1S 4N 34SY ON3!'},
+    { speaker: 'terezi', text: 'TH3R3\'S 4N 1M4G3 OF SOM3 JUJU 1N TH3 H34D3R!'},
+    { speaker: 'rose',   text: 'While it might not be identical to any "legendary treasure", it still has similar properties.'},
+    { speaker: 'rose',   text: 'It might not hurt to try reaching in and out of it several times.'},
+    { speaker: 'terezi', text: 'TH4NKS ROS3.'},
+  ],
+};
+
+/* Buffers between secret entries */
+const BUFFER_SEQUENCES = [
+  // --- quick one-liners --------------------------------------
+  [{ speaker: 'terezi', text: 'H3H3H3...' }],
+  [{ speaker: 'terezi', text: 'OK4Y, N3XT ON3.' }],
+  [{ speaker: 'terezi', text: 'MOV1NG ON!' }],
+  [{ speaker: 'terezi', text: 'OH, OH! 1 H4V3 4NOTH3R ON3.' }],
+  [{ speaker: 'terezi', text: 'WH4T 3LS3, WH4T 3LS3...' }],
+  [{ speaker: 'terezi', text: '>:]' }],
+  [{ speaker: 'terezi', text: 'SH4LL W3 PROC33D?' }],
+  [{ speaker: 'terezi', text: 'OH, YOU\'R3 GONN4 LOV3 TH1S N3XT ON3.' }],
+
+  // --- Dave/Rose solos -------------------------
+  [{ speaker: 'dave', text: 'still here?' }],
+  [{ speaker: 'rose', text: 'I remain available for consultation.' }],
+  [{ speaker: 'dave', text: 'homie if youre still reading these i owe you a soda' }],
+
+  // --- two-beat  ------------------------------------
+  [
+    { speaker: 'terezi', text: 'SORRY, 1 N33D 4 BR34TH3R 4FT3R TH4T ON3.' },
+    { speaker: 'terezi', text: '...OK4Y 1\'M R34DY.' },
+  ],
+  [
+    { speaker: 'dave',   text: 'how many more of these do we have' },
+    { speaker: 'terezi', text: 'TH4T 1S P4RT OF TH3 FUN D4V3! >:]' },
+  ],
+  [
+    { speaker: 'rose',   text: 'Shall we continue?' },
+    { speaker: 'terezi', text: 'OBV1OUSLY!' },
+  ],
+  [
+    { speaker: 'terezi', text: 'WH4T\'S N3XT ON TH3 L1ST...' },
+    { speaker: 'terezi', text: 'OH THIS ON3.' },
+  ],
+  [
+    { speaker: 'dave',   text: 'is the next secret my fault' },
+    { speaker: 'terezi', text: 'HM... L3T M3 CH3CK.' },
+  ],
+
+  // --- three-beat ----------------------------------
+  [
+    { speaker: 'terezi', text: 'OK, N3XT H1NT.' },
+    { speaker: 'dave',   text: 'oh thank god i was starting to think we were done' },
+    { speaker: 'terezi', text: 'W3 4R3 N3V3R DON3, D4V3.' },
+  ],
+  [
+    { speaker: 'terezi', text: 'WH4T\'S TH3 HOLDUP?' },
+    { speaker: 'rose',   text: 'A moment. I\'m consulting my notes.' },
+    { speaker: 'terezi', text: 'OH, SH3 H4S NOT3S! F4NCY.' },
+  ],
+  [
+    { speaker: 'terezi', text: 'HMMMM...' },
+    { speaker: 'dave',   text: 'uh oh thats her thinking noise' },
+    { speaker: 'terezi', text: 'SHOOSH, YOU!!!' },
+  ],
+  [
+    { speaker: 'dave',   text: 'ok so what are we on now' },
+    { speaker: 'terezi', text: 'K33P UP D4V3!!' },
+    { speaker: 'dave',   text: 'i am literally keeping up i just asked a question' },
+  ],
+  [
+    { speaker: 'terezi', text: '1S 1T JUST M3 OR 4R3 TH3R3 4 LOT OF TH3S3' },
+    { speaker: 'rose',   text: 'It is not just you.' },
+    { speaker: 'dave',   text: 'whoever made these secrets isnt top notch in the brevity department' },
+  ],
+  [
+    { speaker: 'rose',   text: 'The next item seems to warrant a measured preamble.' },
+    { speaker: 'terezi', text: 'OR W3 COULD JUST S4Y 1T.' },
+    { speaker: 'rose',   text: 'Fine.' },
+  ],
+
+  // --- really long ones -------------------------------
+  [
+    { speaker: 'terezi', text: '1\'M GO1NG TO H4V3 4 S1P OF W4T3R.' },
+    { speaker: 'terezi', text: '*SLUUUURP*' },
+    { speaker: 'dave',   text: 'dude is there chalk in your water' },
+    { speaker: 'dave',   text: 'oh theres totally chalk in your water what the fuck' },
+    { speaker: 'dave',   text: 'gross'},
+    { speaker: 'terezi', text: '>:]' },
+  ],
+  [
+    { speaker: 'dave',   text: 'hey quick question' },
+    { speaker: 'terezi', text: 'YUP?' },
+    { speaker: 'dave',   text: 'are any of these about me being a cool dude' },
+    { speaker: 'terezi', text: 'NO.' },
+    { speaker: 'dave',   text: 'dang' },
+  ],
+];
+
+const SECRET_GROUPS = [
+  { id: 'sr_mutt_of_slop',           keys: ['sr_mutt_of_slop'] },
+  { id: 'sr_waste_of_space',         keys: ['sr_waste_of_space'] },
+  { id: 'sr_douche_of_tears',        keys: ['sr_douche_of_tears'] },
+  { id: 'sr_gent_of_piss',           keys: ['sr_gent_of_piss'] },
+  { id: 'sr_trash_of_time',          keys: ['sr_trash_of_time'] },
+  { id: 'sr_nic_of_time',            keys: ['sr_nic_of_time'] },
+  { id: 'sr_champion_of_pulchritude',keys: ['sr_champion_of_pulchritude'] },
+  { id: 'sr_nogue_of_noid',          keys: ['sr_nogue_of_noid'] },
+  { id: 'sr_email_of_equius',        keys: ['sr_email_of_equius'] },
+  { id: 'sr_dave_of_guy',            keys: ['sr_dave_of_guy'] },
+  { id: 'sr_chump_of_shoosh',        keys: ['sr_chump_of_shoosh'] },
+  { id: 'sr_son_of_god',             keys: ['sr_son_of_god'] },
+  { id: 'sr_myocdonotsteal',         keys: ['sr_myocdonotsteal', 'visited_oc_session'] },
+  { id: 'visited_cherubs',           keys: ['visited_cherubs'] },
+  { id: 'logo_spammed',              keys: ['logo_spammed'] },
+];
+
+const OPENING_DEFAULT = {
+  speaker: 'terezi',
+  text: 'W3LCOM3 TO MY S3CR3T H3LP D3SK!! TH3 S33R 1S 1N.',
+};
+const OPENING_FROM_PLAYGROUND = {
+  speaker: 'terezi',
+  text: "1F YOU C4N'T 4CC3SS TH4T P4G3 Y3T, 1T M34NS YOU'R3 NOT SUPPOS3D TO, DUMMY! YOU N33D TO B3 MOR3 P3RC3PT1V3 >:]",
+};
+const ALL_FOUND_LINE = {
+  speaker: 'terezi',
+  text: "1 C4N'T DO 4NYTH1NG TO H3LP YOU!!! BUT M4YB3 TRY 4G41N L4T3R WH3N TH3R3 4R3 N3W S3CR3TS FOR YOU TO F1ND.",
+};
+const CLOSING_LINE = {
+  speaker: 'terezi',
+  text: "TH4T'S 4LL 1 H4V3 FOR NOW!! COM3 B4CK WH3N YOU'V3 FOUND MOR3 OF TH3 ON3S 1 JUST M3NT1ON3D >:]",
+};
+
+// Buffer picker
+function makeBufferPicker() {
+  const shortPool = BUFFER_SEQUENCES.filter(s => s.length === 1);
+  const longPool  = BUFFER_SEQUENCES.filter(s => s.length  >  1);
+  const usedLong  = new Set();
+  const pickFrom  = (pool) => pool[Math.floor(Math.random() * pool.length)];
+  return function pickBufferSequence() {
+    const longsLeft = longPool.filter(s => !usedLong.has(s));
+    // ~50% chance of a longer character beat when any are still
+    // available; otherwise fall back to a quick one-liner.
+    if (longsLeft.length > 0 && Math.random() < 0.5) {
+      const pick = pickFrom(longsLeft);
+      usedLong.add(pick);
+      return pick;
+    }
+    return pickFrom(shortPool);
+  };
+}
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildDialogue({ fromPlayground, unlockedSet }) {
+  const script = [];
+  script.push(fromPlayground ? OPENING_FROM_PLAYGROUND : OPENING_DEFAULT);
+
+  const stillOpen = SECRET_GROUPS.filter(g => !g.keys.some(k => unlockedSet.has(k)));
+  if (stillOpen.length === 0) {
+    script.push(ALL_FOUND_LINE);
+    return script;
+  }
+
+  // Shuffle the hint sequences.
+  const openWithHints = shuffle(
+    stillOpen.filter(g => (HINTS_BY_SECRET[g.id] || []).length > 0)
+  );
+  const pickBuffer = makeBufferPicker();
+  openWithHints.forEach((g, i) => {
+    if (i > 0) pickBuffer().forEach(beat => script.push(beat));
+    HINTS_BY_SECRET[g.id].forEach(beat => script.push(beat));
+  });
+
+  if (openWithHints.length === 0) {
+    script.push({
+      speaker: 'terezi',
+      text: '... HUH. 1 DON\'T 4CTU4LLY H4V3 4NY H1NTS WR1TT3N FOR TH3 ON3S YOU H4V3N\'T FOUND Y3T. M4YB3 CH3CK B4CK SOON.',
+    });
+  }
+
+  script.push(CLOSING_LINE);
+  return script;
+}
+
+/* --------------------------------------------------------------
+   HINT UI
+   -------------------------------------------------------------- */
+const HintsPage = () => {
+  const fromPlayground = React.useMemo(() => {
+    try { return new URLSearchParams(window.location.search).get('from') === 'playground'; }
+    catch { return false; }
+  }, []);
+  const unlockedSet = React.useMemo(() => {
+    try { return new Set(JSON.parse(localStorage.getItem('cc_unlocks') || '[]')); }
+    catch { return new Set(); }
+  }, []);
+  const script = React.useMemo(
+    () => buildDialogue({ fromPlayground, unlockedSet }),
+    [fromPlayground, unlockedSet]
+  );
+  const [idx, setIdx] = React.useState(0);
+  const beat    = script[idx] || OPENING_DEFAULT;
+  const atEnd   = idx >= script.length - 1;
+  const advance = () => { if (!atEnd) setIdx(idx + 1); };
+
+  React.useEffect(() => {
+    const onKey = (e) => {
+      if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); advance(); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [idx, atEnd]);
+
+  const isDave = beat.speaker === 'dave';
+  const isRose = beat.speaker === 'rose';
+  const sp     = SPEAKERS[beat.speaker] || SPEAKERS.terezi;
+
+  return (
+    <div className="space-y-4">
+      <h1 className="font-typostuck-title text-center">Hints</h1>
+      <div className="hint-stage">
+        <div className="hint-art">
+          <div className="hint-libra">
+            <img src="./images/special/biglibra.gif" alt="Terezi"/>
+          </div>
+          <div className={'hint-sidebubble dave' + (isDave ? '' : ' inactive')}>
+            <img src={SPEAKERS.dave.bubbleImg} alt="Dave speech bubble"/>
+          </div>
+          <div className={'hint-sidebubble rose' + (isRose ? '' : ' inactive')}>
+            <img src={SPEAKERS.rose.bubbleImg} alt="Rose speech bubble"/>
+          </div>
+        </div>
+
+        <div className={'hint-bubble ' + beat.speaker}>
+          <div className="hint-speaker">{sp.label}</div>
+          <div className="hint-text">{beat.text}</div>
+        </div>
+      </div>
+
+      <div className="hint-controls">
+        {atEnd ? (
+          <div className="hint-closing">
+            -- <span className="is">intrepidScryer [IS]</span> ceased pestering{' '}
+            <span className="gc">gallowsCalibrator [GC]</span> --
+          </div>
+        ) : (
+          <a className="hint-advance" onClick={advance} role="button" tabIndex={0}>
+            ==&gt;
+          </a>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const App = () => {
+  const handleNavigate = (path) => { window.location.href = `./index.html#${path}`; };
+  return (
+    <div style={{ backgroundColor: defaultTheme.bg, minHeight: '100vh' }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme}/>
+      <div className="px-3 sm:px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div style={{
+            backgroundColor: '#eeeeee',           /* matches biglibra.gif's own bg */
+            color: defaultTheme.textColor,
+            padding: '20px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+            border: `2px solid ${defaultTheme.accentBg}`,
+          }}>
+            <HintsPage/>
+          </div>
+          <Footer theme={defaultTheme}/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

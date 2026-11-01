@@ -8,14 +8,16 @@ Inspired by *Homestuck* by Andrew Hussie.
 
 ## Most Recent Updates
 
-Fresh Blood (10/13/2026), Hotfix 1 (10/30/2026):
+Fresh Blood (10/13/2026), Hotfix 1 (10/30/2026), Hotfix 2 (11/1/2026):
 
-- Recentered the Blood emblem inside its disc (the gash now sits at the disc's center instead of the bbox center)
+- **Glyph Designer Playground** (`playground.html`)
+- **Hints page** (`hints.html`) — Terezi helps you find secrets!
+- **Resources page** (`resources.html`) — bulk-downloadable asset library for aspect symbols/colors, class emblems, rings, moons, logos, figures, and classpects.
+- **Searchbar** now has reference searches.
+- **Settings → Secrets** now has some new UI.
+- Recentered the Blood emblem inside its disc
 - More "pester" messages.
-- Added a hidden ring-color option, unlocked at 100% secrets
-- Updated characters: Del'fi (Seer of Life) added to canon, Equius marked Meat-exclusive on the Beyond Canon page
-- Fixed exported glyph PNGs to always render at a fixed 1024px, independent of device display size
-- Fixed jagged class icons on the Rotation graph
+- Added a hidden ring-color option, unlocked at 100% completion
 - Made Kankri Buggier
 
 Glyphs Galore (8/24/2026):
@@ -36,8 +38,9 @@ SEO Suffering (3/12/2026):
 
 ### Hotfixes
 
-- Hotfitx 1 (10/30/2026) -- Image Format Expansion + Resources page
-- Hotfix 2 (Planned) -- Merch Merch Merch
+- Hotfix 1 (10/30/2026) -- Image Format Expansion + Resources page
+- Hotfix 2 (11/1/2026) -- Playground + Hints page
+- Hotfix 3 (Planned) -- Merch Merch Merch
 
 ### Past Updates
 
@@ -77,7 +80,10 @@ You can also browse:
 ├── rungs.html                  # Rungs notes and views
 ├── faq.html                    # FAQ + Glossary
 ├── credits.html                # Credits
-├── settings.html               # Sitewide settings (Polarity, glyph style, Secrets tracker)
+├── settings.html               # Sitewide settings (Polarity, glyph style, Secrets tracker + Playground reward)
+├── resources.html              # Downloadable asset library
+├── playground.html             # Glyph Designer Playground (unlocked at 50% secrets)
+├── hints.html                  # Terezi's help desk — hints for un-found secrets
 │
 ├── components/                 # Shared React components
 │

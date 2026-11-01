@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Playground - The Classpect Connector</title>
+  <meta name="description" content="A playground for rendering glyphs." />
+  <link rel="canonical" href="https://cjroshi.github.io/the-classpect-connector/playground.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Playground - The Classpect Connector" />
+  <meta property="og:description" content="A playground for rendering glyphs." />
+  <meta property="og:url" content="https://cjroshi.github.io/the-classpect-connector/playground.html" />
+  <meta property="og:image" content="https://cjroshi.github.io/the-classpect-connector/images/logos/connector/regular.png" />
+  <meta property="og:site_name" content="The Classpect Connector" />
+  <link rel="icon" type="image/png" href="./images/logos/connector/regular.png" />
+
+  <!-- Playground is gated behind 50% secret completion. -->
+  <script>
+    (function () {
+      try {
+        if (sessionStorage.getItem('cc_playground_bypass') === '1') return;
+        var SG = [
+          ['sr_mutt_of_slop'],['sr_waste_of_space'],['sr_douche_of_tears'],
+          ['sr_gent_of_piss'],['sr_trash_of_time'],['sr_nic_of_time'],
+          ['sr_champion_of_pulchritude'],['sr_nogue_of_noid'],
+          ['sr_email_of_equius'],['sr_dave_of_guy'],['sr_chump_of_shoosh'],
+          ['sr_son_of_god'],['sr_myocdonotsteal','visited_oc_session'],
+          ['visited_cherubs'],['logo_spammed']
+        ];
+        var set = new Set(JSON.parse(localStorage.getItem('cc_unlocks') || '[]'));
+        var found = SG.filter(function (g) { return g.some(function (k) { return set.has(k); }); }).length;
+        var need  = Math.ceil(SG.length / 2);
+        if (found < need) {
+          window.location.replace('./hints.html?from=playground');
+        }
+      } catch (e) { /* fall through — show the page if storage is broken */ }
+    })();
+  </script>
+
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <link rel="stylesheet" href="./components/mobile.css">
+
+  <script type="text/babel" src="./components/constants.js"></script>
+  <script type="text/babel" src="./components/settings.js"></script>
+  <script type="text/babel" src="./components/utility-functions.js"></script>
+  <script type="text/babel" src="./components/header.js"></script>
+  <script type="text/babel" src="./components/footer.js"></script>
+
+  <style>
+    @font-face { font-family: 'Typostuck'; src: url('./fonts/TYPOSTUCK.ttf') format('truetype'); }
+    .font-courier { font-family: 'Courier New', monospace; }
+    .font-courier-bold { font-family: 'Courier New', monospace; font-weight: bold; }
+    .font-typostuck { font-family: 'Typostuck', 'Courier New', monospace; font-size: 1.25rem; }
+    .font-typostuck-title { font-family: 'Typostuck', 'Courier New', monospace; font-size: 2.5rem; }
+    .font-typostuck-header { font-family: 'Typostuck', 'Courier New', monospace; font-size: 1.75rem; }
+
+    .pg-section {
+      border: 1px solid #a0a0a0; border-radius: 6px;
+      background: #ebebeb; padding: 10px 12px; margin-bottom: 12px;
+      font-family: 'Courier New', monospace; font-size: 0.85rem;
+    }
+    .pg-section-title {
+      font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .pg-chip-row { display: flex; flex-wrap: wrap; gap: 4px; }
+    /* Fixed-column grid variant for the Class/Aspect chip pickers. */
+    .pg-chip-grid {
+      display: grid;
+      gap: 4px;
+      grid-template-columns: repeat(var(--pg-cols, 7), minmax(0, 1fr));
+    }
+    @media (max-width: 540px) {
+      .pg-chip-grid {
+        grid-template-columns: repeat(var(--pg-cols-mobile, 4), minmax(0, 1fr));
+      }
+    }
+    .pg-chip {
+      padding: 4px 9px; border: 1px solid #999; border-radius: 999px;
+      background: #fafafa; cursor: pointer; user-select: none;
+      font-size: 0.75rem;
+      text-align: center;
+    }
+    .pg-chip:hover { background: #e5e5e5; }
+    .pg-chip.active { background: #333; color: #fff; border-color: #000; }
+
+    /* Color palette grid — 12 columns, each chip paints its color
+       when active so the user sees the exact hex going into the ring. */
+    .pg-palette {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 3px;
+    }
+    @media (max-width: 540px) {
+      .pg-palette { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    }
+    .pg-palette-group {
+      grid-column: 1 / -1;
+      font-size: 0.68rem; color: #4b5563;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      margin-top: 6px;
+    }
+    .pg-palette-group:first-child { margin-top: 0; }
+    .pg-swatch {
+      position: relative;
+      border: 1px solid #777; border-radius: 4px;
+      padding: 3px 2px;
+      font-size: 0.62rem; text-align: center;
+      background: #fafafa; cursor: pointer; user-select: none;
+      min-height: 24px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .pg-swatch:hover { outline: 2px solid #000; }
+    .pg-swatch.active { border-color: #000; font-weight: bold; }
+    .pg-swatch .ord {
+      position: absolute; top: 1px; right: 3px;
+      font-size: 0.55rem; opacity: 0.75;
+    }
+
+    .pg-preview {
+      background: #121314; border: 2px solid #a0a0a0; border-radius: 10px;
+      padding: 12px; display: flex; justify-content: center;
+    }
+    .pg-preview svg { max-width: 100%; height: auto; display: block; }
+
+    .pg-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+    .pg-row label { font-size: 0.78rem; }
+    .pg-input, .pg-select {
+      border: 1px solid #999; border-radius: 4px; padding: 3px 6px;
+      font-family: 'Courier New', monospace; font-size: 0.78rem;
+      background: #fff;
+    }
+    .pg-color { width: 36px; height: 24px; padding: 0; cursor: pointer; }
+
+    .pg-btn {
+      font-family: 'Courier New', monospace; font-size: 0.82rem;
+      padding: 5px 11px; border: 1px solid #999; background: #f0f0f0;
+      border-radius: 4px; cursor: pointer;
+    }
+    .pg-btn:hover:not(:disabled) { background: #e0e0e0; }
+    .pg-btn:disabled { opacity: 0.5; cursor: default; }
+    .pg-btn { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .pg-btn .pg-ic { display: inline-block; flex-shrink: 0; }
+    .pg-btn.copied { background: #c6ebc6; border-color: #2e8b2e; color: #113311; }
+    .pg-count { font-size: 0.72rem; opacity: 0.7; }
+
+    .pg-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+    @media (min-width: 1024px) {
+      .pg-grid { grid-template-columns: 1fr 380px; }
+    }
+    .pg-help { font-size: 0.78rem; color: #4b5563; margin-top: 6px; font-family: 'Courier New', monospace; line-height: 1.4; }
+
+    /* --- Mobile tuning --- */
+    @media (max-width: 1023px) {
+      .pg-grid > div:nth-child(2) {
+        order: -1;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: #d0d0d0;
+        padding: 6px 0 8px;
+        margin: -8px 0 4px;
+        box-shadow: 0 4px 6px -4px rgba(0,0,0,0.25);
+      }
+      .pg-preview { padding: 6px; max-height: 42vh; }
+      .pg-preview svg { max-height: 40vh; max-width: 100%; width: auto; }
+      .pg-section { padding: 8px 10px; }
+      .pg-swatch { min-height: 30px; font-size: 0.66rem; }
+      .pg-chip   { padding: 6px 10px; font-size: 0.78rem; }
+      .pg-select, .pg-input { padding: 5px 8px; font-size: 0.82rem; }
+      .pg-btn    { padding: 7px 13px; font-size: 0.86rem; flex: 1 1 auto; }
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const defaultTheme = {
+  bg: "#626262", contentBg: "#d0d0d0",
+  textColor: "#000000", accentBg: "#a0a0a0", isDark: false,
+};
+
+/* -------------------------------------------------------------------
+   CONSTANTS (mirrored from classpect-glyph.js — those live in a
+   script-scope const and aren't globally exposed).
+   ------------------------------------------------------------------- */
+// Extended-Zodiac palette — the "canonical" ring and backdrop colors.
+const EZ_FG = {
+  breath: '#47dff9', blood:  '#ba1016', doom:  '#000000', heart:  '#bd1864',
+  hope:   '#fdfdfd', life:   '#72eb34', light: '#f6fa4e', mind:   '#06ffc9',
+  rage:   '#9c4dad', space:  '#ffffff', time:  '#ff2106', void:   '#001957',
+};
+const EZ_BG = {
+  breath: '#4379e6', blood:  '#3e1601', doom:  '#306800', heart:  '#55142a',
+  hope:   '#ffde55', life:   '#a49787', light: '#f0840c', mind:   '#00923d',
+  rage:   '#520c61', space:  '#000000', time:  '#b70d0e', void:   '#104ea2',
+};
+// Sprite palette — Colors from e.g. sprites in the Ministrife.
+const SP_FG = {
+  breath: '#10e0ff', blood:  '#ba1915', doom:  '#000000', heart:  '#bd1864',
+  hope:   '#fdfdfd', life:   '#77d350', light: '#fff547', mind:   '#46fbc4',
+  rage:   '#9c4dad', space:  '#ffffff', time:  '#ff2106', void:   '#00164f',
+};
+const SP_BG = {
+  breath: '#0086eb', blood:  '#3d1909', doom:  '#20401f', heart:  '#6e0e2e',
+  hope:   '#ffe094', life:   '#ccc3b4', light: '#f98100', mind:   '#50b250',
+  rage:   '#391e71', space:  '#000000', time:  '#b70d0e', void:   '#033476',
+};
+// Back-compat aliases (older composer code still uses these names).
+const RING_COLORS = EZ_FG;
+const BG_COLORS   = EZ_BG;
+
+const OUTLINE_PRESETS = {
+  prospit: '#ffff01',
+  derse:   '#ff01fe',
+  neutral: '#808080',
+};
+
+// Flat palette for the ring-color picker. 
+const ASP_ORDER_PALETTE = ['breath','blood','life','doom','light','void','mind','heart','hope','rage','space','time'];
+// Palette overrides
+const FG_SWATCH_SWAP = { doom: true, void: true };   // aspect swatch uses backdrop color
+const BG_SWATCH_SWAP = { space: true };               // backdrop swatch uses aspect color
+const fgSwatch = (fg, bg, a) => (FG_SWATCH_SWAP[a] ? bg[a] : fg[a]);
+const bgSwatch = (fg, bg, a) => (BG_SWATCH_SWAP[a] ? fg[a] : bg[a]);
+
+// Moon palette — Prospit and Derse
+const MOON_PALETTE = [
+  { id: 'prospit',       label: 'prospit',    group: 'EZ · moons',     color: '#ffff01' },
+  { id: 'prospit-ez-bg', label: 'prospit bg', group: 'EZ · moons',     color: '#e49700' },
+  { id: 'derse',         label: 'derse',      group: 'EZ · moons',     color: '#ff01fe' },
+  { id: 'derse-ez-bg',   label: 'derse bg',   group: 'EZ · moons',     color: '#9700e4' },
+  { id: 'prospit-sp',    label: 'prospit',    group: 'Sprite · moons', color: '#ffffe0' },
+  { id: 'prospit-sp-bg', label: 'prospit bg', group: 'Sprite · moons', color: '#ffe134' },
+  { id: 'derse-sp',      label: 'derse',      group: 'Sprite · moons', color: '#f191ff' },
+  { id: 'derse-sp-bg',   label: 'derse bg',   group: 'Sprite · moons', color: '#e000ff' },
+];
+const RING_PALETTE = [
+  ...ASP_ORDER_PALETTE.map((a) => ({ id: `ez-fg-${a}`, label: a, group: 'EZ · aspect',       color: fgSwatch(EZ_FG, EZ_BG, a) })),
+  ...ASP_ORDER_PALETTE.map((a) => ({ id: `sp-fg-${a}`, label: a, group: 'Sprite · aspect',   color: fgSwatch(SP_FG, SP_BG, a) })),
+  ...ASP_ORDER_PALETTE.map((a) => ({ id: `ez-bg-${a}`, label: a, group: 'EZ · backdrop',     color: bgSwatch(EZ_FG, EZ_BG, a) })),
+  ...ASP_ORDER_PALETTE.map((a) => ({ id: `sp-bg-${a}`, label: a, group: 'Sprite · backdrop', color: bgSwatch(SP_FG, SP_BG, a) })),
+  ...MOON_PALETTE,
+];
+const RING_PALETTE_BY_ID = Object.fromEntries(RING_PALETTE.map((p) => [p.id, p]));
+// Helper: for an entry on a given aspect, return the matching back/front hex
+// so the inner-disc BG can be chosen alongside the symbol color scheme.
+function pickBg(aspect, source) {
+  const tbl = source === 'sprite' ? SP_BG : EZ_BG;
+  return tbl[aspect.toLowerCase()] || '#000000';
+}
+
+const CLASS_ORDER  = Object.keys(classesNumeric);
+const ASPECT_ORDER = Object.keys(aspectsNumeric);
+const MAX_CLASSES = 12;
+const MAX_ASPECTS = 12;
+const MAX_RING_COLORS = 24;
+
+// Choose a foreground text color (black or white) that reads clearly
+// against the given hex background.
+function textOn(hex) {
+  const n = parseInt(String(hex || '').replace('#',''), 16) || 0;
+  const r = (n >> 16) & 0xff, g = (n >> 8) & 0xff, b = n & 0xff;
+  // Rec. 709 luma — matches the sRGB perception reasonably well.
+  const y = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return y > 150 ? '#000000' : '#ffffff';
+}
+
+/* -------------------------------------------------------------------
+   ASSET LOADERS — fetch SVG text once per asset, parse viewBox, cache.
+   ------------------------------------------------------------------- */
+const ringTextCache = {};
+async function loadRingText(cls) {
+  const key = cls.toLowerCase();
+  if (ringTextCache[key]) return ringTextCache[key];
+  const resp = await fetch(`./images/classes/rings/${key}.svg`);
+  const text = await resp.text();
+  const doc  = new DOMParser().parseFromString(text, 'image/svg+xml');
+  const svg  = doc.documentElement;
+  svg.querySelectorAll('style').forEach((s) => s.remove());
+  const vb = svg.getAttribute('viewBox');
+  let vbX = 0, vbY = 0, vbW = 100, vbH = 100;
+  if (vb) {
+    const p = vb.split(/[\s,]+/).map(Number);
+    if (p.length === 4) [vbX, vbY, vbW, vbH] = p;
+  }
+  const SHAPES = 'path, ellipse, circle, rect, polygon, polyline, line';
+  svg.querySelectorAll(SHAPES).forEach((s) => {
+    s.removeAttribute('class'); s.removeAttribute('style');
+  });
+  const ser = new XMLSerializer();
+  const inner = Array.from(svg.childNodes)
+    .map((n) => n.nodeType === 1 ? ser.serializeToString(n) : '')
+    .join('');
+  const result = { inner, vbX, vbY, vbW, vbH };
+  ringTextCache[key] = result;
+  return result;
+}
+
+const aspectAssetCache = {};
+async function loadAspectAsset(asp) {
+  const key = asp.toLowerCase();
+  if (aspectAssetCache[key]) return aspectAssetCache[key];
+  const url = `./images/aspects/no-bg/${key}.svg`;
+  // Just fetch raw.
+  const resp = await fetch(url);
+  const text = await resp.text();
+  const dataUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(text);
+  const result = { dataUrl };
+  aspectAssetCache[key] = result;
+  return result;
+}
+
+/* -------------------------------------------------------------------
+   GEOMETRY HELPERS
+   ------------------------------------------------------------------- */
+const TAU = Math.PI * 2;
+// Convert "angle index around a circle" to an angle in radians, with
+// angle 0 = top (12 o'clock), going clockwise.
+const angAt = (i, n) => (-Math.PI / 2) + (TAU * i / n);
+
+/* Build an SVG path "d" string for a pie-slice bounded by two angles
+   and a radius, centered at (cx, cy). */
+function pieSlicePath(cx, cy, outerR, aStart, aEnd, innerR = 0) {
+  const span = aEnd - aStart;
+  if (span <= 0) return '';
+  const EPS = 1e-4;
+  if (span >= Math.PI * 2 - EPS) {
+    // Full circle / annulus — two half-arcs so the path actually closes.
+    if (innerR <= 0) {
+      return `M ${cx - outerR} ${cy} `
+           + `a ${outerR} ${outerR} 0 1 0 ${outerR * 2} 0 `
+           + `a ${outerR} ${outerR} 0 1 0 ${-outerR * 2} 0 Z`;
+    }
+    return `M ${cx - outerR} ${cy} `
+         + `a ${outerR} ${outerR} 0 1 0 ${outerR * 2} 0 `
+         + `a ${outerR} ${outerR} 0 1 0 ${-outerR * 2} 0 Z `
+         + `M ${cx - innerR} ${cy} `
+         + `a ${innerR} ${innerR} 0 1 1 ${innerR * 2} 0 `
+         + `a ${innerR} ${innerR} 0 1 1 ${-innerR * 2} 0 Z`;
+  }
+  const large = span > Math.PI ? 1 : 0;
+  const x0o = cx + outerR * Math.cos(aStart);
+  const y0o = cy + outerR * Math.sin(aStart);
+  const x1o = cx + outerR * Math.cos(aEnd);
+  const y1o = cy + outerR * Math.sin(aEnd);
+  if (innerR <= 0) {
+    return `M ${cx} ${cy} L ${x0o} ${y0o} A ${outerR} ${outerR} 0 ${large} 1 ${x1o} ${y1o} Z`;
+  }
+  const x0i = cx + innerR * Math.cos(aEnd);
+  const y0i = cy + innerR * Math.sin(aEnd);
+  const x1i = cx + innerR * Math.cos(aStart);
+  const y1i = cy + innerR * Math.sin(aStart);
+  return `M ${x0o} ${y0o} A ${outerR} ${outerR} 0 ${large} 1 ${x1o} ${y1o} `
+       + `L ${x0i} ${y0i} A ${innerR} ${innerR} 0 ${large} 0 ${x1i} ${y1i} Z`;
+}
+
+const esc = (v) => String(v).replace(/[&<>"']/g, (c) => (
+  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+));
+
+/* -------------------------------------------------------------------
+   COLOR HELPERS
+   ------------------------------------------------------------------- */
+function hexToRgb(h) {
+  h = String(h || '').replace('#','');
+  if (h.length === 3) h = h.split('').map(c=>c+c).join('');
+  const n = parseInt(h, 16) || 0;
+  return { r: (n >> 16) & 0xff, g: (n >> 8) & 0xff, b: n & 0xff };
+}
+function rgbToHex(r, g, b) {
+  const h = (n) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2,'0');
+  return '#' + h(r) + h(g) + h(b);
+}
+function lerpColorHex(c1Hex, c2Hex, t) {
+  const a = hexToRgb(c1Hex), b = hexToRgb(c2Hex);
+  return rgbToHex(a.r + (b.r - a.r) * t,
+                  a.g + (b.g - a.g) * t,
+                  a.b + (b.b - a.b) * t);
+}
+
+/* -------------------------------------------------------------------
+   COMPOSER
+
+   Pipeline (bottom → top):
+     1. Disc wedge backgrounds + inner-aspect symbols.
+     2. A ring-body MASK.
+     3. Outline HALO.
+     4. Color OVERLAY.
+
+   Controls:
+     classLayout: 'contiguous' — each class a single contiguous arc
+                  'alternating' — spokes assigned round-robin
+     colorBlend:  'hard' — outer-aspect slices with crisp boundaries
+                  'smooth' — angular interpolation between adjacent anchors
+   ------------------------------------------------------------------- */
+async function buildPlaygroundSvg({
+  classes, ringColors, innerAspects,
+  outlineColor, outlineThickness,
+  classLayout = 'contiguous',
+  colorBlend  = 'hard',
+  shading     = 'none',          // none | dark-inner | dark-outer
+  symbolSource = 'ez',           // ez | sprite — picks the disc BG table
+  outputSize,
+}) {
+  // Collapse empties to safe defaults so the preview always renders
+  // something when the user is mid-config.
+  if (!classes.length)      classes      = ['Prince'];
+  if (!ringColors.length)   ringColors   = ['ez-fg-space'];
+  if (!innerAspects.length) innerAspects = ['Space'];
+
+  const K = classes.length;
+  const M = ringColors.length;
+  const I = innerAspects.length;
+  // Resolve ring color IDs → hex strings used by the overlays.
+  const ringHexes = ringColors.map((id) => (RING_PALETTE_BY_ID[id] || { color: '#ffffff' }).color);
+
+  const CANVAS = outputSize;
+  const cx = CANVAS / 2, cy = CANVAS / 2;
+  // Ring OUTER radius uses most of the canvas; disc sits INSIDE the
+  // ring's hole. Each class ring's hole is ~0.46 of its viewBox radius,
+  // so disc < 0.46 * ringR leaves breathing room.
+  const HALO_PAD = Math.max(24, (outlineThickness || 0) * 6 + 20);
+  const ringR = (CANVAS / 2) - HALO_PAD;
+  // Ring body's inner edge sits at ~0.46 of ringR; disc at 0.47 slips
+  // a hair past that to hide the per-class jitter at the hub edge.
+  const discR = ringR * 0.47;
+
+  // Pre-load every unique asset.
+  const uniqueClasses = Array.from(new Set(classes));
+  const uniqueAsps    = Array.from(new Set(innerAspects));
+  const ringMap = {};
+  await Promise.all(uniqueClasses.map(async (c) => {
+    ringMap[c] = await loadRingText(c);
+  }));
+  const aspMap = {};
+  await Promise.all(uniqueAsps.map(async (a) => {
+    aspMap[a] = await loadAspectAsset(a);
+  }));
+
+  // --- Angular ranges ---
+  const SPOKE_COUNT = 24;
+  const SPOKE_STEP  = (Math.PI * 2) / SPOKE_COUNT;        // 15°
+  const SPOKE_BASE  = -Math.PI / 2 + SPOKE_STEP / 2;      // first midpoint, just past 12 o'clock
+  const innerRanges = Array.from({ length: I }, (_, k) => [angAt(k, I), angAt(k + 1, I)]);
+
+  // --- Class spoke assignments ---
+  function buildClassSubRanges() {
+    // Figure out which class owns each spoke.
+    const owner = new Array(SPOKE_COUNT);
+    if (classLayout === 'alternating') {
+      for (let n = 0; n < SPOKE_COUNT; n++) owner[n] = n % K;
+    } else {
+      // Contiguous — Bresenham distribution.
+      let next = 0;
+      for (let i = 0; i < K; i++) {
+        const end = Math.round(((i + 1) * SPOKE_COUNT) / K);
+        for (; next < end; next++) owner[next] = i;
+      }
+    }
+    // Collect sub-ranges per class, merging consecutive spokes.
+    const subs = Array.from({ length: K }, () => []);
+    for (let i = 0; i < K; i++) {
+      let runStart = -1;
+      for (let n = 0; n < SPOKE_COUNT; n++) {
+        if (owner[n] === i) {
+          if (runStart === -1) runStart = n;
+        } else if (runStart !== -1) {
+          subs[i].push([SPOKE_BASE + runStart * SPOKE_STEP,
+                        SPOKE_BASE + n        * SPOKE_STEP]);
+          runStart = -1;
+        }
+      }
+      if (runStart !== -1) {
+        subs[i].push([SPOKE_BASE + runStart     * SPOKE_STEP,
+                      SPOKE_BASE + SPOKE_COUNT  * SPOKE_STEP]);
+      }
+      // Wrap-merge: if the last sub-range ends at the circle's end AND
+      // this class also owns spoke 0, merge end-start into the first.
+      if (subs[i].length >= 2 && owner[0] === i && owner[SPOKE_COUNT - 1] === i) {
+        const last  = subs[i].pop();
+        const first = subs[i].shift();
+        subs[i].unshift([last[0], first[1] + Math.PI * 2]);
+      }
+    }
+    return subs;
+  }
+  const classSubRanges = buildClassSubRanges();
+
+  let defs = '';
+
+  // Inner-aspect wedge clips (only when 2+ inner aspects).
+  if (I > 1) {
+    innerRanges.forEach(([a0, a1], k) => {
+      const d = pieSlicePath(cx, cy, discR, a0, a1);
+      defs += `<clipPath id="inner-${k}"><path d="${d}"/></clipPath>`;
+    });
+  }
+
+  // Per-class spoke clips — used by the ring-body mask and by the ring
+  // body renderer. When K === 1 we skip the clip (full ring).
+  const classClipIds = classSubRanges.map((subs, i) => {
+    if (K === 1) return null;
+    const id = `cclip-${i}`;
+    const d = subs.map(([a, b]) =>
+      pieSlicePath(cx, cy, ringR * 1.08, a, b, 0)
+    ).join(' ');
+    defs += `<clipPath id="${id}"><path d="${d}"/></clipPath>`;
+    return id;
+  });
+
+  /* --- 2. Disc wedge backgrounds + 3. Inner aspect symbols --- */
+  const symSize = discR * 2 * 0.65;
+  const symX    = cx - symSize / 2;
+  const symY    = cy - symSize / 2;
+  let inner = '';
+  if (I === 1) {
+    // Fast path — full disc, full-size centered symbol.
+    const asp = innerAspects[0];
+    const bg = pickBg(asp, symbolSource);
+    inner += `<circle cx="${cx}" cy="${cy}" r="${discR}" fill="${esc(bg)}"/>`;
+    const data = aspMap[asp];
+    if (data) {
+      inner += `<image href="${esc(data.dataUrl)}" x="${symX}" y="${symY}" `;
+      inner += `width="${symSize}" height="${symSize}" preserveAspectRatio="xMidYMid meet"/>`;
+    }
+  } else {
+    // Multiple inner aspects — each wedge of the disc gets its own
+    // background color + its symbol clipped to its wedge.
+    innerRanges.forEach(([a0, a1], k) => {
+      const asp = innerAspects[k];
+      const bg  = pickBg(asp, symbolSource);
+      inner += `<path d="${pieSlicePath(cx, cy, discR, a0, a1)}" fill="${esc(bg)}"/>`;
+    });
+    innerRanges.forEach(([_, __], k) => {
+      const asp = innerAspects[k];
+      const data = aspMap[asp];
+      if (!data) return;
+      inner += `<g clip-path="url(#inner-${k})">`;
+      inner += `<image href="${esc(data.dataUrl)}" x="${symX}" y="${symY}" `;
+      inner += `width="${symSize}" height="${symSize}" preserveAspectRatio="xMidYMid meet"/>`;
+      inner += `</g>`;
+    });
+  }
+
+  /* --- Ring body mask --- */
+  const ringSize = ringR * 2;
+  const ringX    = cx - ringR;
+  const ringY    = cy - ringR;
+  function recolorRing(ringInner, fillColor) {
+    return ringInner.replace(/<(path|ellipse|circle|rect|polygon|polyline|line)\b([^>]*?)(\/?)>/gi,
+      (m, tag, attrs, slash) => {
+        const cleaned = attrs
+          .replace(/\sfill=(["'])[^"']*\1/gi, '')
+          .replace(/\sstroke=(["'])[^"']*\1/gi, '')
+          .replace(/\sstroke-width=(["'])[^"']*\1/gi, '');
+        return `<${tag}${cleaned} fill="${esc(fillColor)}"${slash}>`;
+      });
+  }
+  let maskBody = '';
+  classes.forEach((cls, i) => {
+    const r = ringMap[cls];
+    if (!r) return;
+    const whiteRing = recolorRing(r.inner, '#ffffff');
+    const clipId = classClipIds[i];
+    const open  = clipId ? `<g clip-path="url(#${clipId})">` : '';
+    const close = clipId ? '</g>' : '';
+    maskBody += open;
+    maskBody += `<svg x="${ringX}" y="${ringY}" width="${ringSize}" height="${ringSize}" `;
+    maskBody += `viewBox="${r.vbX} ${r.vbY} ${r.vbW} ${r.vbH}" preserveAspectRatio="xMidYMid meet">`;
+    maskBody += whiteRing;
+    maskBody += `</svg>${close}`;
+  });
+  defs += `<mask id="ring-mask" maskContentUnits="userSpaceOnUse" ` +
+          `x="0" y="0" width="${CANVAS}" height="${CANVAS}">` +
+          `<rect x="0" y="0" width="${CANVAS}" height="${CANVAS}" fill="black"/>` +
+          maskBody +
+          `</mask>`;
+
+  /* --- Color overlay --- */
+  const colorBand = (fill, extraA = 0) => {
+    const d = pieSlicePath(cx, cy, ringR * 1.1, extraA, extraA + Math.PI * 2 + 0.01, discR * 0.5);
+    return `<path d="${d}" fill="${esc(fill)}"/>`;
+  };
+  let overlay = '';
+  if (colorBlend === 'smooth' && M >= 2) {
+    // Anchors sit at the midpoint of each outer-aspect's even slice.
+    // Between adjacent anchors, interpolate linearly in RGB.
+    const SLICES = 720;                            // 0.5° per slice
+    const OVER = 0.0105;                           // ~0.6° in radians
+    const anchorStep = (Math.PI * 2) / M;
+    const colors = ringHexes;
+    const colorAt = (theta) => {
+      // Position relative to anchor 0 (first anchor at angAt(0,M)+step/2).
+      let t = theta - (-Math.PI / 2) - anchorStep / 2;
+      t = ((t % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+      const frac = t / anchorStep;
+      const idx  = Math.floor(frac);
+      const f    = frac - idx;
+      return lerpColorHex(colors[idx % M], colors[(idx + 1) % M], f);
+    };
+    for (let n = 0; n < SLICES; n++) {
+      const a0 = -Math.PI / 2 + (Math.PI * 2 * n)       / SLICES;
+      const a1 = -Math.PI / 2 + (Math.PI * 2 * (n + 1)) / SLICES;
+      const mid = (a0 + a1) / 2;
+      const d = pieSlicePath(cx, cy, ringR * 1.1, a0 - OVER, a1 + OVER, discR * 0.5);
+      overlay += `<path d="${d}" fill="${esc(colorAt(mid))}" shape-rendering="geometricPrecision"/>`;
+    }
+  } else {
+    // Hard slices — one path per selected ring color.
+    if (M === 1) {
+      overlay += colorBand(ringHexes[0]);
+    } else {
+      for (let j = 0; j < M; j++) {
+        const [a0, a1] = [angAt(j, M), angAt(j + 1, M)];
+        const d = pieSlicePath(cx, cy, ringR * 1.1, a0 - 0.001, a1 + 0.001, discR * 0.5);
+        overlay += `<path d="${d}" fill="${esc(ringHexes[j])}"/>`;
+      }
+    }
+  }
+  const colorLayer = `<g mask="url(#ring-mask)">${overlay}</g>`;
+
+  /* --- Shading overlay --- */
+  let shadingLayer = '';
+  if (shading === 'dark-inner' || shading === 'dark-outer') {
+    const DARK_ALPHA = 0.45;  // peak darkness
+    const dark = `rgba(0,0,0,${DARK_ALPHA})`;
+    const clear = `rgba(0,0,0,0)`;
+    const inner = shading === 'dark-inner' ? dark  : clear;
+    const outer = shading === 'dark-inner' ? clear : dark;
+    defs += `<radialGradient id="pg-shade" gradientUnits="userSpaceOnUse" ` +
+            `cx="${cx}" cy="${cy}" r="${ringR}" fx="${cx}" fy="${cy}">` +
+              `<stop offset="${(discR / ringR * 100).toFixed(2)}%" stop-color="${inner}"/>` +
+              `<stop offset="100%" stop-color="${outer}"/>` +
+            `</radialGradient>`;
+    shadingLayer =
+      `<g mask="url(#ring-mask)">` +
+        `<rect x="0" y="0" width="${CANVAS}" height="${CANVAS}" fill="url(#pg-shade)"/>` +
+      `</g>`;
+  }
+
+  /* --- Outline halo via alpha dilation --- */
+  let haloLayer = '';
+  if (outlineColor && outlineThickness > 0) {
+    // Dilation radius in canvas units; px is approximate relative to a
+    // 256-ish reference display size.
+    const rad = outlineThickness * 4;
+    const { r: R, g: G, b: B } = hexToRgb(outlineColor);
+    defs += `<filter id="halo-dilate" x="-10%" y="-10%" width="120%" height="120%" ` +
+            `filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse">` +
+            `<feMorphology operator="dilate" radius="${rad}" in="SourceAlpha" result="dil"/>` +
+            `<feComponentTransfer in="dil">` +
+              `<feFuncR type="linear" slope="0" intercept="${R / 255}"/>` +
+              `<feFuncG type="linear" slope="0" intercept="${G / 255}"/>` +
+              `<feFuncB type="linear" slope="0" intercept="${B / 255}"/>` +
+              `<feFuncA type="identity"/>` +
+            `</feComponentTransfer>` +
+          `</filter>`;
+    // The filter source is a rect masked to the ring body; dilation
+    // extends it outward in the outline color.
+    haloLayer =
+      `<g filter="url(#halo-dilate)">` +
+        `<g mask="url(#ring-mask)">` +
+          `<rect x="0" y="0" width="${CANVAS}" height="${CANVAS}" fill="#ffffff"/>` +
+        `</g>` +
+      `</g>`;
+  }
+
+  const svg =
+    `<?xml version="1.0" encoding="UTF-8"?>\n` +
+    `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ` +
+    `viewBox="0 0 ${CANVAS} ${CANVAS}" width="${CANVAS}" height="${CANVAS}">` +
+    `<defs>${defs}</defs>` +
+    inner +
+    haloLayer +
+    colorLayer +
+    shadingLayer +
+    `</svg>`;
+  return svg;
+}
+
+/* -------------------------------------------------------------------
+   REACT UI
+   ------------------------------------------------------------------- */
+const Chip = ({ label, active, onClick }) => (
+  <span className={'pg-chip' + (active ? ' active' : '')} onClick={onClick}>{label}</span>
+);
+
+// Tiny inline icons — stroke-based so they inherit button text color.
+const IconDice = () => (
+  <svg className="pg-ic" width="16" height="16" fill="none"
+       stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"
+       aria-hidden="true">
+    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+    <circle cx="8"  cy="8"  r="1" fill="currentColor"/>
+    <circle cx="16" cy="8"  r="1" fill="currentColor"/>
+    <circle cx="12" cy="12" r="1" fill="currentColor"/>
+    <circle cx="8"  cy="16" r="1" fill="currentColor"/>
+    <circle cx="16" cy="16" r="1" fill="currentColor"/>
+  </svg>
+);
+const IconTrash = () => (
+  <svg className="pg-ic" width="16" height="16" fill="none"
+       stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+       strokeLinejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+    <polyline points="3 6 5 6 21 6"/>
+    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+    <path d="M10 11v6"/><path d="M14 11v6"/>
+    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+  </svg>
+);
+const IconDownload = () => (
+  <svg className="pg-ic" width="16" height="16" fill="none"
+       stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+       strokeLinejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+    <polyline points="7 10 12 15 17 10"/>
+    <line x1="12" y1="15" x2="12" y2="3"/>
+  </svg>
+);
+const IconCopy = () => (
+  <svg className="pg-ic" width="16" height="16" fill="none"
+       stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+       strokeLinejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+  </svg>
+);
+const IconCheck = () => (
+  <svg className="pg-ic" width="16" height="16" fill="none"
+       stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+       strokeLinejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+    <polyline points="20 6 9 17 4 12"/>
+  </svg>
+);
+
+// Color-palette picker — grouped grid of swatches. Selected swatches
+// paint themselves in their actual color for visibility.
+const ColorPalette = ({ title, selected, onToggle, max, titleTip }) => {
+  // Build groups preserving order.
+  const groups = [];
+  const byGroup = new Map();
+  for (const entry of RING_PALETTE) {
+    if (!byGroup.has(entry.group)) {
+      byGroup.set(entry.group, []);
+      groups.push(entry.group);
+    }
+    byGroup.get(entry.group).push(entry);
+  }
+  return (
+    <div className="pg-section">
+      <div className="pg-section-title">
+        <span title={titleTip}>{title}</span>
+        <span className="pg-count">{selected.length}/{max}</span>
+      </div>
+      <div className="pg-palette">
+        {groups.map((g) => (
+          <React.Fragment key={g}>
+            <div className="pg-palette-group">{g}</div>
+            {byGroup.get(g).map((entry) => {
+              const idx = selected.indexOf(entry.id);
+              const isOn = idx !== -1;
+              const style = isOn
+                ? { background: entry.color, color: textOn(entry.color) }
+                : {};
+              return (
+                <div
+                  key={entry.id}
+                  className={'pg-swatch' + (isOn ? ' active' : '')}
+                  style={style}
+                  title={`${entry.label} · ${entry.group} · ${entry.color}`}
+                  onClick={() => {
+                    if (isOn) onToggle(selected.filter((o) => o !== entry.id));
+                    else if (selected.length < max) onToggle([...selected, entry.id]);
+                  }}>
+                  {entry.label}
+                  {isOn && <span className="ord">{idx + 1}</span>}
+                </div>
+              );
+            })}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const MultiPicker = ({ title, options, selected, onToggle, max, order, titleTip, cols = 7, mobileCols = 4 }) => {
+  // selected is an array (ordered — the user's selection order
+  // determines the slice order). Clicking an unselected chip appends
+  // it; clicking a selected chip removes it (unless it's the last).
+  return (
+    <div className="pg-section">
+      <div className="pg-section-title">
+        <span title={titleTip}>{title}</span>
+        <span className="pg-count">{selected.length}/{max}</span>
+      </div>
+      <div className="pg-chip-grid"
+           style={{ '--pg-cols': cols, '--pg-cols-mobile': mobileCols }}>
+        {options.map((opt) => {
+          const idx = selected.indexOf(opt);
+          const isOn = idx !== -1;
+          return (
+            <Chip
+              key={opt}
+              label={isOn ? `${opt} ${idx + 1}` : opt}
+              active={isOn}
+              onClick={() => {
+                if (isOn) onToggle(selected.filter((o) => o !== opt));
+                else if (selected.length < max) onToggle([...selected, opt]);
+              }}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+// Pick N random distinct entries from a list.
+function sampleN(arr, n) {
+  const copy = arr.slice();
+  const out = [];
+  for (let i = 0; i < n && copy.length; i++) {
+    const idx = Math.floor(Math.random() * copy.length);
+    out.push(copy.splice(idx, 1)[0]);
+  }
+  return out;
+}
+// Build a fresh "random classpect blend".
+function buildRandomConfig() {
+  const [c1, c2]  = sampleN(CLASS_ORDER, 2);
+  const [a1, a2]  = sampleN(ASPECT_ORDER, 2);
+  const source    = Math.random() < 0.5 ? 'ez' : 'sprite';
+  const layout    = Math.random() < 0.5 ? 'contiguous' : 'alternating';
+  const blend     = Math.random() < 0.5 ? 'hard' : 'smooth';
+  const prefix    = source === 'sprite' ? 'sp-fg' : 'ez-fg';
+  return {
+    classes:      [c1, c2],
+    ringColors:   [`${prefix}-${a1.toLowerCase()}`, `${prefix}-${a2.toLowerCase()}`],
+    innerAspects: [a1, a2],
+    symbolSource: source,
+    classLayout:  layout,
+    colorBlend:   blend,
+  };
+}
+// Baseline reset — no selections at all.
+const DEFAULT_CONFIG = {
+  classes:      [],
+  ringColors:   [],
+  innerAspects: [],
+  symbolSource: 'ez',
+  classLayout:  'contiguous',
+  colorBlend:   'hard',
+};
+
+const PlaygroundPage = () => {
+  // Lazy initializer so the FIRST render already shows random.
+  const initial = React.useRef(buildRandomConfig()).current;
+  const [classes,      setClasses]      = React.useState(initial.classes);
+  const [ringColors,   setRingColors]   = React.useState(initial.ringColors);
+  const [innerAspects, setInnerAspects] = React.useState(initial.innerAspects);
+  const [outlineMode,  setOutlineMode]  = React.useState('neutral');
+  const [customOutline, setCustomOutline] = React.useState('#000000');
+  const [outlineThickness, setOutlineThickness] = React.useState(1);
+  const [classLayout, setClassLayout] = React.useState(initial.classLayout);
+  const [colorBlend,  setColorBlend]  = React.useState(initial.colorBlend);
+  const [shading,     setShading]     = React.useState('none');
+  const [symbolSource, setSymbolSource] = React.useState(initial.symbolSource); // ez / sprite
+
+  const applyConfig = (cfg) => {
+    setClasses(cfg.classes);
+    setRingColors(cfg.ringColors);
+    setInnerAspects(cfg.innerAspects);
+    setSymbolSource(cfg.symbolSource);
+    setClassLayout(cfg.classLayout);
+    setColorBlend(cfg.colorBlend);
+  };
+  const randomize = () => applyConfig(buildRandomConfig());
+  const clearAll  = () => applyConfig(DEFAULT_CONFIG);
+
+  // Short-lived "Copied!" acknowledgement for the Copy button.
+  const [copyState, setCopyState] = React.useState('idle');  // idle | ok | err
+  const copyTimer = React.useRef(null);
+  const flashCopy = (state) => {
+    setCopyState(state);
+    if (copyTimer.current) clearTimeout(copyTimer.current);
+    copyTimer.current = setTimeout(() => setCopyState('idle'), 1500);
+  };
+
+  const outlineColor = outlineMode === 'off' ? null
+    : outlineMode === 'custom' ? customOutline
+    : OUTLINE_PRESETS[outlineMode];
+
+  const [svg, setSvg] = React.useState('');
+  const [building, setBuilding] = React.useState(false);
+  // Re-build whenever any control changes. Keep a stale-request guard
+  // so a slow fetch doesn't clobber a newer config.
+  const buildTokenRef = React.useRef(0);
+  React.useEffect(() => {
+    const token = ++buildTokenRef.current;
+    setBuilding(true);
+    (async () => {
+      try {
+        const result = await buildPlaygroundSvg({
+          classes, ringColors, innerAspects,
+          outlineColor, outlineThickness,
+          classLayout, colorBlend, shading, symbolSource,
+          outputSize: 1024,
+        });
+        if (buildTokenRef.current === token) setSvg(result);
+      } catch (e) {
+        console.error('playground compose failed', e);
+      } finally {
+        if (buildTokenRef.current === token) setBuilding(false);
+      }
+    })();
+  }, [classes, ringColors, innerAspects, outlineColor, outlineThickness, classLayout, colorBlend, shading, symbolSource]);
+
+  const downloadSvg = () => {
+    const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `playground-${classes.join('+')}--${ringColors.join('+')}--${innerAspects.join('+')}.svg`.toLowerCase();
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+  const downloadPng = async () => {
+    const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    try {
+      const img = new Image();
+      await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
+      const c = document.createElement('canvas');
+      c.width = 1024; c.height = 1024;
+      c.getContext('2d').drawImage(img, 0, 0, 1024, 1024);
+      c.toBlob((pngBlob) => {
+        const u = URL.createObjectURL(pngBlob);
+        const a = document.createElement('a');
+        a.href = u;
+        a.download = `playground-${classes.join('+')}--${ringColors.join('+')}--${innerAspects.join('+')}.png`.toLowerCase();
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(u);
+      }, 'image/png');
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  };
+  const copyPng = async () => {
+    const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    try {
+      const img = new Image();
+      await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
+      const c = document.createElement('canvas');
+      c.width = 1024; c.height = 1024;
+      c.getContext('2d').drawImage(img, 0, 0, 1024, 1024);
+      const pngBlob = await new Promise((r) => c.toBlob(r, 'image/png'));
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob })]);
+      flashCopy('ok');
+    } catch (e) {
+      console.error('copy failed', e);
+      flashCopy('err');
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <h1 className="font-typostuck-title text-center">Playground</h1>
+      <p className="font-courier text-center" style={{ color: '#4b5563', fontSize: '0.9rem' }}>
+        Freely design classpect glyphs! Combine classes, aspects, colors, and outlines to make your own unique glyphs.
+      </p>
+
+      <div className="pg-grid">
+        <div>
+          <MultiPicker title="Classes"
+                       titleTip="Which class rings are used to compose the glyph. Multiple classes split the ring into their respective shapes."
+                       options={CLASS_ORDER}
+                       selected={classes}
+                       onToggle={setClasses}
+                       max={MAX_CLASSES}
+                       cols={7} mobileCols={4}/>
+          <div className="pg-section">
+            <div className="pg-section-title">
+              <span title="How the class rings are placed around the circle.">Class layout</span>
+            </div>
+            <div className="pg-row">
+              <select className="pg-select" value={classLayout}
+                      onChange={(e) => setClassLayout(e.target.value)}
+                      title="Contiguous: each class has its own arc. Alternating: spokes assigned in the order chosen.">
+                <option value="contiguous" title="Each class has its own arc.">Contiguous blocks</option>
+                <option value="alternating" title="Spokes assigned in the order chosen.">Alternating spokes</option>
+              </select>
+            </div>
+          </div>
+
+          <ColorPalette title="Ring colors"
+                        titleTip="Palette of colors used for the class ring. Click a swatch to add."
+                        selected={ringColors}
+                        onToggle={setRingColors}
+                        max={MAX_RING_COLORS}/>
+          <div className="pg-section">
+            <div className="pg-section-title">
+              <span title="Blending settings and overlay effects for the ring colors.">Ring color settings</span>
+            </div>
+            <div className="pg-row">
+              <label title="Hard: crisp boundaries, like slicing a pie. Smooth: blending between adjacent colors.">Blend:</label>
+              <select className="pg-select" value={colorBlend}
+                      onChange={(e) => setColorBlend(e.target.value)}>
+                <option value="hard"   title="Each color fills an even pie slice; boundaries are crisp.">Hard slices</option>
+                <option value="smooth" title="Each color is an anchor and mixes evenly with neighbors.">Smooth blend</option>
+              </select>
+            </div>
+            <div className="pg-row">
+              <label title="Darkening overlay painted on top of the ring color, akin to Gradient / GradientR Color Settings.">Shading:</label>
+              <select className="pg-select" value={shading}
+                      onChange={(e) => setShading(e.target.value)}>
+                <option value="none"       title="No shading overlay.">None</option>
+                <option value="dark-inner" title="Dark at the inner edge, fading out toward the ring's outer edge.">Dark inner (Gradient)</option>
+                <option value="dark-outer" title="Dark at the outer edge, fading in from the inner edge.">Dark outer (GradientR)</option>
+              </select>
+            </div>
+          </div>
+
+          <MultiPicker title="Inner aspects"
+                       titleTip="Aspects used in the inner disc. Multiple aspects chop the disc into wedges."
+                       options={ASPECT_ORDER}
+                       selected={innerAspects}
+                       onToggle={setInnerAspects}
+                       max={MAX_ASPECTS}
+                       cols={6} mobileCols={4}/>
+          <div className="pg-section">
+            <div className="pg-section-title">
+              <span title="The source of the colors used for the inner disc.">Disc backdrop source</span>
+            </div>
+            <div className="pg-row">
+              <select className="pg-select" value={symbolSource}
+                      onChange={(e) => setSymbolSource(e.target.value)}>
+                <option value="ez"     title="Extended Zodiac backdrop colors.">Extended Zodiac</option>
+                <option value="sprite" title="Sprite backdrop colors.">Sprite</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="pg-section">
+            <div className="pg-section-title">
+              <span title="Settings for the outline of the glyph.">Outline</span>
+            </div>
+            <div className="pg-row">
+              <label>Mode:</label>
+              <select className="pg-select"
+                      value={outlineMode}
+                      onChange={(e) => setOutlineMode(e.target.value)}>
+                <option value="off"     title="No outline.">Off</option>
+                <option value="prospit" title="Prospit gold.">Prospit</option>
+                <option value="derse"   title="Derse magenta.">Derse</option>
+                <option value="neutral" title="Neutral mid-gray.">Neutral</option>
+                <option value="custom"  title="Pick any hex color.">Custom hex</option>
+              </select>
+              {outlineMode === 'custom' && (
+                <>
+                  <input type="color"
+                         className="pg-input pg-color"
+                         value={customOutline}
+                         onChange={(e) => setCustomOutline(e.target.value)}/>
+                  <input type="text"
+                         className="pg-input"
+                         value={customOutline}
+                         onChange={(e) => setCustomOutline(e.target.value)}
+                         style={{ width: '7em' }}/>
+                </>
+              )}
+            </div>
+            <div className="pg-row">
+              <label>Thickness:</label>
+              <input type="range" min="0" max="10" step="1"
+                     value={outlineThickness}
+                     onChange={(e) => setOutlineThickness(parseInt(e.target.value, 10))}
+                     disabled={outlineMode === 'off'}/>
+              <span className="pg-count">{outlineThickness}px</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div>
+          <div className="pg-preview"
+               dangerouslySetInnerHTML={{ __html: svg }}/>
+          <div className="pg-row" style={{ marginTop: 10, justifyContent: 'center', gap: 6, flexWrap: 'wrap' }}>
+            <button className="pg-btn" onClick={randomize}
+                    title="Generates a random clashpect of two classes and two aspects; also randomizes the class layout and blend mode..">
+              <IconDice/>Random
+            </button>
+            <button className="pg-btn" onClick={clearAll}
+                    title="Clear all selections.">
+              <IconTrash/>Clear
+            </button>
+          </div>
+          <div className="pg-row" style={{ marginTop: 6, justifyContent: 'center', gap: 6, flexWrap: 'wrap' }}>
+            <button className="pg-btn" onClick={downloadPng} disabled={!svg || building}
+                    title="Download the current glyph as a 1024×1024 PNG.">
+              <IconDownload/>Save PNG
+            </button>
+            <button className="pg-btn" onClick={downloadSvg} disabled={!svg || building}
+                    title="Download the current glyph as a vector SVG.">
+              <IconDownload/>Save SVG
+            </button>
+            <button className={'pg-btn' + (copyState === 'ok' ? ' copied' : '')}
+                    onClick={copyPng} disabled={!svg || building}
+                    title="Copy the current glyph to the clipboard as a PNG.">
+              {copyState === 'ok'  && <><IconCheck/>Copied!</>}
+              {copyState === 'err' && <><IconCopy/>Copy failed</>}
+              {copyState === 'idle' && <><IconCopy/>Copy</>}
+            </button>
+            {building && <span className="pg-count">rendering…</span>}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const App = () => {
+  const handleNavigate = (path) => {
+    window.location.href = `./index.html#${path}`;
+  };
+  return (
+    <div style={{ backgroundColor: defaultTheme.bg, minHeight: '100vh' }}>
+      <Header onNavigate={handleNavigate} theme={defaultTheme}/>
+      <div className="px-3 sm:px-6 pb-6">
+        <div className="max-w-6xl mx-auto">
+          <div style={{
+            backgroundColor: defaultTheme.contentBg,
+            color: defaultTheme.textColor,
+            padding: '20px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+            border: `2px solid ${defaultTheme.accentBg}`,
+          }}>
+            <PlaygroundPage/>
+          </div>
+          <Footer theme={defaultTheme}/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
