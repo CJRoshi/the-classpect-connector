@@ -18,6 +18,7 @@
   <script type="text/babel" src="./components/settings.js"></script>
   <script type="text/babel" src="./components/utility-functions.js"></script>
   <script type="text/babel" src="./components/header.js"></script>
+  <script type="text/babel" src="./components/searchbar.js"></script>
   <script type="text/babel" src="./components/footer.js"></script>
 
   <style>
@@ -568,6 +569,16 @@ const App = () => {
   return (
     <div style={{ backgroundColor: defaultTheme.bg, minHeight: '100vh' }}>
       <Header onNavigate={handleNavigate} theme={defaultTheme}/>
+
+      {/* Sudden-realization bar — if a hint lands and the player wants
+          to try their guess right now, they shouldn't have to leave
+          this page to search for it. */}
+      <div className="px-3 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <SearchBar onNavigate={handleNavigate} theme={defaultTheme}/>
+        </div>
+      </div>
+
       <div className="px-3 sm:px-6 pb-6">
         <div className="max-w-4xl mx-auto">
           <div style={{
