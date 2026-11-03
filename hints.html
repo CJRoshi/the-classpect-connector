@@ -325,7 +325,7 @@ const HINTS_BY_SECRET = {
 const POST_FIND_HINTS = {
   'sr_mutt_of_slop':           [
     [
-      { speaker: 'terezi', text: 'MUTT OF SLOP HUH'},
+      { speaker: 'terezi', text: 'SO MUTT OF SLOP HUH'},
       { speaker: 'rose',   text: 'Yes.'},
       { speaker: 'terezi', text: '4R3 TH3R3 4NY OTH3R STUP1D HYPOTH3TIC4LS TH4T H4TCH3D FROM TH1S QU3ST1ON?'},
       { speaker: 'rose',   text: 'A few. One of them asks if you would prefer a dinner date with Dave\'s bro to a message from Equius.'},
@@ -356,7 +356,8 @@ const POST_FIND_HINTS = {
       { speaker: 'dave',   text: 'also i can confirm those lips were insane'},
       { speaker: 'dave',   text: 'imagine if karkat was making crazy innuendos about those lips instead of mine'},
       { speaker: 'terezi', text: 'W41T'},
-      { speaker: 'terezi', text: 'WH4T?'}
+      { speaker: 'terezi', text: 'WH4T?'},
+      { speaker: 'rose',   text: 'Moving on...'},
     ]
   ],
   'sr_douche_of_tears':        [
@@ -371,8 +372,9 @@ const POST_FIND_HINTS = {
   ],
   'sr_gent_of_piss':           [
     [
+      { speaker: 'terezi', text: 'FOR TH1S N3XT B1T OF COMM3NT4RY'},
       { speaker: 'terezi', text: '4T TH3 R1SK OF SOUND1NG EXTR3M3LY CRUD3'},
-      { speaker: 'terezi', text: 'TH3 TOP1C OF D1SCUSS1ON SH4LL B3 TH3 OBV1OUSLY F4K3 4SP3CT OF P1SS!'},
+      { speaker: 'terezi', text: 'L3T\'S T4LK 4BOUT TH3 OBV1OUSLY F4K3 4SP3CT OF P1SS!'},
       { speaker: 'terezi', text: '* H3R TYR4NNY Y13LDS TH3 FLOOR W1TH 4N 3XTR3M3LY H3S1T4NT B4NG OF H3R G4V3L *'},
       { speaker: 'terezi', text: 'on3 w1mpy b4ng...'},
       { speaker: 'dave',   text: 'im out'},
@@ -436,6 +438,7 @@ const POST_FIND_HINTS = {
       { speaker: 'rose',   text: 'Such a fascinating early work.'},
       { speaker: 'dave',   text: 'its ok they dont call you a conservative if your opinion is real and true'},
       { speaker: 'dave',   text: 'so its fine'},
+      { speaker: 'dave',   text: 'anyways'},
     ],
   ],
   'sr_nogue_of_noid': [
@@ -489,6 +492,7 @@ const POST_FIND_HINTS = {
     { speaker: 'dave',   text: 'artist commentary coming at you: i said shoosh because it rhymes with whoosh' },
     { speaker: 'dave',   text: 'because of june\'s lame as fuck wind powers' },
     { speaker: 'dave',   text: 'thats kind of it'},
+    { speaker: 'terezi', text: 'HUH.'},
   ],
 ],
   'sr_son_of_god': [
@@ -591,9 +595,9 @@ const POST_FIND_HINTS = {
   'logo_spammed':              [
     [
       { speaker: 'dave',   text: 'hey not to be weird but like' },
-      { speaker: 'dave',   text: 'you did it. we are being pestered. mission accomplished' },
+      { speaker: 'dave',   text: 'you did it we are being pestered mission accomplished' },
       { speaker: 'dave',   text: 'you can stop now' },
-      { speaker: 'dave',   text: 'i am ASKING' },
+      { speaker: 'dave',   text: 'i am asking politely' },
       { speaker: 'terezi', text: 'DON\'T L1ST3N TO H1M! K33P GO1NG! >:]' },
   ],
   ],
@@ -729,32 +733,67 @@ const OPENING_FIRST_VISIT = [
 ];
 
 // ---- MID / CLOSING LINES ---------------------------------------
+// Shown when there's STILL unfound stuff but no commentary queued.
 const CLOSING_WITH_UNFOUND = [
   { speaker: 'terezi', text: 'TH4T\'S 4LL TH3 OPEN C4S3S FOR NOW!!'},
   { speaker: 'terezi', text: 'ONC3 YOU TH1NK YOU\'V3 CR4CK3D ON3 OF TH3S3, TYP3 1T 1NTO TH3 S34RCH B4R UP TOP!'},
   { speaker: 'dave',   text: '(or do whatever inane bullshit that needs you to go to another page)'},
   { speaker: 'terezi', text: 'ANY GU3SS W1LL DO -- 1F YOU\'R3 R1GHT, COOL STUFF W1LL H4PP3N >:]'},
 ];
-const CLOSING_ALL_FOUND = [{
+// Same situation, but there IS commentary queued.
+const CLOSING_WITH_UNFOUND_INTO_COMMENTARY = [
+  { speaker: 'terezi', text: 'TH4T\'S 4LL TH3 OPEN C4S3S FOR NOW!!' },
+  { speaker: 'terezi', text: 'ONC3 YOU TH1NK YOU\'V3 CR4CK3D ON3 OF TH3S3, TYP3 1T 1NTO TH3 S34RCH B4R UP TOP! 4NY GU3SS W1LL DO.' },
+  { speaker: 'terezi', text: '...WH1CH R3M1NDS M3' },
+];
+// All secrets found AND no commentary
+const CLOSING_ALL_FOUND_NO_COMMENTARY = [{
   speaker: 'terezi',
   text: "1 C4N'T DO 4NYTH1NG TO H3LP YOU 4NYMOR3!!! BUT M4YB3 TRY 4G41N L4T3R WH3N TH3R3 4R3 N3W S3CR3TS FOR YOU TO F1ND.",
 }];
+// All secrets found AND commentary available.
+const ALL_FOUND_LEAD_IN = [
+  [
+    { speaker: 'terezi', text: 'OK, SO YOU\'V3 4LR34DY FOUND 3V3RY S3CR3T 1 H4V3 ON F1L3!'},
+    { speaker: 'terezi', text: '4T TH1S PO1NT 1 C4N\'T R34LLY H1NT 4T 4NYTH1NG...'},
+    { speaker: 'terezi', text: 'BUT 1 C4N COMM3NT ON TH3 ON3S YOU DUG UP! L3T\'S DO TH4T >:]'},
+  ],
+  [
+    { speaker: 'rose',   text: 'You\'ve already found everything. Impressive.'},
+    { speaker: 'rose',   text: 'Let\'s skip the hints and go straight to commentary.'},
+  ],
+  [
+    { speaker: 'dave',   text: 'ok so no secrets to hint at today' },
+    { speaker: 'dave',   text: 'just vibes and commentary' },
+    { speaker: 'terezi', text: '4BSOLUT3 V1B4L PR3C1S1ON! G3T COMFORT4BL3, SCRY3R.'},
+  ],
+];
+// Closings for the END of the commentary section itself.
+const COMMENTARY_CLOSING_WITH_UNFOUND = [
+  { speaker: 'terezi', text: 'OK4Y! TH4T\'S 3NOUGH COMM3NT4RY FOR TOD4Y >:]'},
+  { speaker: 'terezi', text: 'GO CR4CK TH3 R3ST OF TH3 S3CR3TS 1 M3NT1ON3D 34RL13R...'},
+  { speaker: 'terezi', text: '...4ND COM3 B4CK FOR MOR3 COMM3NT4RY WH3N YOU DO!'},
+];
+const COMMENTARY_CLOSING_ALL_FOUND = [
+  { speaker: 'terezi', text: 'TH4T\'S 4LL 1 H4V3 TO S4Y FOR NOW!' },
+  { speaker: 'terezi', text: 'COM3 B4CK L4T3R! 1 M1GHT H4V3 N3W TH1NGS TO S4Y 4BOUT TH3S3 S3CR3TS...' },
+  { speaker: 'terezi', text: '...4ND N3W S3CR3TS M4Y G3T 4DD3D FOR YOU TO F1ND 4ND H34R M3 R4MBL3 4BOUT >:]' },
+];
 
 // Lead-in to the post-find commentary section.
 const POST_FIND_LEAD_IN = [
   [
-    { speaker: 'terezi', text: '4CTU4LLY, B3FOR3 YOU GO...'},
+    { speaker: 'terezi', text: 'B3FOR3 YOU GO...'},
     { speaker: 'terezi', text: 'L3T\'S T4LK 4BOUT SOM3 OF TH3 S3CR3TS YOU\'V3 4LR34DY FOUND >:]'},
   ],
   [
-    { speaker: 'terezi', text: 'W41T W41T W41T.'},
     { speaker: 'terezi', text: '1 H4V3 OP1N1ONS ON SOM3 OF TH3 ON3S YOU 4LR34DY FOUND. L3T M3 SH4R3.'},
   ],
   [
     { speaker: 'rose',   text: 'Before you go — we have some thoughts on your earlier finds.'},
   ],
   [
-    { speaker: 'dave',   text: 'hey hold up' },
+    { speaker: 'dave',   text: 'yeah hold up' },
     { speaker: 'dave',   text: 'we never got to say stuff about the ones you ALREADY cracked' },
     { speaker: 'terezi', text: 'TRU3! L3T\'S F1X TH4T.' },
   ],
@@ -884,7 +923,15 @@ function buildDialogue({ fromPlayground, firstVisit, unlockedSet }) {
     HINTS_BY_SECRET[g.id].forEach(beat => script.push(beat));
   });
 
-  // ---- Mid closing ------------------------------------------
+  // Pre-compute whether commentary is going to play — this changes
+  // which mid-closing / all-found opener we use so the handoff into
+  // commentary actually blends.
+  const foundWithPostHints = SECRET_GROUPS
+    .filter(g =>  g.keys.some(k => unlockedSet.has(k)))
+    .filter(g => (POST_FIND_HINTS[g.id] || []).length > 0);
+  const hasCommentary = foundWithPostHints.length > 0;
+
+  // ---- Mid closing (unfound-case) OR all-found opener ------
   if (stillOpen.length > 0) {
     if (openWithHints.length === 0) {
       push({
@@ -892,22 +939,26 @@ function buildDialogue({ fromPlayground, firstVisit, unlockedSet }) {
         text: '... HUH. 1 DON\'T 4CTU4LLY H4V3 4NY H1NTS WR1TT3N FOR TH3 ON3S YOU H4V3N\'T FOUND Y3T. M4YB3 CH3CK B4CK SOON.',
       });
     }
-    push(CLOSING_WITH_UNFOUND);
+    push(hasCommentary
+      ? CLOSING_WITH_UNFOUND_INTO_COMMENTARY
+      : CLOSING_WITH_UNFOUND);
+    if (hasCommentary) {
+      const leadIn = POST_FIND_LEAD_IN[Math.floor(Math.random() * POST_FIND_LEAD_IN.length)];
+      push(leadIn);
+    }
   } else {
-    push(CLOSING_ALL_FOUND);
+    // All secrets found.
+    if (hasCommentary) {
+      const allFoundOpener = ALL_FOUND_LEAD_IN[Math.floor(Math.random() * ALL_FOUND_LEAD_IN.length)];
+      push(allFoundOpener);
+    } else {
+      push(CLOSING_ALL_FOUND_NO_COMMENTARY);
+    }
   }
 
-  // ---- Post-find commentary ---------------------------------
-  const foundWithPostHints = SECRET_GROUPS
-    .filter(g =>  g.keys.some(k => unlockedSet.has(k)))
-    .filter(g => (POST_FIND_HINTS[g.id] || []).length > 0);
-  if (foundWithPostHints.length > 0) {
+  // ---- Commentary picks -------------------------------------
+  if (hasCommentary) {
     const picks = shuffle(foundWithPostHints).slice(0, MAX_POST_FIND_PICKS);
-    const leadIn = POST_FIND_LEAD_IN[Math.floor(Math.random() * POST_FIND_LEAD_IN.length)];
-    push(leadIn);
-    // Separate picker for the commentary section so transitions
-    // between retrospectives don't borrow "ok next hint!" lines
-    // from the hint-section pool.
     const pickCommentaryBuffer = makeBufferPicker(COMMENTARY_BUFFERS);
     picks.forEach((g, i) => {
       if (i > 0) pickCommentaryBuffer().forEach(beat => script.push(beat));
@@ -915,6 +966,11 @@ function buildDialogue({ fromPlayground, firstVisit, unlockedSet }) {
       const chosen   = variants[Math.floor(Math.random() * variants.length)];
       push(chosen);
     });
+
+    // ---- Commentary closing (end of commentary section) ------
+    push(stillOpen.length > 0
+      ? COMMENTARY_CLOSING_WITH_UNFOUND
+      : COMMENTARY_CLOSING_ALL_FOUND);
   }
 
   return script;
