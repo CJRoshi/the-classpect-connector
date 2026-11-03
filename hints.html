@@ -92,6 +92,15 @@
       margin-bottom: 5px;
     }
     .hint-text { white-space: pre-wrap; }
+    /* Inline links in dialogue — picked up from HTML inside each
+       beat's `text`. Inherit the speaker's accent color for the
+       underline so the link reads as part of the character's line. */
+    .hint-text a {
+      color: inherit;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+    .hint-text a:hover { text-decoration: none; opacity: 0.8; }
 
     /* Character color pills applied per-speaker. */
     .hint-bubble.terezi { border-color: #008282; }
@@ -310,6 +319,286 @@ const HINTS_BY_SECRET = {
   ],
 };
 
+/* --------------------------------------------------------------
+   POST-FIND COMMENTARY
+   -------------------------------------------------------------- */
+const POST_FIND_HINTS = {
+  'sr_mutt_of_slop':           [
+    [
+      { speaker: 'terezi', text: 'MUTT OF SLOP HUH'},
+      { speaker: 'rose',   text: 'Yes.'},
+      { speaker: 'terezi', text: '4R3 TH3R3 4NY OTH3R STUP1D HYPOTH3TIC4LS TH4T H4TCH3D FROM TH1S QU3ST1ON?'},
+      { speaker: 'rose',   text: 'A few. One of them asks if you would prefer a dinner date with Dave\'s bro to a message from Equius.'},
+      { speaker: 'dave',   text: 'ok not to statler and waldorf this whole commentary bit'},
+      { speaker: 'dave',   text: 'but genuinely'},
+      { speaker: 'dave',   text: 'genuinely'},
+      { speaker: 'dave',   text: 'what fucking dinner'},
+      { speaker: 'dave',   text: 'dinner from an empty fridge versus a message from the void guy who will just straight up ghost you'},
+      { speaker: 'dave',   text: 'a nothingburger versus a nothingsandwich'},
+      { speaker: 'rose',   text: '"Dohohohoho"?'},
+      { speaker: 'terezi', text: 'WH3N YOU S4Y 1T TH4T W4Y 1 C4N S33 WHY TH4T\'S 4 H4RD QU3ST1ON NOW!'},
+      { speaker: 'rose',   text: 'It wasn\'t hard before?'},
+      { speaker: 'terezi', text: 'NO! 1 WOULD H4V3 CHOS3N D1NN3R W1TH D4V3\'S GU4RD14N 4NY N1GHT'},
+      { speaker: 'terezi', text: 'BUT 1F TH3R3\'S NO FOOD 1NVOLV3D YOU C4N COUNT M3 OUT.'},
+      { speaker: 'rose',   text: 'Hm. Interesting.'},
+    ]
+  ],
+  'sr_waste_of_space':         [
+    [
+      { speaker: 'terezi', text: 'NOW TH4T 1 TH1NK 4BOUT 1T'},
+      { speaker: 'terezi', text: 'W3 D1D S33 TH3 ORANG3 GUY 1N TH3 FURTH3ST R1NG R1GHT'},
+      { speaker: 'terezi', text: 'B3C4US3 1 R3M3MB3R TH3 SC3NT'},
+      { speaker: 'dave',   text: 'oh yeah i bumped into them once or twice when they were in between hiding spots'},
+      { speaker: 'dave',   text: 'always on about horses and stuff'},
+      { speaker: 'rose',   text: 'Like Equius?'},
+      { speaker: 'dave',   text: 'nah more like dirk'},
+      { speaker: 'dave',   text: 'like they got excited when horse based shenanigans were in the proximity but it wasnt all consuming per se'},
+      { speaker: 'dave',   text: 'also i can confirm those lips were insane'},
+      { speaker: 'dave',   text: 'imagine if karkat was making crazy innuendos about those lips instead of mine'},
+      { speaker: 'terezi', text: 'W41T'},
+      { speaker: 'terezi', text: 'WH4T?'}
+    ]
+  ],
+  'sr_douche_of_tears':        [
+    [
+      { speaker: 'dave',   text: 'alright so i did lie a little bit'},
+      { speaker: 'dave',   text: 'according to roses nigh unreadable literature'},
+      { speaker: 'dave',   text: 'it was actually the gamebros bro that was the douche of tears'},
+      { speaker: 'dave',   text: 'but you only needed the promise of gamebro to smell the douchiness so it worked'},
+      { speaker: 'dave',   text: 'im a genius'},
+      { speaker: 'terezi', text: '(UUUUUUUUUUGH)'}
+    ]
+  ],
+  'sr_gent_of_piss':           [
+    [
+      { speaker: 'terezi', text: '4T TH3 R1SK OF SOUND1NG EXTR3M3LY CRUD3'},
+      { speaker: 'terezi', text: 'TH3 TOP1C OF D1SCUSS1ON SH4LL B3 TH3 OBV1OUSLY F4K3 4SP3CT OF P1SS!'},
+      { speaker: 'terezi', text: '* H3R TYR4NNY Y13LDS TH3 FLOOR W1TH 4N 3XTR3M3LY H3S1T4NT B4NG OF H3R G4V3L *'},
+      { speaker: 'terezi', text: 'on3 w1mpy b4ng...'},
+      { speaker: 'dave',   text: 'im out'},
+      { speaker: 'rose',   text: 'I\'m in.'},
+      { speaker: 'rose',   text: 'Even though this is obviously bullshit, the golden yellow color, association with beverages or liquids, and the fact that it is the result of expulsion of a substance from the body lead me to believe that Piss is related to Light, Void, Blood, and Breath.'},
+      { speaker: 'rose',   text: 'In other words, the Vizier\'s group of Aspects-- or, I should say, the Advising Group-- are all prone to Piss-like tendencies.'},
+      { speaker: 'dave',   text: 'what the fuck'},
+      { speaker: 'rose',   text: 'I knew Skaia dressed me in these orange robes for a reason. It wanted to demonstrate that'},
+      { speaker: 'dave',   text: 'ok stop fucking talking we are not making this more weird than it has to be'},
+      { speaker: 'dave',   text: 'were leaving it at "being an advisor means you piss" and thats it'},
+      { speaker: 'terezi', text: 'WH4T 4BOUT TH3 SUPPOS3D G3NT WHO H4D TH1S 4SP3CT?'},
+      { speaker: 'rose',   text: 'You know, it just occurred to me.'},
+      { speaker: 'rose',   text: 'That was probably an associate of June\'s father.'},
+      { speaker: 'dave',   text: 'oh shit'},
+      { speaker: 'dave',   text: 'deep cut'},
+      { speaker: 'rose',   text: 'That beautiful bastard. He pissed and absolved us of our world-destroying sins.'}
+    ]
+  ],
+  'sr_trash_of_time': [
+  [
+    { speaker: 'rose',   text: 'You know, I do find it odd that people forget about the Trash of Time when that moniker originated contemporaneously with Waste of Space.'},
+    { speaker: 'dave',   text: 'yeah weird'},
+    { speaker: 'dave',   text: 'all i know is that if you ask whether or not the skeleton music is aradias music actually'},
+    { speaker: 'dave',   text: 'the answer is <a href="https://soundcloud.com/jamesroachmusic/pesterquest-aradias-theme-yeah-it-is" target="_blank" rel="noopener">yeah it is</a> '},
+    { speaker: 'rose',   text: 'I still think Vriska deserves some credit there.'}
+  ],
+  [
+    { speaker: 'terezi', text: 'DUK3 OF D4WN...'},
+    { speaker: 'terezi', text: 'R3GR3T4BBLY 1 F1ND TH3 M4RCH1NG B4ND 4TT1R3 TO B3'},
+    { speaker: 'terezi', text: '3XTR3M3LY D3L1C1OUS 4ND QUI1T3 WH1MS1C4L'},
+    { speaker: 'rose',   text: 'I\'m still surprised that the color scheme for Dawn blatantly mixes Light and Void by showing the rising sun.'},
+    { speaker: 'rose',   text: 'In "sour lemon" and "acid blue apocalypse" flavors no less.'},
+    { speaker: 'terezi', text: 'NO COMM3NT.'}
+  ]
+  ],
+  'sr_nic_of_time': [
+  // --- Variant 1 ---
+  [
+    { speaker: 'terezi', text: 'VR1SK4 ST1LL TH1NKS TH1S GUY 1S SOM3 L3G3ND 4ND 1 R34LLY DON\'T G3T 1T.' },
+    { speaker: 'dave',   text: 'i mean the guy did con air sure but if you ask me national treasure is my national treasure' },
+    { speaker: 'dave',   text: 'say what you want but a film about stealing some chumpass historical documents is always cool'},
+    { speaker: 'dave',   text: 'the cage film designed specifically to be seen on the small screen'}, 
+    { speaker: 'dave',   text: 'by which i mean the cart with a tv on it at school'},
+    { speaker: 'rose',   text: 'Cage has a respectable range.' },
+    { speaker: 'terezi', text: '1 DON\'T KNOW WH4T 31TH3R OF THOS3 MOV13S 4R3.' },
+    { speaker: 'dave',   text: 'okay thats junes fault for not showing you con air immediately' },
+    { speaker: 'dave',   text: 'even though it was my understanding she literally acted out the scene while you were watching'}
+  ],
+  // --- Variant 2 ---
+  [
+    { speaker: 'rose',   text: 'June and Vriska had me watch Face/Off once.' },
+    { speaker: 'rose',   text: 'I don\'t want to talk about it.' },
+    { speaker: 'terezi', text: 'TH4T B4D?' },
+    { speaker: 'rose',   text: 'That good. When Cage hits, he hits.' },
+  ],
+],
+  'sr_champion_of_pulchritude':[
+    [
+      { speaker: 'rose',   text: 'Anyways, about the Champion of Pulchritude. Call me a conservative,'},
+      { speaker: 'rose',   text: 'But I miss Problem Sleuth.'},
+      { speaker: 'rose',   text: 'Such a fascinating early work.'},
+      { speaker: 'dave',   text: 'its ok they dont call you a conservative if your opinion is real and true'},
+      { speaker: 'dave',   text: 'so its fine'},
+    ],
+  ],
+  'sr_nogue_of_noid': [
+  [
+    { speaker: 'dave',   text: 'ok so for anyone who did not know' },
+    { speaker: 'dave',   text: 'nogue of noid is a reference to a thing' },
+    { speaker: 'dave',   text: 'the thing is called noxyquest' },
+    { speaker: 'rose',   text: 'A true MSPFA all-timer. <a href="https://mspfa.com/?s=65765&p=1" target="_blank" rel="noopener">Noxyquest</a> is warmly recommended.' },
+    { speaker: 'terezi', text: 'G3T 1T? NOXY? NOGU3? L1K3 TH3 P1ZZ4 GOBL1N ON 4LT3RN1A?' },
+    { speaker: 'dave',   text: 'she means the noid' },
+    { speaker: 'dave',   text: 'anyway if you liked the pun go read' },
+    { speaker: 'rose',   text: '(Spoiler: You\'ll enjoy the classpects there.)'},
+  ],
+  [
+    { speaker: 'terezi', text: 'NOGU3 OF NO1D'},
+    { speaker: 'terezi', text: 'TH1S PUN W4S COMM1SS1ON3D BY TH3 NOXYQU3ST M4RK3T1NG D3P4RTM3NT' },
+    { speaker: 'rose',   text: 'That is a lie.' },
+    { speaker: 'terezi', text: 'BUT 1T SHOULD B3 TRU3!' },
+    { speaker: 'dave',   text: 'yeah go read <a href="https://mspfa.com/?s=65765&p=1" target="_blank" rel="noopener">noxyquest</a> its a fun time' },
+  ],
+],
+  'sr_email_of_equius': [
+  [
+    { speaker: 'terezi', text: '1GNOR1NG TH3 1NT3RWOV3N PLOTL1N3 OF TH3 B4RKB3AST SLUDG3 4ND 3QU1US\'S 3MAIL'},
+    { speaker: 'terezi', text: 'WHO TH3 FUCK 1S CURLY???' },
+    { speaker: 'dave',   text: 'oh yeah curly rules' },
+    { speaker: 'dave',   text: '<a href="https://curlychopz.online" target="_blank" rel="noopener">curlychopz dot online</a> go listen' },
+    { speaker: 'dave',   text: 'full disclosure im a fan' },
+    { speaker: 'terezi', text: 'YOU 4R3 4 F4N OF 3V3RYON3' },
+    { speaker: 'dave',   text: 'categorically untrue' },
+    { speaker: 'dave',   text: 'lies and slander i hate on rose daily'},
+    { speaker: 'rose',   text: 'Hey!'}
+  ],
+],
+  'sr_dave_of_guy': [
+  [
+    { speaker: 'dave',   text: 'dave of guy was the one where i was just like' },
+    { speaker: 'dave',   text: 'not cool about the whole dying thing' },
+    { speaker: 'dave',   text: 'but yeah i do think sometimes about how things could be different' },
+    { speaker: 'dave',   text: 'if there wasnt any game and i could just be the dave of guy and not some knight of time'},
+    { speaker: 'dave',   text: 'its just kinda fucked up you get what i mean'},
+    { speaker: 'rose',   text: '"This game is dedicated to all the children who never saw childhood"?'},
+    { speaker: 'dave',   text: 'jesus fuck rose dont scare me with incidental abortion'},
+    { speaker: 'dave',   text: 'but like yeah thats it in a nutshell i guess'},
+    { speaker: 'rose',   text: 'Glad to help illuminate the situation.'}
+  ],
+],
+  'sr_chump_of_shoosh': [
+  [
+    { speaker: 'dave',   text: 'hey good job finding this one' },
+    { speaker: 'dave',   text: 'artist commentary coming at you: i said shoosh because it rhymes with whoosh' },
+    { speaker: 'dave',   text: 'because of june\'s lame as fuck wind powers' },
+    { speaker: 'dave',   text: 'thats kind of it'},
+  ],
+],
+  'sr_son_of_god': [
+  [
+    { speaker: 'terezi', text: 'HUMAN J3GUS CHR1ST! TH3 ULT1M4T3 PR1NC3! OR LORD! OR SON! OR' },
+    { speaker: 'rose',   text: 'Yes, he really has a lot of titles.' },
+    { speaker: 'terezi', text: '1 WOULDN\'T W4NT H1M ON MY T34M THOUGH. H3 SOUNDS W31RDLY 4NNOY1NG?' },
+    { speaker: 'rose',   text: 'Probably a good call. The most advanced theorists have said that he might be a Seer of all Aspects.'},
+    { speaker: 'rose',   text: 'Or worse still, a Seer of Blood, maybe both Hope and Blood simultaneously.'},
+    { speaker: 'terezi', text: 'W41T. L1K3 K4RK4T\'S W31RD T33N 4NC3STOR?'},
+    { speaker: 'terezi', text: 'L1K3 TROLL J3GUS?'},
+    { speaker: 'rose',   text: 'Unfortunately, yes. Kind of obvious in hindsight.'},
+    { speaker: 'terezi', text: 'WOW. 4WFUL.'}
+  ],
+],
+  'sr_myocdonotsteal':         [
+    // --- Variant 1 ---
+    [
+      { speaker: 'terezi', text: '"COUNT3RQU3ST", HMM?' },
+      { speaker: 'rose',   text: 'Not the worst I\'ve come up with. It\'s at least comparable to the gravitas of "Homestuck".' },
+      { speaker: 'terezi', text: '1 GU3SS.' },
+      { speaker: 'terezi', text: 'WH4T QU3ST 4R3 TH3Y 3V3N COUNT3R TO?'},
+      { speaker: 'rose',   text: 'The general futility of SBURB, I suppose.'},
+      { speaker: 'rose',   text: 'This set of sessions defies the historical record, if we\'re discussing that.'},
+      { speaker: 'terezi', text: '4R3N\'T W3 4LSO K1ND OF SP3C14L 1N TH4T W4Y?'},
+      { speaker: 'rose',   text: 'True enough. Moving on.'}
+    ],
+    // --- Variant 2 ---
+    [
+      { speaker: 'rose',   text: 'I have been wondering.' },
+      { speaker: 'terezi', text: 'HMM?' },
+      { speaker: 'rose',   text: 'About the paired sessions we discovered in the literature. Humor me for a moment.' },
+      { speaker: 'rose',   text: 'Unlike our doomed alternate chronologies, which presumably started fading into dreams the moment the situation became lifeless...'},
+      { speaker: 'rose',   text: '(No doubt related to the ruling hand of the Lord of Time...)'},
+      { speaker: 'rose',   text: 'Is it possible that a Page of Life could stall that decay, when it arrives?'},
+      { speaker: 'rose',   text: 'Is the Page of Life the reason the null session of the pair was able to be bailed out?'},
+      { speaker: 'terezi', text: '1 DON\'T KNOW.'},
+      { speaker: 'terezi', text: 'BUT 1T\'S 4N 1NT3R3ST1NG 1D3A.'}
+    ],
+    // --- Variant 3 ---
+    [
+      { speaker: 'dave',   text: 'ok can you go over that counterquest shit again i was NOT listening the first time'},
+      { speaker: 'terezi', text: '1 WOULD 4LSO L1K3 4 R3C4P! WH4T M4K3S TH3S3 S3SS1ONS SO SP3C1AL?'},
+      { speaker: 'rose',   text: 'Sigh.'},
+      { speaker: 'rose',   text: 'I\'ll make this quick.'},
+      { speaker: 'rose',   text: 'Their version of SBURB, which they called STERA, was apparently highly developed.'},
+      { speaker: 'dave',   text: 'which means what'},
+      { speaker: 'rose',   text: 'Which means that game entry was a little more convoluted. There\'s small sidequest that can save the host planet from annihilation at the cost of some ecological disasters.'},
+      { speaker: 'terezi', text: 'R34LLY?'},
+      { speaker: 'rose',   text: 'Yes. No alphas, no betas. Apparently those responsible for the compilation of the game have more to do with its specifics than we realized.'},
+      { speaker: 'dave',   text: 'ok so hackertroll is evil forever actually'},
+      { speaker: 'terezi', text: '1 DOUBT TH4T! TH3 W4Y OUR G4M3 S3SS1ON ST4RT3D W4S OUT OF H1S H4NDS.'},
+      { speaker: 'terezi', text: '4LSO, TH4T NOOKWH1FF C4R3S TOO MUCH TO 4CTU4LLY R3L34S3 H1S OWN W1PS.'},
+      { speaker: 'terezi', text: 'TRUST M3 1 TR13D >:|'},
+      { speaker: 'rose',   text: 'I agree with Terezi here. Lord English was already present as a defect from the start. There was no avoiding him.'},
+      { speaker: 'dave',   text: 'will he ever stop already being here'},
+      { speaker: 'dave',   text: 'what a lame shtick'},
+      { speaker: 'terezi', text: 'W3 KNOW.'},
+      { speaker: 'rose',   text: 'Anyway, moving on.'},
+      { speaker: 'rose',   text: 'One session completed this sidequest, and the other did not. One session bore fruit, and the other began to wither and die.'},
+      { speaker: 'rose',   text: 'Here the literature notes that a Scratch Construct was used not to cause a Scratch, but for some other process.'},
+      { speaker: 'rose',   text: 'The rift opened by it provided an escape route for the players of the doomed session, with the Construct and interlinked session being the wergild of these players.'},
+      { speaker: 'dave',   text: 'so like'},
+      { speaker: 'dave',   text: 'instead of letting that thing float up to skaia'},
+      { speaker: 'dave',   text: 'they used it to access a doomed timeline'},
+      { speaker: 'rose',   text: 'Essentially.'},
+      { speaker: 'dave',   text: 'sounds like horseshit'},
+      { speaker: 'dave',   text: 'why would a doomed timeline have a different session'},
+      { speaker: 'dave',   text: 'and like'},
+      { speaker: 'dave',   text: 'how did they know'},
+      { speaker: 'rose',   text: 'One of the mysteries the literature doesn\'t elaborate on, I\'m afraid.'},
+      { speaker: 'terezi', text: 'M4YB3 4 DOOM3D TIM3L1N3 OF TH3 4LPH4 1NVOLV3D A SCR4TCH'},
+      { speaker: 'terezi', text: '4ND TH1S PR3V3NT3D 1TS 1MM3D14T3 D3STRUCT1ON >:?'},
+      { speaker: 'rose',   text: 'That could explain the use of a Scratch Construct to locate this doomed timeline. A compelling theory, Terezi!'},
+      { speaker: 'terezi', text: '>:]'},
+      { speaker: 'dave',   text: 'i mean i guess that makes sense but why bail out some fuckin losers that cant even win their own session'},
+      { speaker: 'rose',   text: 'Isn\'t that what we did?'},
+      { speaker: 'dave',   text: 'what no this is obviously different'},
+      { speaker: 'dave',   text: 'their shit wasnt doomed and we used to talk about how there was like'},
+      { speaker: 'dave',   text: 'NO time limit other than jack showing up'},
+      { speaker: 'dave',   text: 'but obviously these doomed chumps had some time limit on them'},
+      { speaker: 'rose',   text: 'Dave, this might be the most interested you\'ve ever been in the mechanics of SBURB! At least, in conversation with me.'},
+      { speaker: 'dave',   text: 'man i just dont know'},
+      { speaker: 'dave',   text: 'clearly their time player is some kind of asshole wizard if they figured all this out solo'},
+      { speaker: 'rose',   text: 'True.'},
+      { speaker: 'terezi', text: 'OK4Y WH1L3 TH1S CH4T H4S B33N FUN 1 C4N S33 OUR L1TTL3 SCRY3R 1S G3TT1NG T1R3D SO C4N W3 WR4P TH1S UP?'},
+      { speaker: 'dave',   text: 'seconding this motion on account of suddenly not giving a fuck about sburb for assholes'},
+      { speaker: 'rose',   text: 'Yes, let\'s.'}
+    ],
+  ],
+  'visited_cherubs': [
+  [
+    { speaker: 'rose',   text: 'Do you think al is aware of our scryer managing to find them?' },
+    { speaker: 'terezi', text: 'PROBABLY! 1 DON\'T L1K3 TH1NK1NG ABOUT TH4T.' },
+    { speaker: 'rose',   text: 'Me neither.'},
+    { speaker: 'dave',   text: 'you got scary potential scryer junior'},
+    { speaker: 'dave',   text: 'some day you might surpass these seers'}
+  ],
+],
+  'logo_spammed':              [
+    [
+      { speaker: 'dave',   text: 'hey not to be weird but like' },
+      { speaker: 'dave',   text: 'you did it. we are being pestered. mission accomplished' },
+      { speaker: 'dave',   text: 'you can stop now' },
+      { speaker: 'dave',   text: 'i am ASKING' },
+      { speaker: 'terezi', text: 'DON\'T L1ST3N TO H1M! K33P GO1NG! >:]' },
+  ],
+  ],
+};
+
 /* Buffers between secret entries */
 const BUFFER_SEQUENCES = [
   // --- quick one-liners --------------------------------------
@@ -417,33 +706,138 @@ const SECRET_GROUPS = [
   { id: 'logo_spammed',              keys: ['logo_spammed'] },
 ];
 
-const OPENING_DEFAULT = {
+// ---- OPENING LINES ---------------------------------------------
+const OPENING_DEFAULT = [{
   speaker: 'terezi',
   text: 'W3LCOM3 TO MY S3CR3T H3LP D3SK!! TH3 S33R 1S 1N.',
-};
-const OPENING_FROM_PLAYGROUND = {
+}];
+const OPENING_FROM_PLAYGROUND = [{
   speaker: 'terezi',
   text: "1F YOU C4N'T 4CC3SS TH4T P4G3 Y3T, 1T M34NS YOU'R3 NOT SUPPOS3D TO, DUMMY! YOU N33D TO B3 MOR3 P3RC3PT1V3 >:]",
-};
-const ALL_FOUND_LINE = {
-  speaker: 'terezi',
-  text: "1 C4N'T DO 4NYTH1NG TO H3LP YOU!!! BUT M4YB3 TRY 4G41N L4T3R WH3N TH3R3 4R3 N3W S3CR3TS FOR YOU TO F1ND.",
-};
-const CLOSING_LINE = {
-  speaker: 'terezi',
-  text: "TH4T'S 4LL 1 H4V3 FOR NOW!! COM3 B4CK WH3N YOU'V3 FOUND MOR3 OF TH3 ON3S 1 JUST M3NT1ON3D >:]",
-};
+}];
+// Shown the FIRST time any given browser lands on the hints page.
+const OPENING_FIRST_VISIT = [
+  { speaker: 'terezi', text: 'OH! 4 N3W F4C3! W3LCOM3 TO MY H3LP D3SK >:]'},
+  { speaker: 'terezi', text: 'B3FOR3 W3 ST4RT, YOU SHOULD KNOW HOW TH1S WORKS.'},
+  { speaker: 'terezi', text: '1\'LL G1V3 YOU H1NTS 4BOUT SOM3 UNSOLV3D S3CR3T C4S3S.'},
+  { speaker: 'terezi', text: 'ONC3 YOU F1GUR3 ON3 OUT, TYP3 YOUR GU3SS 1NTO TH3 S34RCH B4R!'},
+  { speaker: 'dave',   text: 'the search bar isnt just for navigation its also like the answer box for this whole gig' },
+  { speaker: 'dave',   text: 'careful though some secrets involve leaving this room and messing with shit instead of playing the sunday crossword' },
+  { speaker: 'terezi', text: 'TH4NKS, D4V3.'},
+  { speaker: 'terezi', text: '1F YOUR GU3SS 1S R1GHT, SOM3TH1NG W1LL H4PP3N 4ND TH3 S3CR3T W1LL UNLOCK!' },
+  { speaker: 'terezi', text: 'OK4Y, LET\'S B3G1N.'},
+];
 
-// Buffer picker
-function makeBufferPicker() {
-  const shortPool = BUFFER_SEQUENCES.filter(s => s.length === 1);
-  const longPool  = BUFFER_SEQUENCES.filter(s => s.length  >  1);
+// ---- MID / CLOSING LINES ---------------------------------------
+const CLOSING_WITH_UNFOUND = [
+  { speaker: 'terezi', text: 'TH4T\'S 4LL TH3 OPEN C4S3S FOR NOW!!'},
+  { speaker: 'terezi', text: 'ONC3 YOU TH1NK YOU\'V3 CR4CK3D ON3 OF TH3S3, TYP3 1T 1NTO TH3 S34RCH B4R UP TOP!'},
+  { speaker: 'dave',   text: '(or do whatever inane bullshit that needs you to go to another page)'},
+  { speaker: 'terezi', text: 'ANY GU3SS W1LL DO -- 1F YOU\'R3 R1GHT, COOL STUFF W1LL H4PP3N >:]'},
+];
+const CLOSING_ALL_FOUND = [{
+  speaker: 'terezi',
+  text: "1 C4N'T DO 4NYTH1NG TO H3LP YOU 4NYMOR3!!! BUT M4YB3 TRY 4G41N L4T3R WH3N TH3R3 4R3 N3W S3CR3TS FOR YOU TO F1ND.",
+}];
+
+// Lead-in to the post-find commentary section.
+const POST_FIND_LEAD_IN = [
+  [
+    { speaker: 'terezi', text: '4CTU4LLY, B3FOR3 YOU GO...'},
+    { speaker: 'terezi', text: 'L3T\'S T4LK 4BOUT SOM3 OF TH3 S3CR3TS YOU\'V3 4LR34DY FOUND >:]'},
+  ],
+  [
+    { speaker: 'terezi', text: 'W41T W41T W41T.'},
+    { speaker: 'terezi', text: '1 H4V3 OP1N1ONS ON SOM3 OF TH3 ON3S YOU 4LR34DY FOUND. L3T M3 SH4R3.'},
+  ],
+  [
+    { speaker: 'rose',   text: 'Before you go — we have some thoughts on your earlier finds.'},
+  ],
+  [
+    { speaker: 'dave',   text: 'hey hold up' },
+    { speaker: 'dave',   text: 'we never got to say stuff about the ones you ALREADY cracked' },
+    { speaker: 'terezi', text: 'TRU3! L3T\'S F1X TH4T.' },
+  ],
+  [
+    { speaker: 'rose',   text: 'Switching gears from "haven\'t found" to "already found" for a moment.'},
+    { speaker: 'rose',   text: 'A short commentary track, if you\'ll allow it.'},
+    { speaker: 'terezi', text: 'TH3 SCRY3R H4S NO CHO1C3 1N TH1S M4TT3R.'},
+  ],
+  [
+    { speaker: 'terezi', text: 'HM! 1 JUST R34L1Z3D W3 N3V3R T4LK3D 4BOUT TH3 S3CR3TS YOU DID F1ND!'},
+    { speaker: 'terezi', text: 'TH4T\'S 4N OV3RS1GHT, L3T US R3CT1FY 1T >:]'},
+  ],
+];
+
+// --- COMMENTARY BUFFERS ----------------------------------------
+const COMMENTARY_BUFFERS = [
+  // --- one-liners --------------------------------------------
+  [{ speaker: 'terezi', text: 'P3NNY FOR OUR THOUGHTS?' }],
+  [{ speaker: 'terezi', text: 'SP34K1NG OF...' }],
+  [{ speaker: 'terezi', text: 'H3H3H3.' }],
+  [{ speaker: 'terezi', text: 'TH4T R34LLY DOES CONN3CT, HUH?' }],
+  [{ speaker: 'dave',   text: 'this is the dumbest trivia session of all time' }],
+
+  // --- two-beat ----------------------------------------------
+  [
+    { speaker: 'rose',   text: 'Related, if you\'ll indulge me.' },
+    { speaker: 'terezi', text: '1 4LW4YS DO.' },
+  ],
+  [
+    { speaker: 'dave',   text: 'wait while were on the subject' },
+    { speaker: 'terezi', text: 'W3 4R3N\'T ON 4 SUBJ3CT. KEEP GO1NG THOUGH.' },
+  ],
+  [
+    { speaker: 'terezi', text: 'OH!! TH1S ON3 1S 4 F4VOR1T3 OF M1N3.' },
+    { speaker: 'dave',   text: 'she says that about all of them' },
+  ],
+  [
+    { speaker: 'rose',   text: 'I have a thought.' },
+    { speaker: 'terezi', text: '1 WOULD B3 SHOCK3D 1F YOU D1DN\'T.' },
+  ],
+  [
+    { speaker: 'dave',   text: 'can we fast forward through this one' },
+    { speaker: 'terezi', text: 'NO.' },
+  ],
+
+  // --- three-beat --------------------------------------------
+  [
+    { speaker: 'terezi', text: 'HM.' },
+    { speaker: 'rose',   text: 'Were you going to say something?' },
+    { speaker: 'terezi', text: 'NO, 1 JUST L1K3 M4K1NG YOU 4NX1OUS.' },
+  ],
+  [
+    { speaker: 'dave',   text: 'hey can i workshop a bit like the oildog real quick' },
+    { speaker: 'terezi', text: 'NO.' },
+    { speaker: 'rose',   text: 'Fuck no. Next.' },
+  ],
+  [
+    { speaker: 'rose',   text: 'That reminds me of one of the others.' },
+    { speaker: 'dave',   text: 'oh no shes doing the thing' },
+    { speaker: 'rose',   text: 'I\'m "doing the thing".' },
+  ],
+
+  // --- long one ----------------------------------------------
+  [
+    { speaker: 'terezi', text: 'OK B3FOR3 TH3 N3XT ON3 1 W4NT TO GO ON R3CORD' },
+    { speaker: 'terezi', text: 'TH3 SCRY3R 1S DO1NG 4 GOOD JOB.' },
+    { speaker: 'dave',   text: 'yeah they really dug around for these' },
+    { speaker: 'rose',   text: 'Credit where credit is due.' },
+    { speaker: 'terezi', text: 'OK4Y, GUSH3D OUT. CONT1NU3.' },
+  ],
+];
+
+// Buffer picker — pass BUFFER_SEQUENCES for hint-section pacing,
+// COMMENTARY_BUFFERS for post-find pacing. Each call creates its
+// own `usedLong` set so long beats never repeat within one script
+// run (short one-liners can repeat freely as before).
+function makeBufferPicker(pool = BUFFER_SEQUENCES) {
+  const shortPool = pool.filter(s => s.length === 1);
+  const longPool  = pool.filter(s => s.length  >  1);
   const usedLong  = new Set();
-  const pickFrom  = (pool) => pool[Math.floor(Math.random() * pool.length)];
+  const pickFrom  = (p) => p[Math.floor(Math.random() * p.length)];
   return function pickBufferSequence() {
     const longsLeft = longPool.filter(s => !usedLong.has(s));
-    // ~50% chance of a longer character beat when any are still
-    // available; otherwise fall back to a quick one-liner.
     if (longsLeft.length > 0 && Math.random() < 0.5) {
       const pick = pickFrom(longsLeft);
       usedLong.add(pick);
@@ -461,34 +855,68 @@ function shuffle(arr) {
   return a;
 }
 
-function buildDialogue({ fromPlayground, unlockedSet }) {
-  const script = [];
-  script.push(fromPlayground ? OPENING_FROM_PLAYGROUND : OPENING_DEFAULT);
+// Max number of already-found secrets to comment on at the end of a
+// session. More than this starts to feel like filibustering.
+const MAX_POST_FIND_PICKS = 3;
 
-  const stillOpen = SECRET_GROUPS.filter(g => !g.keys.some(k => unlockedSet.has(k)));
-  if (stillOpen.length === 0) {
-    script.push(ALL_FOUND_LINE);
-    return script;
+function buildDialogue({ fromPlayground, firstVisit, unlockedSet }) {
+  const script = [];
+  const push = (seqOrBeat) => Array.isArray(seqOrBeat)
+    ? seqOrBeat.forEach(b => script.push(b))
+    : script.push(seqOrBeat);
+  const pickBuffer = makeBufferPicker();
+
+  // ---- Opening ----------------------------------------------
+  if (firstVisit) {
+    push(OPENING_FIRST_VISIT);
+    if (fromPlayground) push(OPENING_FROM_PLAYGROUND);
+  } else {
+    push(fromPlayground ? OPENING_FROM_PLAYGROUND : OPENING_DEFAULT);
   }
 
-  // Shuffle the hint sequences.
+  // ---- Open-case hints --------------------------------------
+  const stillOpen = SECRET_GROUPS.filter(g => !g.keys.some(k => unlockedSet.has(k)));
   const openWithHints = shuffle(
     stillOpen.filter(g => (HINTS_BY_SECRET[g.id] || []).length > 0)
   );
-  const pickBuffer = makeBufferPicker();
   openWithHints.forEach((g, i) => {
     if (i > 0) pickBuffer().forEach(beat => script.push(beat));
     HINTS_BY_SECRET[g.id].forEach(beat => script.push(beat));
   });
 
-  if (openWithHints.length === 0) {
-    script.push({
-      speaker: 'terezi',
-      text: '... HUH. 1 DON\'T 4CTU4LLY H4V3 4NY H1NTS WR1TT3N FOR TH3 ON3S YOU H4V3N\'T FOUND Y3T. M4YB3 CH3CK B4CK SOON.',
+  // ---- Mid closing ------------------------------------------
+  if (stillOpen.length > 0) {
+    if (openWithHints.length === 0) {
+      push({
+        speaker: 'terezi',
+        text: '... HUH. 1 DON\'T 4CTU4LLY H4V3 4NY H1NTS WR1TT3N FOR TH3 ON3S YOU H4V3N\'T FOUND Y3T. M4YB3 CH3CK B4CK SOON.',
+      });
+    }
+    push(CLOSING_WITH_UNFOUND);
+  } else {
+    push(CLOSING_ALL_FOUND);
+  }
+
+  // ---- Post-find commentary ---------------------------------
+  const foundWithPostHints = SECRET_GROUPS
+    .filter(g =>  g.keys.some(k => unlockedSet.has(k)))
+    .filter(g => (POST_FIND_HINTS[g.id] || []).length > 0);
+  if (foundWithPostHints.length > 0) {
+    const picks = shuffle(foundWithPostHints).slice(0, MAX_POST_FIND_PICKS);
+    const leadIn = POST_FIND_LEAD_IN[Math.floor(Math.random() * POST_FIND_LEAD_IN.length)];
+    push(leadIn);
+    // Separate picker for the commentary section so transitions
+    // between retrospectives don't borrow "ok next hint!" lines
+    // from the hint-section pool.
+    const pickCommentaryBuffer = makeBufferPicker(COMMENTARY_BUFFERS);
+    picks.forEach((g, i) => {
+      if (i > 0) pickCommentaryBuffer().forEach(beat => script.push(beat));
+      const variants = POST_FIND_HINTS[g.id];
+      const chosen   = variants[Math.floor(Math.random() * variants.length)];
+      push(chosen);
     });
   }
 
-  script.push(CLOSING_LINE);
   return script;
 }
 
@@ -504,9 +932,17 @@ const HintsPage = () => {
     try { return new Set(JSON.parse(localStorage.getItem('cc_unlocks') || '[]')); }
     catch { return new Set(); }
   }, []);
+  // First-ever visit per browser.
+  const firstVisit = React.useMemo(() => {
+    try {
+      const seen = localStorage.getItem('cc_hints_seen') === '1';
+      if (!seen) localStorage.setItem('cc_hints_seen', '1');
+      return !seen;
+    } catch { return false; }
+  }, []);
   const script = React.useMemo(
-    () => buildDialogue({ fromPlayground, unlockedSet }),
-    [fromPlayground, unlockedSet]
+    () => buildDialogue({ fromPlayground, firstVisit, unlockedSet }),
+    [fromPlayground, firstVisit, unlockedSet]
   );
   const [idx, setIdx] = React.useState(0);
   const beat    = script[idx] || OPENING_DEFAULT;
@@ -544,7 +980,12 @@ const HintsPage = () => {
 
         <div className={'hint-bubble ' + beat.speaker}>
           <div className="hint-speaker">{sp.label}</div>
-          <div className="hint-text">{beat.text}</div>
+          {/* `text` is treated as trusted HTML so beats can embed
+              inline <a> links (and <em>, <br>, etc.) when a line
+              earns one. The content is hard-coded in this file,
+              never user-supplied, so dangerouslySetInnerHTML is fine. */}
+          <div className="hint-text"
+               dangerouslySetInnerHTML={{ __html: beat.text }}/>
         </div>
       </div>
 
